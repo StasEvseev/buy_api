@@ -1,0 +1,11 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <button id="btn-chk-mail">Проверить почту</button>
+{% endblock %}
+
+{% block tail %}
+    {% assets "js_all" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{% endblock %}

@@ -1,0 +1,7 @@
+psycopg2
+flask
+flask-restful
+Flask-SQLAlchemy
+Flask-Migrate
+flask-admin
+flask-assets
