@@ -4,10 +4,30 @@ $('#btn-chk-mail').on("click", function() {
     });
 });
 
+
+var editor; // use a global for the submit and return data rendering in the examples
+
 $(document).ready(function() {
+
     $('#example').dataTable( {
-        "processing": true,
+        "ajax": "/api/mail",
         "serverSide": true,
-        "ajax": "/api/mail"
+        "columns": [
+            { "data": "name" },
+            { "data": "position" },
+            { "data": "office" },
+            { "data": "extn" },
+            { "data": "start_date" },
+            { "data": "salary" }
+        ]
     } );
 } );
+
+
+//$(document).ready(function() {
+//    $('#example').dataTable( {
+//        "processing": true,
+//        "serverSide": true,
+//        "ajax": "/api/mail"
+//    } );
+//} );
