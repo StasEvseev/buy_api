@@ -3,3 +3,11 @@ $('#btn-chk-mail').on("click", function() {
         console.log(res);
     });
 });
+
+$(document).ready(function() {
+    $('#example').dataTable( {
+        "processing": true,
+        "serverSide": true,
+        "ajax": "/api/mail"
+    } );
+} );
