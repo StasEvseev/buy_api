@@ -1,17 +1,16 @@
 {% extends 'admin/master.html' %}
 
 {% block body %}
-    <button id="btn-chk-mail">Проверить почту</button>
-
+    <div>
+        <button id="btn-chk-mail" class="btn btn-default">Проверить почту</button>
+        <button id="btn_handle" class="btn btn-default" disabled="disabled">Обработать</button>
+    </div>
     <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Position</th>
-                <th>Office</th>
-                <th>Extn.</th>
-                <th>Start date</th>
-                <th>Salary</th>
+                <th>Дата и время</th>
+                <th>Заголовок</th>
+                <th>Отправитель</th>
             </tr>
         </thead>
     </table>
@@ -24,6 +23,10 @@
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
     {% assets "DT_CSS" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
+    {% assets "css_all" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}" />
     {% endassets %}
 

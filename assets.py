@@ -15,7 +15,8 @@ bundles = {
         'css/lib/jquery.dataTables_themeroller.css',
         output='gen/css/DT.css'
     ),
-    'js_all': Bundle('main.js', output='gen/packed.js')
+    'js_all': Bundle('main.js', output='gen/packed.js'),
+    'css_all': Bundle('css/main.css', output='gen/css/main.css')
 
     # 'home_js': Bundle(
     #     'js/lib/jquery-1.10.2.js',
