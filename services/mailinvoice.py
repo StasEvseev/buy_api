@@ -4,6 +4,7 @@ from mails.action import get_count_mails, NotConnect, get_mails
 from mails.model import Mail
 from models import db
 from models.invoice import Invoice
+from models.invoiceitem import InvoiceItem
 
 
 class MailInvoiceException(Exception):
@@ -26,7 +27,16 @@ class MailInvoiceService(object):
 
                 invoice = InvoiceModel(ml.file)
 
+                invmodel = Invoice(
+                    number=invoice.number, date=invoice.date, mail=ml,
+                    sum_without_NDS=invoice.sum_without_NDS, sum_with_NDS=invoice.sum_with_NDS,
+                    sum_NDS=invoice.sum_NDS, weight=invoice.weight, responsible=invoice.responsible)
+
+                products = invoice.get_products()
+
                 db.session.add(ml)
+                db.session.add(invmodel)
+
                 db.session.commit()
 
     @classmethod

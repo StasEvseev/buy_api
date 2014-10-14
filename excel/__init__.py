@@ -1,6 +1,8 @@
 #coding:utf-8
 
+
 import xlrd
+import datetime
 from collections import namedtuple
 
 # from applications.product.models import Invoice, IncomingProduct, Product
@@ -23,6 +25,8 @@ class InvoiceModel(object):
 
         self.number = self.get_value(sheet, 3, 0, u'№ ', u' от')
         self.date = self.get_value(sheet, 3, 0, u'от', ' (')
+
+        self.date = datetime.datetime.strptime(self.date, '%d.%m.%y').date()
         #self.provider = ''
         self.start_row = self.find_cell(sheet, u"Название издания") + 1
         row_ = self.find_cell(sheet, u'Итого:')
@@ -42,16 +46,13 @@ class InvoiceModel(object):
 
     def get_products(self):
         sheet = self.doc.sheet_by_index(0)
-        count_row = self.count
         result = []
         for rownum in range(self.start_row, self.start_row + self.count):
             if sheet.cell(rownum, 0).value != '':
                 full_n = sheet.cell(rownum, 1).value
-                # st = full_n.split(u" №")
                 arg = {}
                 arg['full_name'] = full_n
                 arg['name'], arg['number'] = self.get_name_number(full_n)
-                # arg['number'] = st[1].split(u"(")[0]
                 arg['count_order'] = sheet.cell(rownum, 2).value
                 arg['count_postorder'] = sheet.cell(rownum, 3).value
                 arg['count'] = sheet.cell(rownum, 4).value
@@ -72,8 +73,10 @@ class InvoiceModel(object):
         return result
 
     def get_name_number(self, full_name):
-        st = full_name.split(u" №")
-        return st[0], st[1].split(u"(")[0]
+        st = full_name.split(u"№")
+        name = st[0].strip()
+        number = u''.join([st[1].split(u"(")[0], "(", self.substring(st[1], "(", ")"), ")"])
+        return name, number
 
     def find_cell(self, sheet, text):
         for rownum in range(sheet.nrows):
@@ -86,12 +89,16 @@ class InvoiceModel(object):
         value = cell.value
         if isinstance(value, float):
             return value
-        ind_begin = value.find(mask_begin) + len(mask_begin)
-        ind_end = value.find(mask_end)
+        result = self.substring(value, mask_begin, mask_end)
+        return result
+
+    def substring(self, string, mask_begin, mask_end):
+        ind_begin = string.find(mask_begin) + len(mask_begin)
+        ind_end = string.find(mask_end)
         if not ind_end:
-            result = value[ind_begin:]
+            result = string[ind_begin:]
         else:
-            result = value[ind_begin:ind_end].strip()
+            result = string[ind_begin:ind_end].strip()
         return result
 
     # def create(self):
