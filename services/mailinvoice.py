@@ -26,7 +26,6 @@ class MailInvoiceService(object):
 
                 invoice = InvoiceModel(ml.file)
 
-
                 db.session.add(ml)
                 db.session.commit()
 

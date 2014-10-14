@@ -1,5 +1,6 @@
 #coding: utf-8
 from models import db
+from provider import Provider
 
 
 class Invoice(db.Model):
@@ -13,8 +14,11 @@ class Invoice(db.Model):
     date = db.Column(db.Date)
     #Поставщик
     provider_id = db.Column(db.Integer, db.ForeignKey('provider.id'))
-    provider = db.relationship('Provider',
+    provider = db.relationship(Provider,
         backref=db.backref('invoices', lazy='dynamic'))
+
+    mail_id = db.Column(db.Integer, db.ForeignKey('mails.id'))
+    mail = db.relationship('Mail', backref=db.backref('mails', lazy='dynamic'))
 
     #Сумма без НДС, руб.
     sum_without_NDS = db.Column(db.DECIMAL)

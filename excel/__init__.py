@@ -1,8 +1,14 @@
 #coding:utf-8
 
 import xlrd
+from collections import namedtuple
 
 # from applications.product.models import Invoice, IncomingProduct, Product
+
+Product = namedtuple("Product", [
+    'full_name', 'name', 'number', 'count_order', 'count_postorder', 'count', 'price_without_NDS',
+    'price_with_NDS', 'sum_without_NDS', 'sum_NDS', 'rate_NDS', 'sum_with_NDS', 'thematic',
+    'count_whole_pack', 'placer'], verbose=False)
 
 
 class InvoiceModel(object):
@@ -11,19 +17,17 @@ class InvoiceModel(object):
         self.doc = xlrd.open_workbook(doc, on_demand=True)
         sheet = self.doc.sheet_by_index(0)
         number = self.get_value(sheet, 0, 1, u'№', u' от')
-        self.invoice = Invoice.get_by_number(number)
-        if self.invoice is None:
-            self.invoice = Invoice()
-            self.invoice.number = number
-            self.invoice.date = self.get_value(sheet, 0, 1, u'от', '')
-            self.invoice.sklad = self.get_value(sheet, 0, 0, u': ', u'/')
 
-            row_ = self.find_cell(sheet, u'Итого:')
-            self.invoice.sum = self.get_value(sheet, 8, row_)
-            self.invoice.sum_NDS = self.get_value(sheet, 7, row_)
-            row_ = row_ + 4
-            self.invoice.weight = float(self.get_value(sheet, 0, row_, u'Вес товара - ', u'кг.'))
-        self.products = self.get_products()
+        self.number = number
+        self.date = self.get_value(sheet, 0, 1, u'от', '')
+        self.sklad = self.get_value(sheet, 0, 0, u': ', u'/')
+
+        row_ = self.find_cell(sheet, u'Итого:')
+        self.sum = self.get_value(sheet, 8, row_)
+        self.sum_NDS = self.get_value(sheet, 7, row_)
+        row_ = row_ + 4
+        self.weight = float(self.get_value(sheet, 0, row_, u'Вес товара - ', u'кг.'))
+        # self.products = self.get_products()
 
     def get_products(self):
         sheet = self.doc.sheet_by_index(0)
@@ -40,13 +44,13 @@ class InvoiceModel(object):
                 arg['rate_NDS'] = sheet.cell(rownum + 6, 6).value
                 arg['sum_NDS'] = sheet.cell(rownum + 6, 7).value
                 arg['sum_with_NDS'] = sheet.cell(rownum + 6, 8).value
-                ip = IncomingProduct(**arg)
+                ip = Product(**arg)
                 if self.invoice.id is not None:
-                    if IncomingProduct.has_by_invoice(ip.name, self.invoice.id):
-                        price_db = IncomingProduct.get_pricepay_by_name_invoice(
-                            ip.name, self.invoice.id)
-                    else:
-                        price_db = Product.get_pricepay_for_name(ip.norm_name())
+                    # if IncomingProduct.has_by_invoice(ip.name, self.invoice.id):
+                    #     price_db = IncomingProduct.get_pricepay_by_name_invoice(
+                    #         ip.name, self.invoice.id)
+                    # else:
+                    #     price_db = Product.get_pricepay_for_name(ip.norm_name())
                     if price_db:
                         ip.price_pay = price_db
                 else:
@@ -76,11 +80,11 @@ class InvoiceModel(object):
             result = value[ind_begin:ind_end].strip()
         return result
 
-    def create(self):
-        inv = Invoice.get_by_number(number=self.invoice.number)
-        if inv is None:
-            self.invoice.create()
-            inv = self.invoice
-        for pr in self.products:
-            pr.invoice_id = inv.id
-            pr.create()
+    # def create(self):
+    #     inv = Invoice.get_by_number(number=self.invoice.number)
+    #     if inv is None:
+    #         self.invoice.create()
+    #         inv = self.invoice
+    #     for pr in self.products:
+    #         pr.invoice_id = inv.id
+    #         pr.create()

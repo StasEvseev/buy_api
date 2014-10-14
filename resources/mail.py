@@ -28,7 +28,7 @@ class MailCheck(restful.Resource):
 
         try:
             MailInvoiceService.handle_mail()
-            pass
+            # pass
         except MailInvoiceException as err:
             abort(404, message=unicode(err))
 
