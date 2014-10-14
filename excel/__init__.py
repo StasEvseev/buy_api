@@ -14,52 +14,66 @@ Product = namedtuple("Product", [
 class InvoiceModel(object):
 
     def __init__(self, doc):
+
+        self.count = 0
+        self.start_row = 0
+
         self.doc = xlrd.open_workbook(doc, on_demand=True)
         sheet = self.doc.sheet_by_index(0)
-        number = self.get_value(sheet, 0, 1, u'№', u' от')
 
-        self.number = number
-        self.date = self.get_value(sheet, 0, 1, u'от', '')
-        self.sklad = self.get_value(sheet, 0, 0, u': ', u'/')
-
+        self.number = self.get_value(sheet, 3, 0, u'№ ', u' от')
+        self.date = self.get_value(sheet, 3, 0, u'от', ' (')
+        #self.provider = ''
+        self.start_row = self.find_cell(sheet, u"Название издания") + 1
         row_ = self.find_cell(sheet, u'Итого:')
-        self.sum = self.get_value(sheet, 8, row_)
-        self.sum_NDS = self.get_value(sheet, 7, row_)
+        self.count = row_ - self.start_row
+        self.sum_without_NDS = self.get_value(sheet, row_, 7)
+        self.sum_with_NDS = self.get_value(sheet, row_, 10)
+        self.sum_NDS = self.get_value(sheet, row_, 9)
+
+
         row_ = row_ + 4
-        self.weight = float(self.get_value(sheet, 0, row_, u'Вес товара - ', u'кг.'))
-        # self.products = self.get_products()
+        self.weight = float(self.get_value(sheet, row_, 0, u'Вес товара - ', u'кг.'))
+
+        row_ += 2
+        self.responsible = self.get_value(sheet, row_, 0, u" /", u"/ ")
+
+        assert self.number and self.date and self.sum_without_NDS and self.sum_with_NDS and self.sum_NDS and self.weight and self.responsible
 
     def get_products(self):
         sheet = self.doc.sheet_by_index(0)
-        count_row = sheet.nrows - 6
+        count_row = self.count
         result = []
-        for rownum in range(count_row):
-            if sheet.cell(rownum + 6, 0).value != '':
+        for rownum in range(self.start_row, self.start_row + self.count):
+            if sheet.cell(rownum, 0).value != '':
+                full_n = sheet.cell(rownum, 1).value
+                # st = full_n.split(u" №")
                 arg = {}
-                arg['name'] = sheet.cell(rownum + 6, 1).value
-                arg['order'] = sheet.cell(rownum + 6, 2).value
-                arg['count'] = sheet.cell(rownum + 6, 3).value
-                arg['price_full'] = sheet.cell(rownum + 6, 4).value
-                arg['price_without_NDS'] = sheet.cell(rownum + 6, 5).value
-                arg['rate_NDS'] = sheet.cell(rownum + 6, 6).value
-                arg['sum_NDS'] = sheet.cell(rownum + 6, 7).value
-                arg['sum_with_NDS'] = sheet.cell(rownum + 6, 8).value
+                arg['full_name'] = full_n
+                arg['name'], arg['number'] = self.get_name_number(full_n)
+                # arg['number'] = st[1].split(u"(")[0]
+                arg['count_order'] = sheet.cell(rownum, 2).value
+                arg['count_postorder'] = sheet.cell(rownum, 3).value
+                arg['count'] = sheet.cell(rownum, 4).value
+                arg['price_without_NDS'] = sheet.cell(rownum, 5).value
+                arg['price_with_NDS'] = sheet.cell(rownum, 6).value
+                arg['sum_without_NDS'] = sheet.cell(rownum, 7).value
+                arg['sum_NDS'] = sheet.cell(rownum, 8).value
+                arg['rate_NDS'] = sheet.cell(rownum, 9).value
+                arg['sum_with_NDS'] = sheet.cell(rownum, 10).value
+                arg['thematic'] = sheet.cell(rownum, 11).value
+                arg['count_whole_pack'] = sheet.cell(rownum, 12).value
+                arg['placer'] = sheet.cell(rownum, 13).value
+
                 ip = Product(**arg)
-                if self.invoice.id is not None:
-                    # if IncomingProduct.has_by_invoice(ip.name, self.invoice.id):
-                    #     price_db = IncomingProduct.get_pricepay_by_name_invoice(
-                    #         ip.name, self.invoice.id)
-                    # else:
-                    #     price_db = Product.get_pricepay_for_name(ip.norm_name())
-                    if price_db:
-                        ip.price_pay = price_db
-                else:
-                    price_db = Product.get_pricepay_for_name(ip.norm_name())
-                ip.price_db = price_db
                 result.append(ip)
             else:
                 return result
         return result
+
+    def get_name_number(self, full_name):
+        st = full_name.split(u" №")
+        return st[0], st[1].split(u"(")[0]
 
     def find_cell(self, sheet, text):
         for rownum in range(sheet.nrows):
@@ -68,7 +82,7 @@ class InvoiceModel(object):
                 return rownum
 
     def get_value(self, sheet, col, row, mask_begin='_', mask_end='_'):
-        cell = sheet.cell(row, col)
+        cell = sheet.cell(col, row)
         value = cell.value
         if isinstance(value, float):
             return value
