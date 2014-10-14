@@ -7,7 +7,9 @@ def get_date(part):
         part._headers[2][1][:-6], '%a, %d %b %Y %H:%M:%S')
 
 def get_title(part):
-    return part._headers[5][1]
+    from email.header import decode_header
+    subject, _ = decode_header(part._headers[5][1])[0]
+    return subject
 
 def get_from(part):
     num_begin = part._headers[6][1].find('<') + 1

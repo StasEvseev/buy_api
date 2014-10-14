@@ -25,10 +25,8 @@ class MailCheck(restful.Resource):
     }))})
     def get(self, **kwargs):
         args = parser.parse_args()
-
         try:
             MailInvoiceService.handle_mail()
-            # pass
         except MailInvoiceException as err:
             abort(404, message=unicode(err))
 
