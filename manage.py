@@ -13,6 +13,7 @@ from models.order import Order
 from models.orderitem import OrderItem
 from models.provider import Provider
 from mails.model import Mail
+from models.price import Price
 
 migrate = Migrate(app, db)
 manager = Manager(app)

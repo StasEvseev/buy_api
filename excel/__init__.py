@@ -59,11 +59,15 @@ class InvoiceModel(object):
                 arg['price_without_NDS'] = sheet.cell(rownum, 5).value
                 arg['price_with_NDS'] = sheet.cell(rownum, 6).value
                 arg['sum_without_NDS'] = sheet.cell(rownum, 7).value
-                arg['sum_NDS'] = sheet.cell(rownum, 8).value
-                arg['rate_NDS'] = sheet.cell(rownum, 9).value
+                arg['rate_NDS'] = sheet.cell(rownum, 8).value.replace(' %', '')
+                arg['sum_NDS'] = sheet.cell(rownum, 9).value
                 arg['sum_with_NDS'] = sheet.cell(rownum, 10).value
                 arg['thematic'] = sheet.cell(rownum, 11).value
-                arg['count_whole_pack'] = sheet.cell(rownum, 12).value
+
+                count_whole_pack = sheet.cell(rownum, 12).value
+                if count_whole_pack == '   ':
+                    count_whole_pack = 0
+                arg['count_whole_pack'] = count_whole_pack
                 arg['placer'] = sheet.cell(rownum, 13).value
 
                 ip = Product(**arg)

@@ -17,6 +17,13 @@ parser.add_argument('start', type=int)
 
 class MailCheck(restful.Resource):
 
+    def post(self):
+        try:
+            MailInvoiceService.handle_mail()
+        except MailInvoiceException as err:
+            abort(404, message=unicode(err))
+        return 'ok'
+
     @marshal_with({'data': fields.List(fields.Nested({
         'date': fields.DateTime,
         'title': fields.String,
@@ -25,10 +32,10 @@ class MailCheck(restful.Resource):
     }))})
     def get(self, **kwargs):
         args = parser.parse_args()
-        try:
-            MailInvoiceService.handle_mail()
-        except MailInvoiceException as err:
-            abort(404, message=unicode(err))
+        # try:
+        #     MailInvoiceService.handle_mail()
+        # except MailInvoiceException as err:
+        #     abort(404, message=unicode(err))
 
         mails = Mail.query.order_by(desc(Mail.date)).offset(args['start']).limit(args['length']).all()
 

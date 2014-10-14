@@ -19,6 +19,9 @@ class MailInvoiceService(object):
 
     @classmethod
     def handle_mail(cls):
+        """
+        Метод обрабатывает почтовый ящик
+        """
         count = cls.get_count_new_mails()
         if count > 0:
             mails = get_mails()
@@ -33,9 +36,19 @@ class MailInvoiceService(object):
                     sum_NDS=invoice.sum_NDS, weight=invoice.weight, responsible=invoice.responsible)
 
                 products = invoice.get_products()
-
                 db.session.add(ml)
                 db.session.add(invmodel)
+
+                for product in products:
+                    invitem = InvoiceItem(
+                        full_name=product.full_name, name=product.name, number=product.number,
+                        count_order=product.count_order, count_postorder=product.count_postorder,
+                        count=product.count, price_without_NDS=product.price_without_NDS,
+                        price_with_NDS=product.price_with_NDS, sum_without_NDS=product.sum_without_NDS,
+                        sum_NDS=product.sum_NDS, rate_NDS=product.rate_NDS, sum_with_NDS=product.sum_with_NDS,
+                        thematic=product.thematic, count_whole_pack=product.count_whole_pack,
+                        placer=product.placer, invoice=invmodel)
+                    db.session.add(invitem)
 
                 db.session.commit()
 

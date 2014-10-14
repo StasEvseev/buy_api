@@ -23,9 +23,6 @@ def create_app():
     db.init_app(application)
     admin.init_app(application)
 
-    from admin.myview import MyView
-    admin.add_view(MyView(name=u'Проверка почты'))
-
     return application
 
 app = create_app()

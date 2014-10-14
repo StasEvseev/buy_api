@@ -19,9 +19,9 @@ class OrderItem(db.Model):
     count = db.Column(db.Integer)
 
     #Пред цена
-    price_prev = db.Column(db.Float)
+    price_prev = db.Column(db.DECIMAL)
     #Пост цена
-    price_post = db.Column(db.Float)
+    price_post = db.Column(db.DECIMAL)
 
     #Заказ
     order_id = db.Column(db.Integer, db.ForeignKey('order.id'))

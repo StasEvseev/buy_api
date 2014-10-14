@@ -1,13 +1,13 @@
-$('#btn-chk-mail').on("click", function() {
-    $.ajax('/mail', {}).success(function(res) {
-        console.log(res);
-    });
-});
+
 
 
 var editor; // use a global for the submit and return data rendering in the examples
 
 $(document).ready(function() {
+
+    var btn_chk_mail = $('#btn-chk-mail');
+
+    var btnHandle = $("#btn_handle");
 
     var table = $('#example').dataTable( {
         "ajax": "/api/mail",
@@ -25,23 +25,50 @@ $(document).ready(function() {
         "bSort": false
     });
 
-    var btnHandle = $("#btn_handle");
+    btn_chk_mail.on("click", function() {
+        $.post('/api/mail', {}).success(function(res) {
+            var tbl = table;
+            if(res == 'ok') {
+                tbl.api().ajax.reload(function() {
+                    disableBtnHandle(true);
+                });
+            }
+
+        });
+    });
 
     $('#example tbody').on( 'click', 'tr', function () {
         if ( $(this).hasClass('selected') ) {
             $(this).removeClass('selected');
-            btnHandle.attr('disabled', 'disabled');
+            disableBtnHandle(true);
         }
         else {
             table.$('tr.selected').removeClass('selected');
             $(this).addClass('selected');
-            btnHandle.removeAttr('disabled');
+            disableBtnHandle(false);
         }
     } );
 
     btnHandle.click( function () {
-        table.row('.selected').remove().draw( false );
+        var tbl = table;
+        console.log(tbl.$('tr.selected'));
+
+        
+//        console.log(tbl.rows())
+//        var row = tbl.row('.selected');
+//        row.remove().draw(false);
+//        console.log(row);
+//        table.row('.selected').remove().draw( false );
     } );
+
+    function disableBtnHandle(bool) {
+        if (bool) {
+            btnHandle.attr('disabled', 'disabled');
+        } else {
+            btnHandle.removeAttr('disabled');
+        }
+
+    }
 
 
 } );
