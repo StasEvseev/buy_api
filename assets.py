@@ -7,8 +7,8 @@ assets = Environment()
 bundles = {
 
     'DT_JS': Bundle(
-        'js/lib/jquery.dataTables.js',
-        output='gen/js/jqueryDT.js'
+        'js/lib/jquery.dataTables.js'
+        # output='gen/js/jqueryDT.js'
     ),
     'DT_CSS': Bundle(
         'css/lib/jquery.dataTables.css',

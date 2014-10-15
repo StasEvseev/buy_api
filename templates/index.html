@@ -3,9 +3,9 @@
 {% block body %}
     <div>
         <button id="btn-chk-mail" class="btn btn-default">Проверить почту</button>
-{#        <a class="btn" id="btn_handle" href="" disabled="disabled">Обработать</a>#}
         <button id="btn_handle" class="btn btn-default" disabled="disabled">Обработать</button>
     </div>
+
     <table id="example" class="display" cellspacing="0" width="100%">
         <thead>
             <tr>
@@ -19,6 +19,10 @@
 
 {% block tail %}
 
+    <script type="text/javascript">
+        var path_to_invoice = "{{ url_for('.invoice', invoice_id='') }}";
+        console.log(path_to_invoice);
+    </script>
 
     {% assets "DT_JS" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>

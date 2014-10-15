@@ -17,9 +17,6 @@ class Invoice(db.Model):
     provider = db.relationship(Provider,
         backref=db.backref('invoices', lazy='dynamic'))
 
-    mail_id = db.Column(db.Integer, db.ForeignKey('mails.id'))
-    mail = db.relationship('Mail', backref=db.backref('mails', lazy='dynamic'))
-
     #Сумма без НДС, руб.
     sum_without_NDS = db.Column(db.DECIMAL)
     #Сумма с учетом НДС, руб.

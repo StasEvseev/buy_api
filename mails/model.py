@@ -12,6 +12,8 @@ class Mail(db.Model):
     to = db.Column(db.String)
     file = db.Column(db.String)
     is_handling = db.Column(db.BOOLEAN)
+    invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'))
+    invoice = db.relationship('Invoice', backref=db.backref('mails', lazy='dynamic'))
 
     def __init__(self, title, date, from_, to, file=None, is_handling=False):
         self.title = title

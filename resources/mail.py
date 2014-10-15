@@ -28,7 +28,8 @@ class MailCheck(restful.Resource):
         'date': fields.DateTime,
         'title': fields.String,
         'from': fields.String(attribute='from_'),
-        'is_handling': fields.Boolean
+        'is_handling': fields.Boolean,
+        'invoice_id': fields.Integer
     }))})
     def get(self, **kwargs):
         args = parser.parse_args()

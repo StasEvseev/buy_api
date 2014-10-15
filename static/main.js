@@ -1,8 +1,3 @@
-
-
-
-var editor; // use a global for the submit and return data rendering in the examples
-
 $(document).ready(function() {
 
     var btn_chk_mail = $('#btn-chk-mail');
@@ -50,15 +45,15 @@ $(document).ready(function() {
     } );
 
     btnHandle.click( function () {
-        var tbl = table;
-        console.log(tbl.$('tr.selected'));
 
-        
-//        console.log(tbl.rows())
-//        var row = tbl.row('.selected');
-//        row.remove().draw(false);
-//        console.log(row);
-//        table.row('.selected').remove().draw( false );
+        var row = table.api().row('.selected');
+
+        if (row) {
+            var invoice_id = table.api().row('.selected').data()['invoice_id'];
+            var path = path_to_invoice + invoice_id;
+            location.href=path;
+        }
+
     } );
 
     function disableBtnHandle(bool) {

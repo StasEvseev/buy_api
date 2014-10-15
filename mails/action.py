@@ -90,7 +90,23 @@ def get_mails():
                 mail.logout()
             results.append(mail_item)
 
-    return results
+    return ids, results
+
+def mark_as_unseen(ids):
+    """
+    Помечаем письма с ids как непросмотренные
+    """
+    try:
+        mail = imaplib.IMAP4_SSL(imap_server)
+        mail.login(user_imap, user_pass)
+    except Exception as err:
+        raise NotConnect(u'Нет соединения с сервером. Проверьте подключение.')
+    else:
+        mail.select('inbox')
+        for id in ids:
+            mail.store(id, '-FLAGS', '\Seen')
+        mail.close()
+        mail.logout()
 
 def file_imap(pmail):
     """
