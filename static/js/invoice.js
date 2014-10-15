@@ -16,19 +16,19 @@ function idToIconPlus(index) {
 }
 
 function disableRow(index) {
-    if (confirm("Вы подтверждаете удаление?")) {
+//    if (confirm("Вы подтверждаете удаление?")) {
 
         yesDisableConfirm(index);
 
-    }
+//    }
 }
 
 function enableRow(index) {
-    if (confirm("Вы подтверждаете добавление?")) {
+//    if (confirm("Вы подтверждаете добавление?")) {
 
         yesEnableConfirm(index);
 
-    }
+//    }
 }
 
 function yesDisableConfirm(index) {
