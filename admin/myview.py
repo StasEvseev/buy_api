@@ -13,7 +13,7 @@ class MyView(BaseView):
     def invoice(self, invoice_id):
         url = url_for('.index')
         invoice = Invoice.query.get(invoice_id)
-        return self.render('invoice.html', url=url)
+        return self.render('invoice.html', url=url, invoice_items=invoice.items)
 
     @expose('/bla/bla')
     def bla(self):
