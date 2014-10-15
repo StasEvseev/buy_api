@@ -21,12 +21,12 @@
             <tbody>
                 {% for item in invoice_items %}
 
-                        <input type="hidden" name="commodity_id-item-{{ loop.index }}" value="{{ item.commodity_id }}">
-                        <input type="hidden" name="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">
-                        <input type="hidden" name="number_global-item-{{ loop.index }}" value="{{ item.number_global }}">
-                        <input type="hidden" name="NDS-item-{{ loop.index }}" value="{{ item.NDS }}">
-                        <input type="hidden" name="price_prev-item-{{ loop.index }}" value="{{ item.price_prev }}">
-                        <input type="hidden" name="price_post-item-{{ loop.index }}" value="{{ item.price_post }}">
+                        <input type="hidden" id="commodity_id-item-{{ loop.index }}" value="{{ item.id_commodity }}">
+                        <input type="hidden" id="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">
+                        <input type="hidden" id="number_global-item-{{ loop.index }}" value="{{ item.number_global }}">
+                        <input type="hidden" id="NDS-item-{{ loop.index }}" value="{{ item.NDS }}">
+                        <input type="hidden" id="price_prev-item-{{ loop.index }}" value="{{ item.price_prev }}">
+                        <input type="hidden" id="price_post-item-{{ loop.index }}" value="{{ item.price_post }}">
 {#                        <input type="hidden" name="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">#}
 
 {#                        <input type="hidden" name="invoice-item-id-{{ loop.index }}" value="{{ item.id }}">#}
@@ -35,20 +35,22 @@
                                 {{ item.full_name }}
                             </td>
                             <td>
-                                {{ item.rate_NDS }}
+                                {{ item.NDS }}
                             </td>
                             <td>
-                                {{ item.price_without_NDS }}
+                                {{ item.price_prev}}
                             </td>
                             <td>
-                                {{ item.price_with_NDS }}
+                                {{ item.price_post }}
                             </td>
                             <td>
-                                <input id="price_retail-item-{{ loop.index }}" name="price-pay-item-{{ loop.index }}" class="input-small" type="text" placeholder="Цена" value="">
+                                <input id="price_retail-item-{{ loop.index }}"
+                                       class="input-small" type="text" placeholder="Цена" value="{{ item.price_retail }}">
                             </td>
 
                             <td>
-                                <input id="price_gross-item-{{ loop.index }}" name="price-pay-item-{{ loop.index }}" class="input-small" type="text" placeholder="Цена" value="">
+                                <input id="price_gross-item-{{ loop.index }}"
+                                       class="input-small" type="text" placeholder="Цена" value="{{ item.price_gross }}">
                             </td>
 {#                            <td>#}
 {#                                <i id="icon-remove-{{ loop.index }}" class="icon-remove" onclick="disableRow('{{ loop.index }}')"></i>#}
