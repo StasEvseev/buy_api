@@ -1,0 +1,74 @@
+{% extends 'admin/master.html' %}
+
+{% block body %}
+    <a class="btn btn-primary" href="{{ url }}">Назад</a>
+
+    <h3 class="text-right">{{ date.strftime('%d.%m.%Y') }}</h3>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>НДС (%)</th>
+                    <th>Цена (руб.)</th>
+                    <th>Цена с НДС (руб.)</th>
+                    <th>Цена розницы (руб.)</th>
+                    <th>Цена опта (руб.)</th>
+{#                    <th>Статус</th>#}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in invoice_items %}
+
+                        <input type="hidden" name="commodity_id-item-{{ loop.index }}" value="{{ item.commodity_id }}">
+                        <input type="hidden" name="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">
+                        <input type="hidden" name="number_global-item-{{ loop.index }}" value="{{ item.number_global }}">
+                        <input type="hidden" name="NDS-item-{{ loop.index }}" value="{{ item.NDS }}">
+                        <input type="hidden" name="price_prev-item-{{ loop.index }}" value="{{ item.price_prev }}">
+                        <input type="hidden" name="price_post-item-{{ loop.index }}" value="{{ item.price_post }}">
+{#                        <input type="hidden" name="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">#}
+
+{#                        <input type="hidden" name="invoice-item-id-{{ loop.index }}" value="{{ item.id }}">#}
+                        <tr id="row-item-{{ loop.index }}">
+                            <td>
+                                {{ item.full_name }}
+                            </td>
+                            <td>
+                                {{ item.rate_NDS }}
+                            </td>
+                            <td>
+                                {{ item.price_without_NDS }}
+                            </td>
+                            <td>
+                                {{ item.price_with_NDS }}
+                            </td>
+                            <td>
+                                <input id="price_retail-item-{{ loop.index }}" name="price-pay-item-{{ loop.index }}" class="input-small" type="text" placeholder="Цена" value="">
+                            </td>
+
+                            <td>
+                                <input id="price_gross-item-{{ loop.index }}" name="price-pay-item-{{ loop.index }}" class="input-small" type="text" placeholder="Цена" value="">
+                            </td>
+{#                            <td>#}
+{#                                <i id="icon-remove-{{ loop.index }}" class="icon-remove" onclick="disableRow('{{ loop.index }}')"></i>#}
+{#                                <i id="icon-plus-{{ loop.index }}" class="icon-plus hidden" onclick="enableRow('{{ loop.index }}')"></i>#}
+{#                            </td>#}
+
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button class="btn" onclick="submitPrices({{ invoice_items|length }})">Сохранить</button>
+
+
+{% endblock %}
+
+{% block tail %}
+
+        {% assets "invoice" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+
+{% endblock %}

@@ -46,3 +46,8 @@ function yesEnableConfirm(index) {
     $(idToIconPlus(index)).addClass('hidden');
     $(idToIconRemove(index)).removeClass('hidden');
 }
+
+
+function submitPrices(count) {
+    console.log(count);
+}

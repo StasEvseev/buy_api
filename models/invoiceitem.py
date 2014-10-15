@@ -13,7 +13,9 @@ class InvoiceItem(db.Model):
     #Название издания
     name = db.Column(db.String(250))
     #Номер издания
-    number = db.Column(db.String(250))
+    number_local = db.Column(db.String(250))
+
+    number_global = db.Column(db.String(250))
 
     #Заказ
     count_order = db.Column(db.Integer)
@@ -28,9 +30,9 @@ class InvoiceItem(db.Model):
     price_with_NDS = db.Column(db.DECIMAL)
     #Сумма без НДС, руб.
     sum_without_NDS = db.Column(db.DECIMAL)
-    #Ставка НДС
-    sum_NDS = db.Column(db.DECIMAL)
     #Сумма НДС, руб.
+    sum_NDS = db.Column(db.DECIMAL)
+    #Ставка НДС
     rate_NDS = db.Column(db.DECIMAL)
     #Сумма с учетом НДС, руб.
     sum_with_NDS = db.Column(db.DECIMAL)

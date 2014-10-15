@@ -8,8 +8,8 @@ from collections import namedtuple
 # from applications.product.models import Invoice, IncomingProduct, Product
 
 Product = namedtuple("Product", [
-    'full_name', 'name', 'number', 'count_order', 'count_postorder', 'count', 'price_without_NDS',
-    'price_with_NDS', 'sum_without_NDS', 'sum_NDS', 'rate_NDS', 'sum_with_NDS', 'thematic',
+    'full_name', 'name', 'number_local', 'number_global', 'count_order', 'count_postorder', 'count',
+    'price_without_NDS', 'price_with_NDS', 'sum_without_NDS', 'sum_NDS', 'rate_NDS', 'sum_with_NDS', 'thematic',
     'count_whole_pack', 'placer'], verbose=False)
 
 
@@ -52,7 +52,7 @@ class InvoiceModel(object):
                 full_n = sheet.cell(rownum, 1).value
                 arg = {}
                 arg['full_name'] = full_n
-                arg['name'], arg['number'] = self.get_name_number(full_n)
+                arg['name'], arg['number_local'], arg['number_global'] = self.get_name_number(full_n)
                 arg['count_order'] = sheet.cell(rownum, 2).value
                 arg['count_postorder'] = sheet.cell(rownum, 3).value
                 arg['count'] = sheet.cell(rownum, 4).value
@@ -79,8 +79,9 @@ class InvoiceModel(object):
     def get_name_number(self, full_name):
         st = full_name.split(u"№")
         name = st[0].strip()
-        number = u''.join([st[1].split(u"(")[0], "(", self.substring(st[1], "(", ")"), ")"])
-        return name, number
+        number_local = st[1].split(u"(")[0]
+        number_global = self.substring(st[1], "(", ")")
+        return name, number_local, number_global
 
     def find_cell(self, sheet, text):
         for rownum in range(sheet.nrows):

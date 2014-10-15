@@ -1,7 +1,7 @@
 #coding: utf-8
 from flask import request, url_for
 from flask.ext.admin import BaseView, expose
-from models.invoice import Invoice
+from services.mailinvoice import MailInvoiceService
 
 
 class MyView(BaseView):
@@ -9,13 +9,14 @@ class MyView(BaseView):
     def index(self):
         return self.render('index.html')
 
-    @expose('/invoice/<string:invoice_id>')
-    def invoice(self, invoice_id):
+    @expose('/prices/<string:invoice_id>')
+    def prices(self, invoice_id):
         url = url_for('.index')
-        invoice = Invoice.query.get(invoice_id)
-        return self.render('invoice.html',
+        invoice = MailInvoiceService.get_invoice(invoice_id)
+
+        return self.render('prices.html',
                            date=invoice.date,
-                           url=url, invoice_items=invoice.items)
+                           url=url, invoice_items=list(invoice.items))
 
     @expose('/bla/bla')
     def bla(self):
