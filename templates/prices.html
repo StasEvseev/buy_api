@@ -3,8 +3,18 @@
 {% block body %}
     <ul class="nav nav-pills">
             <a class="btn btn-primary" href="{{ url_back }}">Назад</a>
-            <a class="btn btn-primary" href="{{ url_next }}">Вперед</a>
+        <div class="pull-right">
+            <a class="btn btn-primary" href="{{ url_retail }}">Розничная накладная</a>
+            <a class="btn btn-primary" href="{{ url_gross }}">Оптовая накладная</a>
+        </div>
+
     </ul>
+
+    <div class="alert alert-block {% if not attention %} hidden {% endif %}">
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+      <h4>Внимание!</h4>
+      В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.
+    </div>
 
     <div id="alert-success" class="alert alert-success hidden">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
