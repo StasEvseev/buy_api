@@ -13,7 +13,9 @@
                     <th>Цена (руб.)</th>
                     <th>Цена с НДС (руб.)</th>
                     <th>Цена розницы (руб.)</th>
+                    <th>Рекомендуемая цена розницы (руб.)</th>
                     <th>Цена опта (руб.)</th>
+                    <th>Рекомендуемая цена опта (руб.)</th>
 {#                    <th>Статус</th>#}
                 </tr>
             </thead>
@@ -30,7 +32,7 @@
 {#                        <input type="hidden" name="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">#}
 
 {#                        <input type="hidden" name="invoice-item-id-{{ loop.index }}" value="{{ item.id }}">#}
-                        <tr id="row-item-{{ loop.index }}">
+                        <tr id="row-item-{{ loop.index }}" class="{% if item.is_change %}warning{% endif %}">
                             <td>
                                 {{ item.full_name }}
                             </td>
@@ -49,8 +51,15 @@
                             </td>
 
                             <td>
+                                {{ item.price_retail_recommendation }}
+                            </td>
+
+                            <td>
                                 <input id="price_gross-item-{{ loop.index }}"
                                        class="input-small" type="text" placeholder="Цена" value="{{ item.price_gross }}">
+                            </td>
+                            <td>
+                                {{ item.price_gross_recommendation }}
                             </td>
 {#                            <td>#}
 {#                                <i id="icon-remove-{{ loop.index }}" class="icon-remove" onclick="disableRow('{{ loop.index }}')"></i>#}
