@@ -8,3 +8,4 @@ flask-assets
 xlrd
 xlwt
 xlutils
+flask-triangle

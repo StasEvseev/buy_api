@@ -3,9 +3,52 @@
 {% block body %}
 
     РОЗНИЦА
+    <div ng-app="myApp" ng-controller="MainCtrl">
+
+        {{ bla|angular }}
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Количество</th>
+                    <th>Цена розницы (руб.)</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="item in items">
+                    <td>
+                        {{ item.full_name|angular }}
+                    </td>
+                    <td>
+                        <input type="text" ng-model="item.count" placeholder="Количество" />
+                    </td>
+                    <td>
+                        {{ item.price_retail|angular}}
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+
+        <button ng-click="btnClick()">Click</button>
+
+    </div>
+
+
 
 {% endblock %}
 
-{% block tail %}
+{% block head %}
+
+    {% assets "angularjs" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+{#    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>#}
+{#    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>#}
+    {% assets "invoice_retail" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
 {% endblock %}

@@ -18,7 +18,17 @@ bundles = {
     'js_all': Bundle('main.js', output='gen/packed.js'),
     'css_all': Bundle('css/main.css', output='gen/css/main.css'),
 
-    'invoice': Bundle('js/prices.js')
+    'invoice': Bundle('js/prices.js'),
+
+    'angularjs': Bundle('js/lib/angular.min.js',
+                        #'js/lib/angular.min.js.map',
+                        'js/lib/angular-resource.min.js',
+                        #'js/lib/angular-resource.min.js.map',
+                        'js/lib/angular-route.min.js',
+                        #'js/lib/angular-route.min.js.map'
+                        ),
+
+    'invoice_retail': Bundle('js/invoice_retail.js')
 
     # 'home_js': Bundle(
     #     'js/lib/jquery-1.10.2.js',

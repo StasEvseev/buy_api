@@ -2,6 +2,7 @@
 
 
 from flask import Flask
+from flask.ext.triangle import Triangle
 
 
 
@@ -17,7 +18,7 @@ def create_app():
     application = Flask(__name__)
     application.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 
-
+    Triangle(application)
     assets.init_app(application)
     api.init_app(application)
     db.init_app(application)
