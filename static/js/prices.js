@@ -104,10 +104,16 @@ function submitPrices(count) {
         url: '/api/pricebulk',
         type: 'POST',
         data: {data: JSON.stringify(res)},
-        success: function() {
+        success: function(res) {
+            if(res == 'ok') {
+                $("#alert-success").removeClass("hidden");
+                $("#alert-error").addClass("hidden");
+            }
             console.log("SUCCESS")
         },
         error: function() {
+            $("#alert-success").addClass("hidden");
+            $("#alert-error").removeClass("hidden");
             console.log("ERROR")
         }
     });

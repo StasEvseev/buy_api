@@ -18,7 +18,7 @@ bundles = {
     'js_all': Bundle('main.js', output='gen/packed.js'),
     'css_all': Bundle('css/main.css', output='gen/css/main.css'),
 
-    'invoice': Bundle('js/invoice.js')
+    'invoice': Bundle('js/prices.js')
 
     # 'home_js': Bundle(
     #     'js/lib/jquery-1.10.2.js',
