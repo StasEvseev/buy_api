@@ -18,7 +18,7 @@ app.controller('MainCtrl', function($scope, RetailItems) {
 //        $scope.items = data.items;
 //    });
 
-    RetailItems.get({ id: 9 }, function(data) {
+    RetailItems.get({ id: INVOICE_ID }, function(data) {
         $scope.items = data.items;
 //        console.log(data);
     });

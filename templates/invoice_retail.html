@@ -22,7 +22,8 @@
                         {{ item.full_name|angular }}
                     </td>
                     <td>
-                        <input type="text" ng-model="item.count" placeholder="Количество" />
+                        {{ item.count|angular }}
+{#                        <input type="text" ng-model="item.count" placeholder="Количество" />#}
                     </td>
                     <td>
                         {{ item.price_retail|angular}}
@@ -41,6 +42,10 @@
 {% endblock %}
 
 {% block head %}
+
+    <script type="text/javascript">
+        var INVOICE_ID = {{ invoice_id }};
+    </script>
 
     {% assets "angularjs" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>

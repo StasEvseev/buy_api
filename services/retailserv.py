@@ -5,7 +5,7 @@ from services.mailinvoice import MailInvoiceService
 from services.priceserv import PriceService
 
 
-RetailStub = namedtuple('RetailStub', ['full_name', 'price_retail'])
+RetailStub = namedtuple('RetailStub', ['full_name', 'price_retail', 'count'])
 
 
 class RetailService(object):
@@ -24,7 +24,7 @@ class RetailService(object):
             price = PriceService.get_price_to_commodity(commodity.id)
 
             res.append(RetailStub(
-                full_name=prod.full_name, price_retail=price.price_retail))
+                full_name=prod.full_name, price_retail=price.price_retail, count=prod.count))
 
         return res
 
