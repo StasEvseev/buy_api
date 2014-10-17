@@ -1,27 +1,52 @@
 
-var app = angular.module('myApp', ['ngResource'])
+var app = angular.module('myApp', ['ngResource', 'ui.bootstrap'])
 .factory("RetailItems", function($resource) {
   return $resource("/api/retailitems/:id", {}, {
-    query: { method: "GET", isArray: false }
+    query: { method: "GET", isArray: false },
+    query_approve: {method: "GET", isArray:false, params: {approve: true}},
+    query_not_approve: {method: "GET", isArray:false, params: {approve: false}}
   });
 });
 
 
-app.controller('MainCtrl', function($scope, RetailItems) {
-    $scope.bla = 'WORK!!!!';
+app.controller('MainCtrl', function($scope, $modal, RetailItems) {
 
-//    $scope.items = [
-//        {full_name: 'Первый товар', count: '155', price_retail: '250.0'}
-//    ];
+    $scope.open = function () {
 
-//    RetailItems.query(function(data) {
-//        $scope.items = data.items;
-//    });
+        var modalInstance = $modal.open({
+            templateUrl: 'myModalContent.html',
+            //      controller: 'ModalInstanceCtrl',
+            resolve: {
+                items: function () {
+                  return $scope.items;
+                }
+            }
+        });
 
-    RetailItems.get({ id: INVOICE_ID }, function(data) {
-        $scope.items = data.items;
-//        console.log(data);
+        modalInstance.result.then(function (selectedItem) {
+            $scope.selected = selectedItem;
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    };
+
+    $scope.model = {};
+
+    RetailItems.query({ id: INVOICE_ID }, function(data) {
+        $scope.model.items = data.items;
     });
+
+    $scope.removeFromInvoice = function(item) {
+        item.is_approve = false;
+    };
+    $scope.addToInvoice = function(item) {
+        if(!item.price_retail) {
+
+        } else {
+            item.is_approve = true;
+        }
+
+    };
 
     $scope.btnClick = function() {
         console.log($scope.items);

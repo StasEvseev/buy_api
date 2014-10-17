@@ -18,6 +18,12 @@ bundles = {
     'js_all': Bundle('main.js', output='gen/packed.js'),
     'css_all': Bundle('css/main.css', output='gen/css/main.css'),
 
+    'bootstrap-css': Bundle('css/lib/bootstrap.min.css'),
+    'bootstrap-js': Bundle('js/lib/bootstrap.min.js'),
+
+    'ng-grid-css': Bundle('css/lib/ng-grid.css'),
+    'ng-grid-js': Bundle('js/lib/ng-grid.debug.js'),
+
     'invoice': Bundle('js/prices.js'),
 
     'angularjs': Bundle('js/lib/angular.min.js',
@@ -27,6 +33,8 @@ bundles = {
                         'js/lib/angular-route.min.js',
                         #'js/lib/angular-route.min.js.map'
                         ),
+
+    'angularjs-ui-bootstrap': Bundle('js/lib/ui-bootstrap-tpls-0.11.2.min.js'),
 
     'invoice_retail': Bundle('js/invoice_retail.js')
 
