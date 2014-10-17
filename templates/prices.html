@@ -10,18 +10,18 @@
 
     </ul>
 
-    <div class="alert alert-block {% if not attention %} hidden {% endif %}">
+    <div class="alert alert-warning {% if not attention %} hidden {% endif %}" role="alert">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
       <h4>Внимание!</h4>
       В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.
     </div>
 
-    <div id="alert-success" class="alert alert-success hidden">
+    <div id="alert alert-success" class="alert alert-success hidden">
         <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>Замечательно!</strong> Цены сохранены. Можно переходить к следующему пункту.
     </div>
 
-    <div id="alert-error" class="alert alert-error hidden">
+    <div id="alert alert-error" class="alert alert-error hidden">
       <button type="button" class="close" data-dismiss="alert">&times;</button>
         <strong>Ошибка!</strong> Цены не сохранились. Попробуйте снова, или обратитель в службу поддержки.
     </div>
