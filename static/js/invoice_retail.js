@@ -41,7 +41,7 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems) {
     };
     $scope.addToInvoice = function(item) {
         if(!item.price_retail) {
-
+            bootbox.alert("Hello world!");
         } else {
             item.is_approve = true;
         }

@@ -76,7 +76,7 @@
 
 {% endblock %}
 
-{% block head %}
+{% block tail %}
 
     <script type="text/javascript">
         var INVOICE_ID = {{ invoice_id }};
@@ -96,6 +96,11 @@
     {% assets "angularjs-ui-bootstrap" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+
+    {% assets "bootbox" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
 
 
 {#    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>#}

@@ -36,6 +36,8 @@ bundles = {
 
     'angularjs-ui-bootstrap': Bundle('js/lib/ui-bootstrap-tpls-0.11.2.min.js'),
 
+    'bootbox': Bundle('js/lib/bootbox.min.js'),
+
     'invoice_retail': Bundle('js/invoice_retail.js')
 
     # 'home_js': Bundle(
