@@ -87,6 +87,7 @@ class PriceService(object):
             price = PriceService.get_price_to_commodity(commodity.id)
 
             pricestub = PriceStub(
+                id='',
                 id_commodity=commodity.id,
                 full_name=prod.full_name,
                 number_local=prod.number_local,

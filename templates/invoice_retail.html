@@ -4,20 +4,31 @@
 
     <ul class="nav nav-pills">
         <a class="btn btn-primary" href="{{ url_prices }}">Назад</a>
-        <div class="pull-right">
-            <button class="btn btn-primary">Click</button>
-        </div>
     </ul>
     <br/>
 
     <div class="alert alert-warning" role="alert">
       <strong>Внимание!</strong><br/>
-      Позиции обозначенные красным цветом не попадут в накладную.
+      Позиции с вычеркнутыми названиями не попадут в накладную.
     </div>
 
-    <div ng-app="myApp" ng-controller="MainCtrl">
+    <div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
+
+        <div ng-show="model.is_save" class="alert alert-success" role="alert">
+            <strong>Замечательно!</strong> Накладная сохранена. Перейдите по этой
+            <a target="_self" href="{{ model.url_to_download|angular }}" class="alert-link">ссылке</a> для скачивания.
+        </div>
+
         <h3>Товары:</h3>
-        <button class="btn btn-primary" ng-click="openToAdd()">Добавить</button>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" ng-click="openToAdd()">Добавить</button>
+{#            <div class="pull-right">#}
+            <button class="btn btn-primary" ng-click="saveAndPrint()">Сохранить и печатать</button>
+{#        </div>#}
+        </div>
+
+
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
@@ -32,11 +43,11 @@
             <tbody>
                 <tr ng-repeat="item in model.items">
 
-                    <td ng-class="{danger: !item.is_approve}">
+                    <td >
                         {{ '$index + 1'|angular }}
                     </td>
 
-                    <td ng-class="{danger: !item.is_approve}">
+                    <td >
                         <del ng-if="!item.is_approve">
                             {{ item.full_name|angular }}
                         </del>
@@ -45,10 +56,10 @@
                         </span>
 
                     </td>
-                    <td ng-class="{danger: !item.is_approve}">
+                    <td >
                         {{ item.count|angular }}
                     </td>
-                    <td ng-class="{danger: !item.is_approve}">
+                    <td >
                         {{ item.price_retail|angular}}
                     </td>
 

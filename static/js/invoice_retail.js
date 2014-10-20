@@ -20,6 +20,10 @@ var app = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', '
 
 app.controller('MainCtrl', function($scope, $modal, RetailItems) {
 
+    $scope.model = {};
+
+    $scope.model.is_save = false;
+
     $scope.openToAdd = function () {
 
         var modalInstance = $modal.open({
@@ -47,7 +51,7 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems) {
         });
     };
 
-    $scope.model = {};
+
 
     RetailItems.query({ id: INVOICE_ID }, function(data) {
         $scope.model.items = data.items;
@@ -62,11 +66,20 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems) {
         } else {
             item.is_approve = true;
         }
-
     };
 
     $scope.btnClick = function() {
         console.log($scope.items);
+    };
+
+    $scope.saveAndPrint = function() {
+
+        $scope.model.is_save = true;
+
+        $scope.model.url_to_download = '/blabla/asda.html';
+
+        console.log("SAVE AND PRINT");
+
     };
 
 });
