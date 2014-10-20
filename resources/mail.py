@@ -5,8 +5,9 @@ from flask.ext.restful import abort, marshal_with, fields, reqparse
 
 # from mails.action import get_count_mails, NotConnect, get_mails
 from mails.model import Mail
-from services.mailinvoice import MailInvoiceService, MailInvoiceException
 # from models import db
+from services import MailInvoiceService
+from services.mailinvoice import MailInvoiceException
 from sqlalchemy import desc
 
 

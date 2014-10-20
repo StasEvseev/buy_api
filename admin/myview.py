@@ -29,8 +29,8 @@ class MyView(BaseView):
 
     @expose('/invoice-retail/<string:invoice_id>')
     def invoice_retail(self, invoice_id):
-        return self.render('invoice_retail.html', invoice_id=invoice_id)
-        pass
+        url_prices = url_for('.prices', invoice_id=invoice_id)
+        return self.render('invoice_retail.html', invoice_id=invoice_id, url_prices=url_prices)
 
     @expose('/invoice-gross/<string:invoice_id>')
     def invoice_gross(self, invoice_id):

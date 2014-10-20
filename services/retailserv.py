@@ -1,11 +1,9 @@
 #coding: utf-8
 from collections import namedtuple
-from services.commodityserv import CommodityService
-from services.mailinvoice import MailInvoiceService
-from services.priceserv import PriceService
+from services import MailInvoiceService, CommodityService, PriceService
 
 
-RetailStub = namedtuple('RetailStub', ['full_name', 'price_retail', 'count'])
+RetailStub = namedtuple('RetailStub', ['id_price', 'id_commodity', 'full_name', 'price_retail', 'count'])
 
 
 class RetailService(object):
@@ -24,6 +22,7 @@ class RetailService(object):
             price = PriceService.get_price_to_commodity(commodity.id)
 
             res.append(RetailStub(
+                id_price=price.id, id_commodity=commodity.id,
                 full_name=prod.full_name, price_retail=price.price_retail, count=prod.count))
 
         return res

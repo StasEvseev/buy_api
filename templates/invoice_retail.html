@@ -2,6 +2,14 @@
 
 {% block body %}
 
+    <ul class="nav nav-pills">
+        <a class="btn btn-primary" href="{{ url_prices }}">Назад</a>
+        <div class="pull-right">
+            <button class="btn btn-primary">Click</button>
+        </div>
+    </ul>
+    <br/>
+
     <div class="alert alert-warning" role="alert">
       <strong>Внимание!</strong><br/>
       Позиции обозначенные красным цветом не попадут в накладную.
@@ -9,10 +17,11 @@
 
     <div ng-app="myApp" ng-controller="MainCtrl">
         <h3>Товары:</h3>
+        <button class="btn btn-primary" ng-click="openToAdd()">Добавить</button>
         <table class="table table-bordered table-hover">
             <thead>
                 <tr>
-
+                    <th>№</th>
                     <th>Наименование</th>
                     <th>Количество</th>
                     <th>Цена розницы (руб.)</th>
@@ -24,8 +33,17 @@
                 <tr ng-repeat="item in model.items">
 
                     <td ng-class="{danger: !item.is_approve}">
+                        {{ '$index + 1'|angular }}
+                    </td>
 
-                        {{ item.full_name|angular }}
+                    <td ng-class="{danger: !item.is_approve}">
+                        <del ng-if="!item.is_approve">
+                            {{ item.full_name|angular }}
+                        </del>
+                        <span ng-if="item.is_approve">
+                            {{ item.full_name|angular }}
+                        </span>
+
                     </td>
                     <td ng-class="{danger: !item.is_approve}">
                         {{ item.count|angular }}
@@ -35,12 +53,7 @@
                     </td>
 
                     <td>
-{#                        <button type="button" class="btn btn-lg btn-danger" data-toggle="popover"#}
-{#                                title="Popover title"#}
-{#                                data-content="And here's some amazing content. It's very engaging. Right?">#}
-{#                            Click to toggle popover#}
-{#                        </button>#}
-                        <span ng-hide="item.is_approve"><button class="btn btn-success btn-block btn-sm" ng-click="addToInvoice(item)">Добавить</button></span>
+                        <span ng-hide="item.is_approve"><button ng-disabled="!item.price_retail" class="btn btn-success btn-block btn-sm" ng-click="addToInvoice(item)">Добавить</button></span>
 
                         <span ng-hide="!item.is_approve"><button class="btn btn-danger btn-block btn-sm" ng-click="removeFromInvoice(item)">Убрать</button></span>
                     </td>
@@ -50,19 +63,23 @@
             </tbody>
         </table>
 
-        <button ng-click="open()">Click</button>
-
         <script type="text/ng-template" id="myModalContent.html">
             <div class="modal-header">
-                <h3 class="modal-title">I'm a modal!</h3>
+                <h3 class="modal-title">Добавление товара в розничную накладную</h3>
             </div>
             <div class="modal-body">
-                <ul>
-                    <li ng-repeat="item in items">
-                        <a ng-click="selected.item = item">{{ item }}</a>
-                    </li>
-                </ul>
-                Selected: <b>{{ selected.item }}</b>
+                <p>Выбран: {{person.selected|angular}}</p>
+                <ui-select ng-model="model.selected" theme="select2" ng-disabled="disabled" style="min-width: 300px;">
+                    <ui-select-match placeholder="Выберите товар или поищите его...">
+                        {{'$select.selected.name'|angular}}
+                    </ui-select-match>
+                    <ui-select-choices repeat="commodity in model.commodity_items | propsFilter: {name: $select.search, price_retail: $select.search}">
+                        <div ng-bind-html="commodity.name | highlight: $select.search"></div>
+                        <small>
+                            Цена розницы: <span ng-bind-html="''+commodity.price_retail | highlight: $select.search"></span>
+                        </small>
+                    </ui-select-choices>
+                </ui-select>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-primary" ng-click="ok()">OK</button>
@@ -85,9 +102,9 @@
     {% assets "css_all" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}" />
     {% endassets %}
-{#    {% assets "bootstrap-js" %}#}
-{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
-{#    {% endassets %}#}
+    {% assets "select-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
 
     {% assets "angularjs" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
@@ -101,10 +118,10 @@
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 
+    {% assets "select-js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
-
-{#    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0rc1/angular-route.min.js"></script>#}
-{#    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.7/angular-resource.min.js"></script>#}
     {% assets "invoice_retail" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}

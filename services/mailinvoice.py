@@ -6,7 +6,7 @@ from mails.model import Mail
 from models import db
 from models.invoice import Invoice
 from models.invoiceitem import InvoiceItem
-from services.commodityserv import CommodityService
+from services import CommodityService
 
 
 class MailInvoiceException(Exception):

@@ -2,12 +2,14 @@
 from collections import namedtuple
 from models import db
 from models.price import Price
-from services.commodityserv import CommodityService
+
+from services import CommodityService
 from sqlalchemy import desc
 from sqlalchemy.orm.exc import NoResultFound
 
 
-PriceStub = namedtuple('PriceStub', ['id_commodity', 'full_name', 'number_local', 'number_global', 'NDS', 'price_prev',
+PriceStub = namedtuple('PriceStub', ['id', 'id_commodity', 'full_name', 'number_local', 'number_global', 'NDS',
+                                     'price_prev',
                                      'price_post', 'price_retail', 'price_gross', 'is_change',
                                      'price_retail_recommendation', 'price_gross_recommendation'])
 
@@ -59,6 +61,7 @@ class PriceService(object):
         ).order_by(desc(Price.number_local), desc(Price.number_global)).first()
         if price is None:
             price = PriceStub(
+            id='',
             id_commodity=id_commodity,
             full_name='',
             number_local='',

@@ -24,6 +24,10 @@ bundles = {
     'ng-grid-css': Bundle('css/lib/ng-grid.css'),
     'ng-grid-js': Bundle('js/lib/ng-grid.debug.js'),
 
+    'select-js': Bundle('js/lib/select.min.js'),
+    'select-css': Bundle('css/lib/select.css',
+                         'css/lib/select2.css'),
+
     'invoice': Bundle('js/prices.js'),
 
     'angularjs': Bundle('js/lib/angular.min.js',
@@ -31,6 +35,7 @@ bundles = {
                         'js/lib/angular-resource.min.js',
                         #'js/lib/angular-resource.min.js.map',
                         'js/lib/angular-route.min.js',
+                        'js/lib/angular-sanitize.js'
                         #'js/lib/angular-route.min.js.map'
                         ),
 
