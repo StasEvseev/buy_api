@@ -18,6 +18,8 @@ bundles = {
     'js_all': Bundle('main.js', output='gen/packed.js'),
     'css_all': Bundle('css/main.css', output='gen/css/main.css'),
 
+    'underscore': Bundle('js/lib/underscore-min.js'),
+
     'bootstrap-css': Bundle('css/lib/bootstrap.min.css'),
     'bootstrap-js': Bundle('js/lib/bootstrap.min.js'),
 

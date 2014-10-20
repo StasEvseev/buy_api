@@ -5,6 +5,7 @@ from resources.commodity import CommodityResource
 from resources.invoice import InvoiceRetailResource, InvoiceRetailItemsResource
 from resources.mail import MailCheck
 from resources.price import PriceBulkResource
+from resources.retailinvoice import RetailResource
 
 api = restful.Api(prefix='/api')
 # api.add_resource(MailCheck, '/mail')
@@ -17,3 +18,5 @@ api.add_resource(PriceBulkResource, '/pricebulk')
 api.add_resource(InvoiceRetailItemsResource, '/retailitems/<int:invoice_id>')
 
 api.add_resource(CommodityResource, '/commodity')
+
+api.add_resource(RetailResource, '/retail-invoice')

@@ -15,12 +15,23 @@ var app = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', '
 //        query_not_approve: {method: "GET", isArray:false, params: {approve: false}}
     });
 
+})
+
+.factory("RetailInvoice", function($resource) {
+    return $resource("/api/retail-invoice", {}, {
+        query: { method: "POST", isArray: false }
+//        query_approve: {method: "GET", isArray:false, params: {approve: true}},
+//        query_not_approve: {method: "GET", isArray:false, params: {approve: false}}
+    });
+
 });
 
 
-app.controller('MainCtrl', function($scope, $modal, RetailItems) {
+app.controller('MainCtrl', function($scope, $modal, RetailItems, RetailInvoice) {
 
     $scope.model = {};
+
+    $scope.model.invoice_id = INVOICE_ID;
 
     $scope.model.is_save = false;
 
@@ -51,9 +62,7 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems) {
         });
     };
 
-
-
-    RetailItems.query({ id: INVOICE_ID }, function(data) {
+    RetailItems.query({ id: $scope.model.invoice_id }, function(data) {
         $scope.model.items = data.items;
     });
 
@@ -74,9 +83,27 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems) {
 
     $scope.saveAndPrint = function() {
 
-        $scope.model.is_save = true;
+        var res = _.filter($scope.model.items, function(elem){ return elem.is_approve; });
 
-        $scope.model.url_to_download = '/blabla/asda.html';
+        RetailInvoice.query({
+            'data': {
+                'invoice_id': $scope.model.invoice_id,
+                'items': res
+            }
+        }, function() {
+            console.log("SUCCESS");
+            $scope.model.is_save = true;
+            $scope.model.url_to_download = '/blabla/asda.html';
+            $scope.model.is_error = false;
+        }, function() {
+            console.log("ERROR");
+            $scope.model.is_save = false;
+            $scope.model.is_error = true;
+        });
+
+//        $scope.model.is_save = true;
+
+
 
         console.log("SAVE AND PRINT");
 
