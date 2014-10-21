@@ -1,9 +1,13 @@
 #coding:utf-8
+import os
 
 import xlrd
 import xlwt
 from xlutils.copy import copy
 
+
+path = os.path.dirname(__file__)
+path_template = os.path.join(path, 'template')
 
 class PrintInvoice(object):
 

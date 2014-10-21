@@ -1,5 +1,8 @@
 #coding: utf-8
 from collections import namedtuple
+from config import PATH_TO_GENERATE_INVOICE
+import os
+from excel.output import PrintInvoice, path_template
 from models import db
 from models.invoice import Invoice
 from models.retailinvoice import RetailInvoice
@@ -52,15 +55,33 @@ class RetailService(object):
             return RetailInvoice.query.filter(RetailInvoice.invoice_id==invoice_id).one()
 
     @classmethod
+    def create_retail_invoice(cls, invoice_id):
+        invoice = MailInvoiceService.get_invoice(invoice_id)
+        db.session.add(RetailInvoice(date=invoice.date, number=invoice.number, invoice=invoice))
+        db.session.commit()
+
+    @classmethod
     def save_retail_invoice(cls, retail, items):
+        # if retail.retailinvoiceitems:
         retail.retailinvoiceitems.delete()
+
+        import uuid
+
+        pi = PrintInvoice(
+            path=os.path.join(path_template, 'print_invoice.xls'),
+            destination=os.path.join(PATH_TO_GENERATE_INVOICE, str(uuid.uuid4()) + ".xls"))
+        pi.set_cells(0, 0, ['a', 'b', 'c', 'date'])
+        # pi.set_cells(0, 2, ['name', 'count', 'price_pay', 'mul'])
+        pi.write(0, 0, [{'a': u'', 'b': u'', 'c': u'', 'date': retail.date.strftime('%d.%m.%Y')}, ])
+        # pi.write(0, 0, [])
+
         db.session.add(retail)
 
         for it in items:
 
             retailitem_q = RetailInvoiceItem.query.filter(
-                            RetailInvoiceItem.retailinvoice==retail,
-                            RetailInvoiceItem.commodity_id==it.id_commodity)
+                RetailInvoiceItem.retailinvoice==retail,
+                RetailInvoiceItem.commodity_id==it.id_commodity)
 
             if retailitem_q.count() > 0:
                 retail_item = retailitem_q.one()

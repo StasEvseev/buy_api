@@ -24,3 +24,5 @@ from_imap = "stasevseev@gmail.com"
 
 DIR_PROJECT = os.path.dirname(__file__)
 mail_folder = 'attachments'
+
+PATH_TO_GENERATE_INVOICE = os.path.join(DIR_PROJECT, 'static', 'files')

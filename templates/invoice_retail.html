@@ -15,12 +15,13 @@
     <div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
 
         <div ng-show="model.is_save" class="alert alert-success" role="alert">
-            <strong>Замечательно!</strong> Накладная сохранена. Перейдите по этой
+            <strong>Замечательно!</strong><br/>Накладная сохранена. Перейдите по этой
             <a target="_self" href="{{ model.url_to_download|angular }}" class="alert-link">ссылке</a> для скачивания.
         </div>
 
         <div ng-show="model.is_error" class="alert alert-danger" role="alert">
-            <strong>Ошибка!</strong> Накладная не сохранена. Попробуйте позже или обратитесь в службу технической поддержки.
+            <strong>Ошибка!</strong><br/>Накладная не сохранена.
+            {{ model.message_error|angular }}
         </div>
 
         <h3>Товары:</h3>

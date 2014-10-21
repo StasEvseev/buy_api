@@ -108,7 +108,9 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems, RetailInvoice) 
                 });
             }
         }, function(resp) {
-            console.log(resp);
+            console.log(resp)
+            $scope.model.message_error = resp.data['message'];
+//            console.log(resp);
             $scope.model.is_save = false;
             $scope.model.is_error = true;
         });

@@ -22,14 +22,17 @@ class RetailResource(restful.Resource):
         items = retailinvoice['items']
 
         retail = RetailService.get_retail_invoice(invoice_id)
-        if retail and not forse:
-            res = {"status": "confirm"}
+        if retail:
+            if not forse:
+                return {"status": "confirm"}
+
         else:
-            try:
-                retail_items = RetailService.build_retail_items(items)
-                RetailService.save_retail_invoice(retail, retail_items)
-                res = {"status": "ok", "path": "/static/files/1.xlsx"}
-            except RetailServiceException as retailexc:
-                abort(404, message=unicode(retailexc))
+            retail = RetailService.create_retail_invoice(invoice_id)
+        try:
+            retail_items = RetailService.build_retail_items(items)
+            RetailService.save_retail_invoice(retail, retail_items)
+            res = {"status": "ok", "path": "/static/files/1.xlsx"}
+        except RetailServiceException as retailexc:
+            abort(404, message=unicode(retailexc))
 
         return res
