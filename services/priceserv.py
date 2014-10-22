@@ -21,6 +21,10 @@ class PriceServiceException(Exception):
 class PriceService(object):
 
     @classmethod
+    def get_price(cls, id):
+        return Price.query.filter(Price.id==id).one()
+
+    @classmethod
     def create_or_update_prices(cls, datas):
         try:
             for data in datas:

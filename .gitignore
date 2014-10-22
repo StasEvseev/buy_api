@@ -3,3 +3,6 @@
 config_local.py
 /.idea
 attachments
+/static/files
+/static/gen
+/static/.webassets-cache

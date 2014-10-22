@@ -1,5 +1,7 @@
 #coding: utf-8
-from flask import request
+from config import PATH_TO_GENERATE_INVOICE
+import os
+from flask import request, url_for
 from flask import json
 from flask.ext import restful
 from flask.ext.restful import abort
@@ -11,6 +13,10 @@ class RetailResource(restful.Resource):
     Ресурс сохраняет накладную с ее позициями и возвращает ссылку на файл.
     """
     def post(self):
+
+        import uuid
+        file_name = str(uuid.uuid4()) + ".xls"
+        path_to_target = os.path.join(PATH_TO_GENERATE_INVOICE, file_name)
 
         forse = False
 
@@ -30,8 +36,9 @@ class RetailResource(restful.Resource):
             retail = RetailService.create_retail_invoice(invoice_id)
         try:
             retail_items = RetailService.build_retail_items(items)
-            RetailService.save_retail_invoice(retail, retail_items)
-            res = {"status": "ok", "path": "/static/files/1.xlsx"}
+            RetailService.save_retail_invoice(retail, retail_items, path_to_target)
+            path = url_for('static', filename='files/' + file_name)
+            res = {"status": "ok", "path": path}
         except RetailServiceException as retailexc:
             abort(404, message=unicode(retailexc))
 

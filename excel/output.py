@@ -9,6 +9,7 @@ from xlutils.copy import copy
 path = os.path.dirname(__file__)
 path_template = os.path.join(path, 'template')
 
+
 class PrintInvoice(object):
 
     def __init__(self, path, destination):

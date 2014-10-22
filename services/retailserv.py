@@ -22,6 +22,10 @@ class RetailDuplicateItemsException(RetailServiceException):
     pass
 
 
+class RetailNotPriceException(RetailServiceException):
+    pass
+
+
 class RetailService(object):
 
     @classmethod
@@ -61,23 +65,15 @@ class RetailService(object):
         db.session.commit()
 
     @classmethod
-    def save_retail_invoice(cls, retail, items):
-        # if retail.retailinvoiceitems:
+    def save_retail_invoice(cls, retail, items, path_target):
         retail.retailinvoiceitems.delete()
-
-        import uuid
-
-        pi = PrintInvoice(
-            path=os.path.join(path_template, 'print_invoice.xls'),
-            destination=os.path.join(PATH_TO_GENERATE_INVOICE, str(uuid.uuid4()) + ".xls"))
-        pi.set_cells(0, 0, ['a', 'b', 'c', 'date'])
-        # pi.set_cells(0, 2, ['name', 'count', 'price_pay', 'mul'])
-        pi.write(0, 0, [{'a': u'', 'b': u'', 'c': u'', 'date': retail.date.strftime('%d.%m.%Y')}, ])
-        # pi.write(0, 0, [])
 
         db.session.add(retail)
 
         for it in items:
+
+            if not PriceService.get_price(it.id_price).price_retail:
+                raise RetailNotPriceException(u"У товара должна быть указана розничная цена. %s" % it.full_name)
 
             retailitem_q = RetailInvoiceItem.query.filter(
                 RetailInvoiceItem.retailinvoice==retail,
@@ -90,4 +86,14 @@ class RetailService(object):
             retail_item = RetailInvoiceItem(
                 full_name=it.full_name, price_id=it.id_price, commodity_id=it.id_commodity, retailinvoice=retail)
             db.session.add(retail_item)
+        pi = PrintInvoice(
+            path=os.path.join(path_template, 'print_invoice.xls'),
+            destination=path_target)
+        pi.set_cells(0, 0, ['a', 'b', 'c', 'date'])
+        pi.set_cells(0, 2, ['name', 'count', 'price_pay', 'mul'])
+        pi.write(0, 0, [{'a': u'', 'b': u'', 'c': u'', 'date': retail.date.strftime('%d.%m.%Y')}, ])
+
+        pi.write(0, 2, [{'name': it.full_name, 'count': '', 'price_pay': str(PriceService.get_price(it.id_price).price_retail), 'mul': ''} for it in items])
+
+        retail.file = path_target
         db.session.commit()
