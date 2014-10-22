@@ -15,20 +15,32 @@ PriceStub = namedtuple('PriceStub', ['id', 'id_commodity', 'full_name', 'number_
 
 
 class PriceServiceException(Exception):
+    """
+    Базовый класс исключений для сервисного слоя цен.
+    """
     pass
 
 
 class PriceService(object):
+    """
+    Сервисный слой цен.
+    """
 
     @classmethod
     def get_price(cls, id):
+        """
+        Получим модель цены.
+        """
         return Price.query.filter(Price.id==id).one()
 
     @classmethod
     def create_or_update_prices(cls, datas, date):
+        """
+        Создаем или изменяем цены.
+        """
         try:
             for data in datas:
-                id_commodity = int(data['id'])
+                id_commodity = int(data['id_commodity'])
                 price_retail = float(data['price_retail']) if data['price_retail'] else None
                 price_gross = float(data['price_gross']) if data['price_gross'] else None
                 NDS = float(data['NDS'])
@@ -96,6 +108,9 @@ class PriceService(object):
 
     @classmethod
     def generate_price_stub(cls, products, invoice=None):
+        """
+        По продуктам и накладной формируем цены.
+        """
 
         res = []
 

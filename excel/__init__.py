@@ -1,11 +1,8 @@
 #coding:utf-8
 
-
 import xlrd
 import datetime
 from collections import namedtuple
-
-# from applications.product.models import Invoice, IncomingProduct, Product
 
 Product = namedtuple("Product", [
     'full_name', 'name', 'number_local', 'number_global', 'count_order', 'count_postorder', 'count',
@@ -14,7 +11,9 @@ Product = namedtuple("Product", [
 
 
 class InvoiceModel(object):
-
+    """
+    Класс для работы с файлом приходной накладной.
+    """
     def __init__(self, doc):
 
         self.count = 0
@@ -27,14 +26,12 @@ class InvoiceModel(object):
         self.date = self.get_value(sheet, 3, 0, u'от', ' (')
 
         self.date = datetime.datetime.strptime(self.date, '%d.%m.%y').date()
-        #self.provider = ''
         self.start_row = self.find_cell(sheet, u"Название издания") + 1
         row_ = self.find_cell(sheet, u'Итого:')
         self.count = row_ - self.start_row
         self.sum_without_NDS = self.get_value(sheet, row_, 7)
         self.sum_with_NDS = self.get_value(sheet, row_, 10)
         self.sum_NDS = self.get_value(sheet, row_, 9)
-
 
         row_ = row_ + 4
         self.weight = float(self.get_value(sheet, row_, 0, u'Вес товара - ', u'кг.'))
@@ -45,6 +42,9 @@ class InvoiceModel(object):
         assert self.number and self.date and self.sum_without_NDS and self.sum_with_NDS and self.sum_NDS and self.weight and self.responsible
 
     def get_products(self):
+        """
+        Получим все позиции приходной накладной в виде списка объектов заглушек.
+        """
         sheet = self.doc.sheet_by_index(0)
         result = []
         for rownum in range(self.start_row, self.start_row + self.count):
@@ -84,7 +84,9 @@ class InvoiceModel(object):
         return result
 
     def get_name_number(self, full_name):
-
+        """
+        Извлечь чистое имя, локальный и глобальный номера.
+        """
         wt_nb = full_name.find(u"б/н")
 
         if wt_nb != -1:
@@ -118,12 +120,3 @@ class InvoiceModel(object):
         else:
             result = string[ind_begin:ind_end].strip()
         return result
-
-    # def create(self):
-    #     inv = Invoice.get_by_number(number=self.invoice.number)
-    #     if inv is None:
-    #         self.invoice.create()
-    #         inv = self.invoice
-    #     for pr in self.products:
-    #         pr.invoice_id = inv.id
-    #         pr.create()

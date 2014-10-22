@@ -14,6 +14,8 @@ class RetailResource(restful.Resource):
     """
     def post(self):
 
+        #TODO: отрефакторить.
+
         import uuid
         file_name = str(uuid.uuid4()) + ".xls"
         path_to_target = os.path.join(PATH_TO_GENERATE_INVOICE, file_name)

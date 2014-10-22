@@ -18,12 +18,15 @@ class PriceResource(restful.Resource):
 
 
 class PriceBulkResource(restful.Resource):
+    """
+    Массовое сохранение цен.
+    """
     def post(self):
-        data = json.loads(request.form.get('data'))
+        data = request.json['data']
+
         prices = data['items']
         invoice_id = data['invoice_id']
         invoice = MailInvoiceService.get_invoice(invoice_id)
-        # invoice_id = json.loads(request.form.get('invoice'))
         try:
             PriceService.create_or_update_prices(prices, invoice.date)
         except PriceServiceException as err:

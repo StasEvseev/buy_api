@@ -11,7 +11,9 @@ path_template = os.path.join(path, 'template')
 
 
 class PrintInvoice(object):
-
+    """
+    Класс для генерации отчетов в excel.
+    """
     def __init__(self, path, destination):
         self.path = path
         self.destination_filename = destination

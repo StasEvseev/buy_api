@@ -3,11 +3,9 @@
 from flask.ext import restful
 from flask.ext.restful import abort, marshal_with, fields, reqparse
 
-# from mails.action import get_count_mails, NotConnect, get_mails
 from mails.model import Mail
-# from models import db
-from services import MailInvoiceService
-from services.mailinvoice import MailInvoiceException
+
+from services.mailinvoice import MailInvoiceService, MailInvoiceException
 from sqlalchemy import desc
 
 
@@ -17,8 +15,14 @@ parser.add_argument('start', type=int)
 
 
 class MailCheck(restful.Resource):
+    """
+    Ресурс для работы с почтой.
+    """
 
     def post(self):
+        """
+        Запрос на обработку почтового ящика(проверка новых писем и сохранение их в БД).
+        """
         try:
             MailInvoiceService.handle_mail()
         except MailInvoiceException as err:
@@ -33,11 +37,10 @@ class MailCheck(restful.Resource):
         'invoice_id': fields.Integer
     }))})
     def get(self, **kwargs):
+        """
+        Получим все почтовые письма.
+        """
         args = parser.parse_args()
-        # try:
-        #     MailInvoiceService.handle_mail()
-        # except MailInvoiceException as err:
-        #     abort(404, message=unicode(err))
 
         mails = Mail.query.order_by(desc(Mail.date)).offset(args['start']).limit(args['length']).all()
 

@@ -6,3 +6,8 @@
 .red {
     color: red;
 }
+
+.panel-default {
+    padding-right: 30px;
+    padding-bottom: 25px;
+}

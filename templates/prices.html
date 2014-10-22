@@ -2,13 +2,9 @@
 
 {% block body %}
     <ul class="nav nav-pills">
-            <a class="btn btn-primary" href="{{ url_back }}">Назад</a>
-        <div class="pull-right">
-            <a class="btn btn-primary" href="{{ url_retail }}">Розничная накладная</a>
-            <a class="btn btn-primary" href="{{ url_gross }}">Оптовая накладная</a>
-        </div>
-
+        <a class="btn btn-primary" href="{{ url_back }}">Назад</a>
     </ul>
+    <br/>
 
     <div ng-app="PriceApp" ng-controller="PriceController" ng-cloak>
 
@@ -25,11 +21,21 @@
             В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.
         </div>
 
-        <h3 class="text-right">{{ date.strftime('%d.%m.%Y') }}</h3>
+        <div class="panel panel-default">
+            <div class="panel-heading"><h3 class="text-right">Цены на товары по приходной накладной <strong>{{ date.strftime('%d.%m.%Y') }}</strong></h3></div>
+            <div class="panel-body">
+                <button class="btn btn-primary" ng-click="savePrice($event)" data-loading-text="Сохранение...">Сохранить</button>
+                <div class="pull-right">
+                    <a class="btn btn-primary" href="{{ url_retail }}">Розничная накладная</a>
+                    <a class="btn btn-primary" href="{{ url_gross }}">Оптовая накладная</a>
+                </div>
+            </div>
 
+            <!-- Table -->
             <table class="table table-bordered table-hover">
                 <thead>
                     <tr>
+                        <th>№</th>
                         <th>Наименование</th>
                         <th>НДС (%)</th>
                         <th>Цена (руб.)</th>
@@ -43,6 +49,9 @@
 
                 <tbody>
                     <tr ng-class="{warning: item.is_change}" ng-repeat="item in model.items">
+                        <td >
+                            {{ '$index + 1'|angular }}
+                        </td>
                         <td>
                             {{ item.full_name|angular }}
                         </td>
@@ -73,8 +82,9 @@
                     </tr>
                 </tbody>
             </table>
+        </div>
 
-            <button class="btn" onclick="submitPrices({{ invoice_items|length }})">Сохранить</button>
+
     </div>
 
 {% endblock %}
