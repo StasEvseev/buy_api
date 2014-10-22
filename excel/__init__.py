@@ -53,9 +53,9 @@ class InvoiceModel(object):
                 arg = {}
                 arg['full_name'] = full_n
                 arg['name'], arg['number_local'], arg['number_global'] = self.get_name_number(full_n)
-                arg['count_order'] = sheet.cell(rownum, 2).value
-                arg['count_postorder'] = sheet.cell(rownum, 3).value
-                arg['count'] = sheet.cell(rownum, 4).value
+                arg['count_order'] = int(sheet.cell(rownum, 2).value)
+                arg['count_postorder'] = int(sheet.cell(rownum, 3).value)
+                arg['count'] = int(sheet.cell(rownum, 4).value)
                 arg['price_without_NDS'] = sheet.cell(rownum, 5).value
                 arg['price_with_NDS'] = sheet.cell(rownum, 6).value
                 arg['sum_without_NDS'] = sheet.cell(rownum, 7).value
@@ -65,10 +65,17 @@ class InvoiceModel(object):
                 arg['thematic'] = sheet.cell(rownum, 11).value
 
                 count_whole_pack = sheet.cell(rownum, 12).value
-                if count_whole_pack == '   ':
+                if count_whole_pack in ['   ', '  ', ' ', ''] :
                     count_whole_pack = 0
+                else:
+                    count_whole_pack = int(count_whole_pack)
                 arg['count_whole_pack'] = count_whole_pack
-                arg['placer'] = sheet.cell(rownum, 13).value
+                placer = sheet.cell(rownum, 13).value
+                if placer in ['']:
+
+                    arg['placer'] = 0
+                else:
+                    arg['placer'] = int(placer)
 
                 ip = Product(**arg)
                 result.append(ip)
@@ -77,6 +84,12 @@ class InvoiceModel(object):
         return result
 
     def get_name_number(self, full_name):
+
+        wt_nb = full_name.find(u"б/н")
+
+        if wt_nb != -1:
+            return full_name[:wt_nb].strip(), None, None
+
         st = full_name.split(u"№")
         name = st[0].strip()
         number_local = st[1].split(u"(")[0]

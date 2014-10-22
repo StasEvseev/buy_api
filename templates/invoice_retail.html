@@ -1,4 +1,4 @@
-{% extends 'admin/master.html' %}
+{% extends 'admin/base_template.html' %}
 
 {% block body %}
 
@@ -8,8 +8,8 @@
     <br/>
 
     <div class="alert alert-warning" role="alert">
-      <strong>Внимание!</strong><br/>
-      Позиции с вычеркнутыми названиями не попадут в накладную.
+        <strong>Внимание!</strong><br/>
+        Позиции с вычеркнутыми названиями не попадут в накладную.
     </div>
 
     <div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
@@ -28,9 +28,7 @@
 
         <div class="btn-group">
             <button class="btn btn-primary" ng-click="openToAdd()">Добавить</button>
-{#            <div class="pull-right">#}
             <button class="btn btn-primary" ng-click="saveAndPrint()">Сохранить и печатать</button>
-{#        </div>#}
         </div>
 
 
@@ -111,39 +109,45 @@
 
 {% block tail %}
 
+    {{ super() }}
+
     <script type="text/javascript">
         var INVOICE_ID = {{ invoice_id }};
     </script>
 
-    {% assets "css_all" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
-    {% assets "select-css" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
-
-    {% assets "underscore" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
-    {% assets "angularjs" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
-    {% assets "angularjs-ui-bootstrap" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
-    {% assets "bootbox" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
-    {% assets "select-js" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-
     {% assets "invoice_retail" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
+
+{#    {% assets "css_all" %}#}
+{#        <link rel="stylesheet" href="{{ ASSET_URL }}" />#}
+{#    {% endassets %}#}
+{#    {% assets "select-css" %}#}
+{#        <link rel="stylesheet" href="{{ ASSET_URL }}" />#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "underscore" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "angularjs" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "angularjs-ui-bootstrap" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "bootbox" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "select-js" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "invoice_retail" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
 
 {% endblock %}

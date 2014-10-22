@@ -30,7 +30,7 @@ bundles = {
     'select-css': Bundle('css/lib/select.css',
                          'css/lib/select2.css'),
 
-    'invoice': Bundle('js/prices.js'),
+    'prices': Bundle('js/prices.js'),
 
     'angularjs': Bundle('js/lib/angular.min.js',
                         #'js/lib/angular.min.js.map',

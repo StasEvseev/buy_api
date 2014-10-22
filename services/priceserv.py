@@ -4,7 +4,7 @@ from models import db
 from models.price import Price
 
 from services import CommodityService
-from sqlalchemy import desc
+from sqlalchemy import desc, and_
 from sqlalchemy.orm.exc import NoResultFound
 
 
@@ -25,7 +25,7 @@ class PriceService(object):
         return Price.query.filter(Price.id==id).one()
 
     @classmethod
-    def create_or_update_prices(cls, datas):
+    def create_or_update_prices(cls, datas, date):
         try:
             for data in datas:
                 id_commodity = int(data['id'])
@@ -46,7 +46,7 @@ class PriceService(object):
                     price = Price(commodity_id=id_commodity, number_local=data['number_local'],
                                   number_global=data['number_global'], NDS=NDS,
                                   price_prev=price_prev, price_post=price_post, price_retail=price_retail,
-                                  price_gross=price_gross)
+                                  price_gross=price_gross, date_from=date)
                     db.session.add(price)
                 else:
                     price.NDS = NDS
@@ -59,10 +59,23 @@ class PriceService(object):
             db.session.commit()
 
     @classmethod
-    def get_price_to_commodity(cls, id_commodity):
-        price = Price.query.filter(
-            Price.commodity_id==id_commodity,
-        ).order_by(desc(Price.number_local), desc(Price.number_global)).first()
+    def get_price_to_commodity(cls, id_commodity, date_from=None):
+        """
+        Получаем цену по продукту.
+        """
+        if date_from:
+
+            price_query = Price.query.filter(
+                and_(
+                    Price.commodity_id == id_commodity,
+                    Price.date_from <= date_from
+                )
+            )
+        else:
+            price_query = Price.query.filter(
+                Price.commodity_id==id_commodity,
+            )
+        price = price_query.order_by(desc(Price.date_from)).first()
         if price is None:
             price = PriceStub(
             id='',
@@ -82,13 +95,16 @@ class PriceService(object):
         return price
 
     @classmethod
-    def generate_price_stub(cls, products):
+    def generate_price_stub(cls, products, invoice=None):
 
         res = []
 
         for prod in products:
             commodity = CommodityService.get_commodity(prod.name)
-            price = PriceService.get_price_to_commodity(commodity.id)
+            if invoice:
+                price = PriceService.get_price_to_commodity(commodity.id, invoice.date)
+            else:
+                price = PriceService.get_price_to_commodity(commodity.id)
 
             pricestub = PriceStub(
                 id='',

@@ -22,6 +22,49 @@ class InvoiceRetailResource(restful.Resource):
         return {'a': 1, 'b': 2}
 
 
+class InvoicePriceItemsResource(restful.Resource):
+    """
+    ресурс для получения товаров, цен, и их рекомендуемую стоимость на товары из накладной
+    """
+
+    @marshal_with({'items': fields.List(fields.Nested({
+        'id_commodity': fields.Integer,
+        'full_name': fields.String,
+        'number_local': fields.String,
+        'number_global': fields.String,
+        'NDS': fields.String,
+        'price_prev': fields.String,
+        'price_post': fields.String,
+        'price_retail': fields.String,
+        'price_gross': fields.String,
+        'price_retail_recommendation': fields.String,
+        'price_gross_recommendation': fields.String,
+        'is_change': fields.Boolean
+    }))})
+    def get(self, invoice_id):
+        from services.mailinvoice import MailInvoiceService
+        from services.priceserv import PriceService
+
+        invoice = MailInvoiceService.get_invoice(invoice_id)
+
+        items = PriceService.generate_price_stub(invoice.items, invoice)
+
+        return {'items': [{
+            'id_commodity': it.id_commodity,
+            'full_name': it.full_name,
+            'number_local': it.number_local,
+            'number_global': it.number_global,
+            'NDS': it.NDS,
+            'price_prev': it.price_prev,
+            'price_post': it.price_post,
+            'price_retail': it.price_retail,
+            'price_gross': it.price_gross,
+            'price_retail_recommendation': it.price_retail_recommendation,
+            'price_gross_recommendation': it.price_gross_recommendation,
+            'is_change': it.is_change
+        } for it in items]}
+
+
 class InvoiceRetailItemsResource(restful.Resource):
 
     @marshal_with({'items': fields.List(fields.Nested({

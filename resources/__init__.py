@@ -2,7 +2,7 @@
 
 from flask.ext import restful
 from resources.commodity import CommodityResource
-from resources.invoice import InvoiceRetailResource, InvoiceRetailItemsResource
+from resources.invoice import InvoiceRetailResource, InvoiceRetailItemsResource, InvoicePriceItemsResource
 from resources.mail import MailCheck
 from resources.price import PriceBulkResource
 from resources.retailinvoice import RetailResource
@@ -16,6 +16,7 @@ api.add_resource(PriceBulkResource, '/pricebulk')
 
 # api.add_resource(InvoiceRetailResource, '/retailitems/<int:invoice_id>')
 api.add_resource(InvoiceRetailItemsResource, '/retailitems/<int:invoice_id>')
+api.add_resource(InvoicePriceItemsResource, '/invoicepriceitems/<int:invoice_id>')
 
 api.add_resource(CommodityResource, '/commodity')
 

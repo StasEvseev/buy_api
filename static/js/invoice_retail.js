@@ -11,8 +11,6 @@ var app = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', '
 .factory("CommodityItems", function($resource) {
     return $resource("/api/commodity/:id", {}, {
         query: { method: "GET", isArray: false }
-//        query_approve: {method: "GET", isArray:false, params: {approve: true}},
-//        query_not_approve: {method: "GET", isArray:false, params: {approve: false}}
     });
 
 })
@@ -21,10 +19,7 @@ var app = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', '
     return $resource("/api/retail-invoice", {}, {
         query: { method: "POST", isArray: false },
         query_confirm: {method: "POST", isArray: false, params: {confirm: true}}
-//        query_approve: {method: "GET", isArray:false, params: {approve: true}},
-//        query_not_approve: {method: "GET", isArray:false, params: {approve: false}}
     });
-
 });
 
 
@@ -108,9 +103,7 @@ app.controller('MainCtrl', function($scope, $modal, RetailItems, RetailInvoice) 
                 });
             }
         }, function(resp) {
-            console.log(resp)
             $scope.model.message_error = resp.data['message'];
-//            console.log(resp);
             $scope.model.is_save = false;
             $scope.model.is_error = true;
         });

@@ -1,4 +1,26 @@
 
+var app = angular.module('PriceApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', 'ui.select']);
+
+app.factory("InvoicePriceItems", function($resource) {
+  return $resource("/api/invoicepriceitems/:id", {}, {
+    query: { method: "GET", isArray: false }
+  });
+});
+
+app.controller("PriceController", function($scope, InvoicePriceItems) {
+    $scope.model = {};
+
+    $scope.model.invoice_id = INVOICE_ID;
+
+    InvoicePriceItems.query({ id: $scope.model.invoice_id }, function(data) {
+        $scope.model.items = data.items;
+
+        $scope.model.is_change = Boolean(_.find($scope.model.items, function(el) { return el['is_change'] }));
+    });
+});
+
+//OLD CODE!!!
+
 function idToRow(index) {
     return "#row-item-" + index;
 }

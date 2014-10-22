@@ -39,7 +39,7 @@ class RetailService(object):
 
         for prod in products:
             commodity = CommodityService.get_commodity(prod.name)
-            price = PriceService.get_price_to_commodity(commodity.id)
+            price = PriceService.get_price_to_commodity(commodity.id, date_from=invoice.date)
 
             res.append(RetailStub(
                 id_price=price.id, id_commodity=commodity.id,

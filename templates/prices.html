@@ -1,4 +1,4 @@
-{% extends 'admin/master.html' %}
+{% extends 'admin/base_template.html' %}
 
 {% block body %}
     <ul class="nav nav-pills">
@@ -10,99 +10,85 @@
 
     </ul>
 
-    <div class="alert alert-warning {% if not attention %} hidden {% endif %}" role="alert">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-      <h4>Внимание!</h4>
-      В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.
+    <div ng-app="PriceApp" ng-controller="PriceController" ng-cloak>
+
+        <div ng-show="model.is_success" class="alert alert-success" role="alert">
+            <strong>Замечательно!</strong> Цены сохранены. Можно переходить к следующему пункту.
+        </div>
+
+        <div ng-show="model.is_error" class="alert alert-danger" role="alert">
+            <strong>Ошибка!</strong> Цены не сохранились. Попробуйте снова, или обратитесь в службу поддержки.
+        </div>
+
+        <div ng-show="model.is_change" class="alert alert-warning" role="alert">
+            <h4>Внимание!</h4>
+            В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.
+        </div>
+
+        <h3 class="text-right">{{ date.strftime('%d.%m.%Y') }}</h3>
+
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>Наименование</th>
+                        <th>НДС (%)</th>
+                        <th>Цена (руб.)</th>
+                        <th>Цена с НДС (руб.)</th>
+                        <th>Цена розницы (руб.)</th>
+                        <th>Рекомендуемая цена розницы (руб.)</th>
+                        <th>Цена опта (руб.)</th>
+                        <th>Рекомендуемая цена опта (руб.)</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-class="{warning: item.is_change}" ng-repeat="item in model.items">
+                        <td>
+                            {{ item.full_name|angular }}
+                        </td>
+                        <td>
+                            {{ item.NDS|angular }}
+                        </td>
+                        <td>
+                            {{ item.price_prev|angular}}
+                        </td>
+                        <td>
+                            {{ item.price_post|angular }}
+                        </td>
+                        <td>
+                            <input ng-model="item.price_retail" class="input-small" type="text" placeholder="Цена">
+                        </td>
+
+                        <td>
+                            {{ item.price_retail_recommendation|angular }}
+                        </td>
+
+                        <td>
+                            <input ng-model="item.price_gross"
+                                   class="input-small" type="text" placeholder="Цена">
+                        </td>
+                        <td>
+                            {{ item.price_gross_recommendation|angular }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <button class="btn" onclick="submitPrices({{ invoice_items|length }})">Сохранить</button>
     </div>
-
-    <div id="alert alert-success" class="alert alert-success hidden">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Замечательно!</strong> Цены сохранены. Можно переходить к следующему пункту.
-    </div>
-
-    <div id="alert alert-error" class="alert alert-error hidden">
-      <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Ошибка!</strong> Цены не сохранились. Попробуйте снова, или обратитель в службу поддержки.
-    </div>
-
-    <h3 class="text-right">{{ date.strftime('%d.%m.%Y') }}</h3>
-
-        <table class="table table-bordered table-hover">
-            <thead>
-                <tr>
-                    <th>Наименование</th>
-                    <th>НДС (%)</th>
-                    <th>Цена (руб.)</th>
-                    <th>Цена с НДС (руб.)</th>
-                    <th>Цена розницы (руб.)</th>
-                    <th>Рекомендуемая цена розницы (руб.)</th>
-                    <th>Цена опта (руб.)</th>
-                    <th>Рекомендуемая цена опта (руб.)</th>
-{#                    <th>Статус</th>#}
-                </tr>
-            </thead>
-
-            <tbody>
-                {% for item in invoice_items %}
-
-                        <input type="hidden" id="commodity_id-item-{{ loop.index }}" value="{{ item.id_commodity }}">
-                        <input type="hidden" id="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">
-                        <input type="hidden" id="number_global-item-{{ loop.index }}" value="{{ item.number_global }}">
-                        <input type="hidden" id="NDS-item-{{ loop.index }}" value="{{ item.NDS }}">
-                        <input type="hidden" id="price_prev-item-{{ loop.index }}" value="{{ item.price_prev }}">
-                        <input type="hidden" id="price_post-item-{{ loop.index }}" value="{{ item.price_post }}">
-{#                        <input type="hidden" name="number_local-item-{{ loop.index }}" value="{{ item.number_local }}">#}
-
-{#                        <input type="hidden" name="invoice-item-id-{{ loop.index }}" value="{{ item.id }}">#}
-                        <tr id="row-item-{{ loop.index }}" class="{% if item.is_change %}warning{% endif %}">
-                            <td>
-                                {{ item.full_name }}
-                            </td>
-                            <td>
-                                {{ item.NDS }}
-                            </td>
-                            <td>
-                                {{ item.price_prev}}
-                            </td>
-                            <td>
-                                {{ item.price_post }}
-                            </td>
-                            <td>
-                                <input id="price_retail-item-{{ loop.index }}"
-                                       class="input-small" type="text" placeholder="Цена" value="{{ item.price_retail }}">
-                            </td>
-
-                            <td>
-                                {{ item.price_retail_recommendation }}
-                            </td>
-
-                            <td>
-                                <input id="price_gross-item-{{ loop.index }}"
-                                       class="input-small" type="text" placeholder="Цена" value="{{ item.price_gross }}">
-                            </td>
-                            <td>
-                                {{ item.price_gross_recommendation }}
-                            </td>
-{#                            <td>#}
-{#                                <i id="icon-remove-{{ loop.index }}" class="icon-remove" onclick="disableRow('{{ loop.index }}')"></i>#}
-{#                                <i id="icon-plus-{{ loop.index }}" class="icon-plus hidden" onclick="enableRow('{{ loop.index }}')"></i>#}
-{#                            </td>#}
-
-                        </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-
-        <button class="btn" onclick="submitPrices({{ invoice_items|length }})">Сохранить</button>
-
 
 {% endblock %}
 
 {% block tail %}
 
-        {% assets "invoice" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
+    {{ super() }}
+
+    <script type="text/javascript">
+        var INVOICE_ID = {{ invoice_id }};
+    </script>
+
+    {% assets "prices" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
 {% endblock %}

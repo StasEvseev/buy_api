@@ -16,10 +16,6 @@ class MailInvoiceException(Exception):
 class MailInvoiceService(object):
 
     @classmethod
-    def get_new_mails(cls):
-        pass
-
-    @classmethod
     def get_invoice(cls, invoice_id):
         return Invoice.query.get(invoice_id)
 

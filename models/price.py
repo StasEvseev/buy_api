@@ -14,6 +14,8 @@ class Price(db.Model):
     number_local = db.Column(db.String(250))
     number_global = db.Column(db.String(250))
 
+    date_from = db.Column(db.Date)
+
     NDS = db.Column(db.DECIMAL)
     #Пред цена
     price_prev = db.Column(db.DECIMAL)

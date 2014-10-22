@@ -21,11 +21,12 @@ class MyView(BaseView):
 
         return self.render('prices.html',
                            date=invoice.date,
-                           attention=any([it.is_change for it in items]),
+                           # attention=any([it.is_change for it in items]),
                            url_back=url_back,
                            url_retail=url_invoice_retail,
                            url_gross=url_invoice_gross,
-                           invoice_items=items)
+                           # invoice_items=items,
+                           invoice_id=invoice_id)
 
     @expose('/invoice-retail/<string:invoice_id>')
     def invoice_retail(self, invoice_id):
