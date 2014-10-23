@@ -16,6 +16,7 @@ from mails.model import Mail
 from models.price import Price
 from models.retailinvoice import RetailInvoice
 from models.retailinvoiceitem import RetailInvoiceItem
+from security.model import User#,# Role
 
 migrate = Migrate(app, db)
 manager = Manager(app)

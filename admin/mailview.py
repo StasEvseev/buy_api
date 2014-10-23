@@ -2,14 +2,20 @@
 
 from flask import url_for
 from flask.ext.admin import BaseView, expose
+from flask.ext import login
 
 from services.mailinvoice import MailInvoiceService
+
 
 
 class MailView(BaseView):
     """
     View в админку для работы с почтой.
     """
+
+    def is_accessible(self):
+        return login.current_user.is_authenticated()
+
     @expose('/')
     def index(self):
         return self.render('index.html')
@@ -36,10 +42,3 @@ class MailView(BaseView):
     @expose('/invoice-gross/<string:invoice_id>')
     def invoice_gross(self, invoice_id):
         return self.render('invoice_gross.html')
-
-
-class InvoiceView(BaseView):
-
-    @expose('/')
-    def index(self):
-        return self.render('invoice.html')

@@ -6,3 +6,5 @@ PASSWORD = ''
 
 user_imap = ''
 user_pass = ''
+
+SECRET_KEY = ''

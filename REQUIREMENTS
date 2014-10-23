@@ -9,3 +9,4 @@ xlrd
 xlwt
 xlutils
 flask-triangle
+flask-security

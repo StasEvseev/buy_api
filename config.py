@@ -12,6 +12,11 @@ except ImportError:
 DATABASE_URI = 'postgresql://%s:%s@localhost:5432/buy_api' % (USER, PASSWORD)
 
 try:
+    from config_local import SECRET_KEY
+except ImportError:
+    SECRET_KEY = 'test'
+
+try:
     from config_local import user_imap
     from config_local import user_pass
 except ImportError:

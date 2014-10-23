@@ -1,7 +1,7 @@
 #coding: utf-8
 from flask import current_app
 from app import app
-from models import db
+from model import db
 from mails.model import Mail
 from excel import InvoiceModel
 import re
