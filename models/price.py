@@ -32,4 +32,4 @@ class Price(db.Model):
 
 
     def __repr__(self):
-        return '<Price %r>' % self.name
+        return '<Price to %r from %s (%s, %s)>' % (self.commodity.name, self.date_from, self.price_retail or "", self.price_gross or "")
