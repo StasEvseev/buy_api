@@ -1,12 +1,13 @@
 #coding: utf-8
 
 
-from flask import Flask, redirect
+from flask import Flask, redirect, g, jsonify
 from flask.ext.triangle import Triangle
 
 
 
 from config import DATABASE_URI, SECRET_KEY
+from security import auth
 
 
 def create_app():
@@ -34,6 +35,15 @@ app = create_app()
 @app.route('/')
 def index():
     return redirect("/admin")
+
+# @app.route('/api/token')
+# @auth.login_required
+# def get_auth_token():
+#     """
+#     Получаем токен для работы.
+#     """
+#     token = g.user.generate_auth_token()
+#     return jsonify({ 'token': token.decode('ascii') })
 
 if __name__ == "__main__":
     app.run(debug=True)

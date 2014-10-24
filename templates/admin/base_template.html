@@ -4,6 +4,10 @@
 
     {{ super() }}
 
+    <script type="text/javascript">
+        var TOKEN = '{{ token }}';
+    </script>
+
     {% assets "css_all" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}" />
     {% endassets %}

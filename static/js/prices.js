@@ -1,15 +1,15 @@
 
-var app = angular.module('PriceApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', 'ui.select']);
+var app = angular.module('PriceApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', 'ui.select', 'AuthModule']);
 
-app.factory("InvoicePriceItems", function($resource) {
+app.factory("InvoicePriceItems", function($resource, Base64) {
   return $resource("/api/invoicepriceitems/:id", {}, {
-    query: { method: "GET", isArray: false }
+    query: { method: "GET", isArray: false , headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }}
   });
 });
 
-app.factory("PriceItems", function($resource) {
+app.factory("PriceItems", function($resource, Base64) {
   return $resource("/api/pricebulk", {}, {
-    query: { method: "POST", isArray: false }
+    query: { method: "POST", isArray: false , headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }}
   });
 });
 

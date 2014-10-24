@@ -13,6 +13,9 @@ class LoginForm(form.Form):
     password = fields.PasswordField(validators=[validators.required()])
 
     def validate_login(self, field):
+        """
+        Проверяем логин
+        """
         user = self.get_user()
 
         if user is None:
@@ -25,6 +28,9 @@ class LoginForm(form.Form):
             raise validators.ValidationError('Invalid password')
 
     def get_user(self):
+        """
+        Получаем пользователя
+        """
         return db.session.query(User).filter_by(login=self.login.data).first()
 
 

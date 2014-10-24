@@ -4,6 +4,7 @@ from flask.ext import restful
 from flask.ext.restful import abort, marshal_with, fields, reqparse
 
 from mails.model import Mail
+from resources.core import TokenResource
 
 from services.mailinvoice import MailInvoiceService, MailInvoiceException
 from sqlalchemy import desc
@@ -14,10 +15,12 @@ parser.add_argument('length', type=int)
 parser.add_argument('start', type=int)
 
 
-class MailCheck(restful.Resource):
+class MailCheck(TokenResource):
     """
     Ресурс для работы с почтой.
     """
+
+
 
     def post(self):
         """

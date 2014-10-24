@@ -1,4 +1,4 @@
-{% extends 'admin/master.html' %}
+{% extends 'admin/base_template.html' %}
 
 {% block body %}
     <div>
@@ -19,23 +19,9 @@
 
 {% block tail %}
 
-    <script type="text/javascript">
-        var path_to_invoice = "{{ url_for('.prices', invoice_id='') }}";
-        console.log(path_to_invoice);
-    </script>
+    {{ super() }}
 
-    {% assets "DT_JS" %}
-        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-    {% endassets %}
-    {% assets "DT_CSS" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
-
-    {% assets "css_all" %}
-        <link rel="stylesheet" href="{{ ASSET_URL }}" />
-    {% endassets %}
-
-    {% assets "js_all" %}
+    {% assets "indexmail" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
     {% endassets %}
 

@@ -10,3 +10,4 @@ xlwt
 xlutils
 flask-triangle
 flask-security
+Flask-HTTPAuth

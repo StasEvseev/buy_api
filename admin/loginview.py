@@ -14,6 +14,9 @@ from models import db
 
 
 class MyAdminIndexView(admin.AdminIndexView):
+    """
+    Базовая вьюха админки
+    """
 
     @expose('/')
     def index(self):
@@ -23,7 +26,6 @@ class MyAdminIndexView(admin.AdminIndexView):
 
     @expose('/login/', methods=('GET', 'POST'))
     def login_view(self):
-        # handle user login
         form = LoginForm(request.form)
         if helpers.validate_form_on_submit(form):
             user = form.get_user()

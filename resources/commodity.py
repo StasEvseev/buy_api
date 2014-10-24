@@ -2,10 +2,10 @@
 
 from flask.ext import restful
 from flask.ext.restful import marshal_with, fields
+from resources.core import TokenResource
 
 
-
-class CommodityResource(restful.Resource):
+class CommodityResource(TokenResource):
 
     @marshal_with({'items': fields.List(fields.Nested({
         'name': fields.String,

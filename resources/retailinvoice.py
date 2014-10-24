@@ -1,14 +1,16 @@
 #coding: utf-8
-from config import PATH_TO_GENERATE_INVOICE
+
 import os
+
 from flask import request, url_for
-from flask import json
-from flask.ext import restful
 from flask.ext.restful import abort
+
+from config import PATH_TO_GENERATE_INVOICE
+from resources.core import TokenResource
 from services.retailserv import RetailService, RetailServiceException
 
 
-class RetailResource(restful.Resource):
+class RetailResource(TokenResource):
     """
     Ресурс сохраняет накладную с ее позициями и возвращает ссылку на файл.
     """

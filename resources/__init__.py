@@ -7,6 +7,7 @@ from resources.mail import MailCheck
 from resources.price import PriceBulkResource
 from resources.retailinvoice import RetailResource
 
+
 api = restful.Api(prefix='/api')
 # api.add_resource(MailCheck, '/mail')
 

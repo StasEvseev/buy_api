@@ -8,7 +8,8 @@ from flask.ext.restful import marshal_with, fields, reqparse
 # parser = reqparse.RequestParser()
 # parser.add_argument('approve', type=bool)
 # parser.add_argument('start', type=int)
-
+from resources.core import TokenResource
+from security import auth
 
 
 class InvoiceResource(restful.Resource):
@@ -22,10 +23,12 @@ class InvoiceRetailResource(restful.Resource):
         return {'a': 1, 'b': 2}
 
 
-class InvoicePriceItemsResource(restful.Resource):
+class InvoicePriceItemsResource(TokenResource):
     """
     ресурс для получения товаров, цен, и их рекомендуемую стоимость на товары из накладной
     """
+
+    decorators = [auth.login_required]
 
     @marshal_with({'items': fields.List(fields.Nested({
         'id_commodity': fields.Integer,
@@ -65,7 +68,7 @@ class InvoicePriceItemsResource(restful.Resource):
         } for it in items]}
 
 
-class InvoiceRetailItemsResource(restful.Resource):
+class InvoiceRetailItemsResource(TokenResource):
 
     @marshal_with({'items': fields.List(fields.Nested({
         'id_commodity': fields.Integer,

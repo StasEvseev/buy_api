@@ -1,8 +1,12 @@
 #coding: utf-8
 
-from flask.ext.security import Security, SQLAlchemyUserDatastore, \
-    UserMixin, RoleMixin, login_required
+from config import SECRET_KEY
+
+from itsdangerous import JSONWebSignatureSerializer as Serializer, SignatureExpired, BadSignature
+
 from models import db
+from werkzeug.security import check_password_hash
+
 
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -24,6 +28,25 @@ class User(db.Model):
 
     def get_id(self):
         return self.id
+
+    def verify_password(self, password):
+        return check_password_hash(self.password, password)
+
+    def generate_auth_token(self):
+        s = Serializer(SECRET_KEY)
+        return s.dumps({ 'id': self.id })
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(SECRET_KEY)
+        try:
+            data = s.loads(token)
+        except SignatureExpired:
+            return None # valid token, but expired
+        except BadSignature:
+            return None # invalid token
+        user = User.query.get(data['id'])
+        return user
 
     # Required for administrative interface
     def __unicode__(self):

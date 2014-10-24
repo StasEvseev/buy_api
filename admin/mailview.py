@@ -1,6 +1,6 @@
 #coding: utf-8
 
-from flask import url_for
+from flask import url_for, g
 from flask.ext.admin import BaseView, expose
 from flask.ext import login
 
@@ -18,7 +18,8 @@ class MailView(BaseView):
 
     @expose('/')
     def index(self):
-        return self.render('index.html')
+        return self.render('index.html',
+                           token=login.current_user.generate_auth_token())
 
     @expose('/prices/<string:invoice_id>')
     def prices(self, invoice_id):
@@ -32,12 +33,15 @@ class MailView(BaseView):
                            url_back=url_back,
                            url_retail=url_invoice_retail,
                            url_gross=url_invoice_gross,
-                           invoice_id=invoice_id)
+                           invoice_id=invoice_id, token=login.current_user.generate_auth_token())
 
     @expose('/invoice-retail/<string:invoice_id>')
     def invoice_retail(self, invoice_id):
         url_prices = url_for('.prices', invoice_id=invoice_id)
-        return self.render('invoice_retail.html', invoice_id=invoice_id, url_prices=url_prices)
+        return self.render('invoice_retail.html',
+                           invoice_id=invoice_id,
+                           url_prices=url_prices,
+                           token=login.current_user.generate_auth_token())
 
     @expose('/invoice-gross/<string:invoice_id>')
     def invoice_gross(self, invoice_id):
