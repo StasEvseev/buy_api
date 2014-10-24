@@ -1,13 +1,10 @@
 #coding: utf-8
 
 
-from flask import Flask, redirect, g, jsonify
+from flask import Flask, redirect
 from flask.ext.triangle import Triangle
 
-
-
 from config import DATABASE_URI, SECRET_KEY
-from security import auth
 
 
 def create_app():

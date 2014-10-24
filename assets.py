@@ -25,6 +25,9 @@ bundles = {
     'ng-grid-css': Bundle('css/lib/ng-grid.css'),
     'ng-grid-js': Bundle('js/lib/ng-grid.debug.js'),
 
+    'ng-table-css': Bundle('css/lib/ng-table.min.css'),
+    'ng-table-js': Bundle('js/lib/ng-table.min.js'),
+
     'select-js': Bundle('js/lib/select.min.js'),
     'select-css': Bundle('css/lib/select.css',
                          'css/lib/select2.css'),

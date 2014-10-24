@@ -32,8 +32,9 @@ class MailCheck(TokenResource):
             abort(404, message=unicode(err))
         return 'ok'
 
-    @marshal_with({'data': fields.List(fields.Nested({
-        'date': fields.DateTime,
+    @marshal_with({'items': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'date': fields.String,
         'title': fields.String,
         'from': fields.String(attribute='from_'),
         'is_handling': fields.Boolean,
@@ -47,4 +48,4 @@ class MailCheck(TokenResource):
 
         mails = Mail.query.order_by(desc(Mail.date)).offset(args['start']).limit(args['length']).all()
 
-        return {'data': mails}
+        return {'items': mails}

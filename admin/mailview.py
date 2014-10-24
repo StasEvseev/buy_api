@@ -19,6 +19,7 @@ class MailView(BaseView):
     @expose('/')
     def index(self):
         return self.render('index.html',
+                           url_to_price=url_for('.prices', invoice_id=''),
                            token=login.current_user.generate_auth_token())
 
     @expose('/prices/<string:invoice_id>')

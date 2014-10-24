@@ -21,11 +21,11 @@ def load_user(user_id):
 
 auth = HTTPBasicAuth()
 
-@auth.get_password
-def get_password(username):
-    if username == 'miguel':
-        return 'python'
-    return None
+# @auth.get_password
+# def get_password(username):
+#     if username == 'miguel':
+#         return 'python'
+#     return None
 
 @auth.error_handler
 def unauthorized():
@@ -40,5 +40,5 @@ def verify_password(username_or_token, password):
         user = User.query.filter_by(login = username_or_token).first()
         if not user or not user.verify_password(password):
             return False
-    g.user = user
+    #g.user = user
     return True

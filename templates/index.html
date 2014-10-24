@@ -1,25 +1,70 @@
 {% extends 'admin/base_template.html' %}
 
 {% block body %}
-    <div>
-        <button id="btn-chk-mail" class="btn btn-default">Проверить почту</button>
-        <button id="btn_handle" class="btn btn-default" disabled="disabled">Обработать</button>
+
+    <div ng-app="MailApp" ng-controller="MailMainCtrl" ng-cloak>
+
+        <div>
+            <button class="btn btn-default" ng-click="checkPost($event)" data-loading-text="Идет проверка...">Проверить почту</button>
+            <button class="btn btn-default" ng-click="goToPrice()" ng-disabled="!model.idSelected">Обработать</button>
+        </div>
+        <br/>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Дата и время</th>
+                    <th>Заголовок</th>
+                    <th>Отправитель</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="item in model.items" ng-click="setSelected(item)" ng-class="{warning: item.id === model.idSelected}">
+                    <td>{{ item.date|angular }}</td>
+                    <td>{{ item.title|angular }}</td>
+                    <td>{{ item.from|angular }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+          <table ng-table="tableParams" show-filter="true" class="table">
+            <tbody>
+              <tr ng-repeat="item in model.items">
+                <td data-title="'Дата и время'" filter="{ 'name': 'text' }" sortable="name">
+                        {{item.date|angular}}
+                    </td>
+                <td data-title="'Заголовок'" sortable="age">
+                        {{item.title|angular}}
+                    </td>
+                <td data-title="'Отправитель'" sortable="age">
+                        {{ item.from|angular }}
+                    </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
     </div>
 
-    <table id="example" class="display" cellspacing="0" width="100%">
-        <thead>
-            <tr>
-                <th>Дата и время</th>
-                <th>Заголовок</th>
-                <th>Отправитель</th>
-            </tr>
-        </thead>
-    </table>
+
 {% endblock %}
 
 {% block tail %}
 
     {{ super() }}
+
+    <script type="text/javascript">
+        var path_to_invoice = '{{ url_to_price }}';
+    </script>
+
+    {% assets "ng-table-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
+    {% assets "ng-table-js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
 
     {% assets "indexmail" %}
         <script type="text/javascript" src="{{ ASSET_URL }}"></script>
