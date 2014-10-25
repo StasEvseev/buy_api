@@ -1,24 +1,24 @@
 
-var app = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', 'ui.select'])
-.factory("RetailItems", function($resource) {
+var app = angular.module('myApp', ['ngResource', 'ui.bootstrap', 'ngSanitize', 'ui.select', 'AuthModule'])
+.factory("RetailItems", function($resource, Base64) {
   return $resource("/api/retailitems/:id", {}, {
-    query: { method: "GET", isArray: false },
-    query_approve: {method: "GET", isArray:false, params: {approve: true}},
-    query_not_approve: {method: "GET", isArray:false, params: {approve: false}}
+    query: { method: "GET", isArray: false, headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') } },
+    query_approve: {method: "GET", isArray:false, params: {approve: true}, headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }},
+    query_not_approve: {method: "GET", isArray:false, params: {approve: false}, headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }}
   });
 })
 
-.factory("CommodityItems", function($resource) {
+.factory("CommodityItems", function($resource, Base64) {
     return $resource("/api/commodity/:id", {}, {
-        query: { method: "GET", isArray: false }
+        query: { method: "GET", isArray: false , headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }}
     });
 
 })
 
-.factory("RetailInvoice", function($resource) {
+.factory("RetailInvoice", function($resource, Base64) {
     return $resource("/api/retail-invoice", {}, {
-        query: { method: "POST", isArray: false },
-        query_confirm: {method: "POST", isArray: false, params: {confirm: true}}
+        query: { method: "POST", isArray: false, headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') } },
+        query_confirm: {method: "POST", isArray: false, params: {confirm: true}, headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }}
     });
 });
 
