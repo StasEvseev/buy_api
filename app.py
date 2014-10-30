@@ -13,10 +13,13 @@ def create_app():
     from admin import admin
     from assets import assets
     from security import login_manager
+    from datetime import timedelta
+
 
     application = Flask(__name__)
     application.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
     application.config['SECRET_KEY'] = SECRET_KEY
+    application.permanent_session_lifetime = timedelta(minutes=30)
 
     Triangle(application)
     assets.init_app(application)
