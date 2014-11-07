@@ -40,5 +40,5 @@ def verify_password(username_or_token, password):
         user = User.query.filter_by(login = username_or_token).first()
         if not user or not user.verify_password(password):
             return False
-    #g.user = user
+    g.user = user
     return True

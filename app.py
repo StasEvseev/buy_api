@@ -42,8 +42,8 @@ def index():
 #     """
 #     Получаем токен для работы.
 #     """
-#     token = g.user.generate_auth_token()
+#     token = g.user.generate_auth_tokeUSER = ''
 #     return jsonify({ 'token': token.decode('ascii') })
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, host="0.0.0.0")

@@ -40,26 +40,26 @@ class MyAdminIndexView(admin.AdminIndexView):
         # self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
 
-    # @expose('/register/', methods=('GET', 'POST'))
-    # def register_view(self):
-    #     form = RegistrationForm(request.form)
-    #     if helpers.validate_form_on_submit(form):
-    #         user = User()
-    #
-    #         form.populate_obj(user)
-    #         # we hash the users password to avoid saving it as plaintext in the db,
-    #         # remove to use plain text:
-    #         user.password = generate_password_hash(form.password.data)
-    #
-    #         db.session.add(user)
-    #         db.session.commit()
-    #
-    #         login.login_user(user)
-    #         return redirect(url_for('.index'))
-    #     link = u'<p>Уже имеете аккаунт? <a href="' + url_for('.login_view') + u'">Нажмите для входа.</a></p>'
-    #     self._template_args['form'] = form
-    #     self._template_args['link'] = link
-    #     return super(MyAdminIndexView, self).index()
+    @expose('/register/', methods=('GET', 'POST'))
+    def register_view(self):
+        form = RegistrationForm(request.form)
+        if helpers.validate_form_on_submit(form):
+            user = User()
+
+            form.populate_obj(user)
+            # we hash the users password to avoid saving it as plaintext in the db,
+            # remove to use plain text:
+            user.password = generate_password_hash(form.password.data)
+
+            db.session.add(user)
+            db.session.commit()
+
+            login.login_user(user)
+            return redirect(url_for('.index'))
+        link = u'<p>Уже имеете аккаунт? <a href="' + url_for('.login_view') + u'">Нажмите для входа.</a></p>'
+        self._template_args['form'] = form
+        self._template_args['link'] = link
+        return super(MyAdminIndexView, self).index()
 
     @expose('/logout/')
     def logout_view(self):
