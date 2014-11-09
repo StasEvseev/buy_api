@@ -10,17 +10,36 @@ from flask.ext.restful import marshal_with, fields, reqparse
 # parser.add_argument('start', type=int)
 from resources.core import TokenResource
 from security import auth
+from services.mailinvoice import InvoiceService
 
 
-class InvoiceResource(restful.Resource):
+#class InvoiceResource(restful.Resource):
 
-    def get(self):
-        pass
+#    def get(self):
+#        pass
 
 class InvoiceRetailResource(restful.Resource):
 
     def get(self, invoice_id):
         return {'a': 1, 'b': 2}
+
+
+class InvoiceResource(restful.Resource):
+    """
+    Ресурс для получения всех накладных.
+    """
+
+    decorators = [auth.login_required]
+
+    @marshal_with({'items': fields.List(fields.Nested({
+        'number': fields.String,
+        'date': fields.String
+    }))})
+    def get(self):
+        return {'items': [{
+            'number': it.number,
+            'date': it.date,
+        } for it in InvoiceService.get_all()]}
 
 
 class InvoicePriceItemsResource(TokenResource):
@@ -69,7 +88,7 @@ class InvoicePriceItemsResource(TokenResource):
 
 
 class InvoiceRetailItemsResource(TokenResource):
-
+    
     @marshal_with({'items': fields.List(fields.Nested({
         'id_commodity': fields.Integer,
         'id_price': fields.String,

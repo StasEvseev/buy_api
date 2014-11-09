@@ -13,6 +13,12 @@ class MailInvoiceException(Exception):
     pass
 
 
+class InvoiceService(object):
+    @classmethod
+    def get_all(cls):
+        return Invoice.query.all()
+
+
 class MailInvoiceService(object):
 
     @classmethod
