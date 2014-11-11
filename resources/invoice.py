@@ -8,7 +8,7 @@ from flask.ext.restful import marshal_with, fields, reqparse
 # parser = reqparse.RequestParser()
 # parser.add_argument('approve', type=bool)
 # parser.add_argument('start', type=int)
-from resources.core import TokenResource
+from resources.core import TokenResource, BaseTokeniseResource
 from security import auth
 from services.mailinvoice import InvoiceService
 
@@ -24,30 +24,48 @@ class InvoiceRetailResource(restful.Resource):
         return {'a': 1, 'b': 2}
 
 
-class InvoiceResource(restful.Resource):
+class InvoiceResource(BaseTokeniseResource):
     """
     Ресурс для получения всех накладных.
     """
 
-    decorators = [auth.login_required]
-
     @marshal_with({'items': fields.List(fields.Nested({
+        'id': fields.Integer,
         'number': fields.String,
         'date': fields.String
     }))})
     def get(self):
-        return {'items': [{
-            'number': it.number,
-            'date': it.date,
-        } for it in InvoiceService.get_all()]}
+        return {'items': InvoiceService.get_all()}
 
 
-class InvoicePriceItemsResource(TokenResource):
+class InvoiceItemResource(BaseTokeniseResource):
+    @marshal_with({'items': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'full_name': fields.String,
+        'name': fields.String,
+        'number_local': fields.String,
+        'number_global': fields.String,
+        'count_order': fields.Integer,
+        'count_postorder': fields.Integer,
+        'count': fields.Integer,
+        'price_without_NDS': fields.Price,
+        'price_with_NDS': fields.Price,
+        'sum_without_NDS': fields.Price,
+        'sum_NDS': fields.Price,
+        'rate_NDS': fields.Price,
+        'sum_with_NDS': fields.Price,
+        'thematic': fields.String,
+        'count_whole_pack': fields.Integer,
+        'placer': fields.Integer,
+    }))})
+    def get(self, invoice_id):
+        return {'items': InvoiceService.get_items(invoice_id)}
+
+
+class InvoicePriceItemsResource(BaseTokeniseResource):
     """
     ресурс для получения товаров, цен, и их рекомендуемую стоимость на товары из накладной
     """
-
-    decorators = [auth.login_required]
 
     @marshal_with({'items': fields.List(fields.Nested({
         'id_commodity': fields.Integer,
@@ -87,7 +105,10 @@ class InvoicePriceItemsResource(TokenResource):
         } for it in items]}
 
 
-class InvoiceRetailItemsResource(TokenResource):
+class InvoiceRetailItemsResource(BaseTokeniseResource):
+    """
+    Ресурс
+    """
     
     @marshal_with({'items': fields.List(fields.Nested({
         'id_commodity': fields.Integer,

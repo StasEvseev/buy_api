@@ -10,10 +10,14 @@ from security import auth
 #     b = 2
 #     return f
 
-class TokenResource(restful.Resource):
+class BaseTokeniseResource(restful.Resource):
     decorators = [auth.login_required]
+
+class TokenResource(BaseTokeniseResource):
 
     def get(self):
         token = g.user.generate_auth_token()
         print token
         return jsonify({ 'token': token.decode('ascii') })
+
+

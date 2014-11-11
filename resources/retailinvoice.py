@@ -6,11 +6,11 @@ from flask import request, url_for
 from flask.ext.restful import abort
 
 from config import PATH_TO_GENERATE_INVOICE
-from resources.core import TokenResource
+from resources.core import TokenResource, BaseTokeniseResource
 from services.retailserv import RetailService, RetailServiceException
 
 
-class RetailResource(TokenResource):
+class RetailResource(BaseTokeniseResource):
     """
     Ресурс сохраняет накладную с ее позициями и возвращает ссылку на файл.
     """

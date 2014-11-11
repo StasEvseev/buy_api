@@ -14,9 +14,22 @@ class MailInvoiceException(Exception):
 
 
 class InvoiceService(object):
+    """
+    Сервисный слой работы с накладными.
+    """
     @classmethod
     def get_all(cls):
+        """
+        Получаем все накладные
+        """
         return Invoice.query.all()
+
+    @classmethod
+    def get_items(cls, invoice_id):
+        """
+        Получаем позиции накладной по id
+        """
+        return InvoiceItem.query.filter(InvoiceItem.invoice_id==invoice_id).all()
 
 
 class MailInvoiceService(object):

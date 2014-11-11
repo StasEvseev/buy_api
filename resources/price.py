@@ -5,12 +5,12 @@ from flask.ext import restful
 from flask import request
 from flask import json
 from flask.ext.restful import abort, marshal_with, fields, reqparse
-from resources.core import TokenResource
+from resources.core import TokenResource, BaseTokeniseResource
 from services.mailinvoice import MailInvoiceService
 from services.priceserv import PriceService, PriceServiceException
 
 
-class PriceResource(TokenResource):
+class PriceResource(BaseTokeniseResource):
     def get(self):
         pass
 
@@ -18,7 +18,7 @@ class PriceResource(TokenResource):
         pass
 
 
-class PriceBulkResource(TokenResource):
+class PriceBulkResource(BaseTokeniseResource):
     """
     Массовое сохранение цен.
     """
