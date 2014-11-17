@@ -16,6 +16,9 @@ from mails.model import Mail
 from models.price import Price
 from models.retailinvoice import RetailInvoice
 from models.retailinvoiceitem import RetailInvoiceItem
+from models.good import Good
+from models.acceptance import Acceptance
+from models.warehouse import WareHouse
 from security.model import User#,# Role
 
 migrate = Migrate(app, db)
