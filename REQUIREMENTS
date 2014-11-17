@@ -11,3 +11,4 @@ xlutils
 flask-triangle
 flask-security
 Flask-HTTPAuth
+flask-fixtures

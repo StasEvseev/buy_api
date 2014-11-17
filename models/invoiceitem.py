@@ -1,5 +1,6 @@
 #coding: utf-8
 from models import db
+from models.good import Good
 
 
 class InvoiceItem(db.Model):
@@ -48,6 +49,10 @@ class InvoiceItem(db.Model):
     invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'))
     invoice = db.relationship('Invoice',
         backref=db.backref('items', lazy='dynamic'))
+
+    #Товар в системе
+    good_id = db.Column(db.Integer, db.ForeignKey('good.id'))
+    good = db.relationship(Good, backref=db.backref('invoiceitems', lazy='dynamic'))
 
     def __repr__(self):
         return '<InvoiceItem %r>' % self.name

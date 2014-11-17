@@ -1,0 +1,17 @@
+[
+    {
+        "table": "provider",
+        "records": [{
+            "id": 1,
+            "name": "KZN"
+        }]
+    },
+    {
+        "table": "ware_house",
+        "records": [{
+            "id": 1,
+            "name": "ШШК",
+            "": ""
+        }]
+    }
+]

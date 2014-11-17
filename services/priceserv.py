@@ -9,6 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 
 
 PriceStub = namedtuple('PriceStub', ['id', 'id_commodity', 'full_name', 'number_local', 'number_global', 'NDS',
+                                     'id_good',
                                      'price_prev',
                                      'price_post', 'price_retail', 'price_gross', 'is_change',
                                      'price_retail_recommendation', 'price_gross_recommendation'])
@@ -38,6 +39,7 @@ class PriceService(object):
         """
         Создаем или изменяем цены.
         """
+        from services.goodservice import GoodService
         try:
             for data in datas:
                 id_commodity = int(data['id_commodity'])
@@ -61,9 +63,12 @@ class PriceService(object):
                                   price_gross=price_gross, date_from=date)
                     db.session.add(price)
                 else:
+                    good = GoodService.get_good(data['id_good'])
+                    good.price = price
                     price.NDS = NDS
                     price.price_retail = price_retail
                     price.price_gross = price_gross
+                    db.session.add(good)
                     db.session.add(price)
         except Exception as err:
             raise PriceServiceException(err)
@@ -91,6 +96,7 @@ class PriceService(object):
         if price is None:
             price = PriceStub(
             id='',
+            id_good='',
             id_commodity=id_commodity,
             full_name='',
             number_local='',
@@ -124,6 +130,7 @@ class PriceService(object):
             pricestub = PriceStub(
                 id='',
                 id_commodity=commodity.id,
+                id_good=prod.good_id,
                 full_name=prod.full_name,
                 number_local=prod.number_local,
                 number_global=prod.number_global,

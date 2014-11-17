@@ -4,6 +4,7 @@ from mails.action import get_count_mails, NotConnect, get_mails, mark_as_unseen
 from mails.model import Mail
 
 from models import db
+from models.good import Good
 from models.invoice import Invoice
 from models.invoiceitem import InvoiceItem
 from services import CommodityService
@@ -75,12 +76,19 @@ class MailInvoiceService(object):
                             thematic=product.thematic, count_whole_pack=product.count_whole_pack,
                             placer=product.placer, invoice=invmodel)
 
+                        good = Good(full_name=product.full_name)
+
                         res, comm = CommodityService.get_or_create_commodity(
                             name=product.name, thematic=product.thematic)
+
+                        good.commodity = comm
 
                         if res is False:
                             db.session.add(comm)
 
+                        invitem.good = good
+
+                        db.session.add(good)
                         db.session.add(invitem)
 
                     db.session.commit()

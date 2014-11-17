@@ -32,10 +32,11 @@ class RetailResource(BaseTokeniseResource):
         items = retailinvoice['items']
 
         retail = RetailService.get_retail_invoice(invoice_id)
+        #Если накладная уже присутствует в системе
         if retail:
             if not forse:
                 return {"status": "confirm"}
-
+        #Иначе создаем новую
         else:
             retail = RetailService.create_retail_invoice(invoice_id)
         try:

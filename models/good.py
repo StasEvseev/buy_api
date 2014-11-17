@@ -23,3 +23,6 @@ class Good(db.Model):
     #Цена на продукцию
     price_id = db.Column(db.Integer, db.ForeignKey('price.id'))
     price = db.relationship(Price, backref=db.backref('goods', lazy='dynamic'))
+
+    #подтвержден товар
+    is_confirm = db.Column(db.BOOLEAN, default=False)

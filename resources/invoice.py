@@ -57,6 +57,7 @@ class InvoiceItemResource(BaseTokeniseResource):
         'thematic': fields.String,
         'count_whole_pack': fields.Integer,
         'placer': fields.Integer,
+        'good_id': fields.Integer
     }))})
     def get(self, invoice_id):
         return {'items': InvoiceService.get_items(invoice_id)}
@@ -79,7 +80,8 @@ class InvoicePriceItemsResource(BaseTokeniseResource):
         'price_gross': fields.String,
         'price_retail_recommendation': fields.String,
         'price_gross_recommendation': fields.String,
-        'is_change': fields.Boolean
+        'is_change': fields.Boolean,
+        'id_good': fields.Integer
     }))})
     def get(self, invoice_id):
         from services.mailinvoice import MailInvoiceService
@@ -91,6 +93,7 @@ class InvoicePriceItemsResource(BaseTokeniseResource):
 
         return {'items': [{
             'id_commodity': it.id_commodity,
+            'id_good': it.id_good,
             'full_name': it.full_name,
             'number_local': it.number_local,
             'number_global': it.number_global,
@@ -111,8 +114,7 @@ class InvoiceRetailItemsResource(BaseTokeniseResource):
     """
     
     @marshal_with({'items': fields.List(fields.Nested({
-        'id_commodity': fields.Integer,
-        'id_price': fields.String,
+        'id_good': fields.Integer,
         'full_name': fields.String,
         'price_retail': fields.String,
         'count': fields.String,
@@ -134,6 +136,7 @@ class InvoiceRetailItemsResource(BaseTokeniseResource):
             {'full_name': item.full_name,
              'price_retail': item.price_retail,
              'count': item.count,
-             'id_commodity': item.id_commodity,
-             'id_price': item.id_price,
+             'id_good': item.id_good,
+             # 'id_commodity': item.id_commodity,
+             # 'id_price': item.id_price,
              'is_approve': item.price_retail != ''} for item in items]}
