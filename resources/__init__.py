@@ -5,7 +5,7 @@ from resources.commodity import CommodityResource
 from resources.core import TokenResource
 from resources.goodres import GoodResource
 from resources.invoice import InvoiceResource, InvoiceRetailItemsResource, InvoicePriceItemsResource, \
-    InvoiceItemResource
+    InvoiceItemResource, InvoiceItemCountResource
 from resources.mail import MailCheck
 from resources.price import PriceBulkResource
 from resources.retailinvoice import RetailResource
@@ -21,6 +21,8 @@ api.add_resource(MailCheck, '/mail')
 api.add_resource(InvoiceResource, '/invoice')
 
 api.add_resource(InvoiceItemResource, '/invoice/<int:invoice_id>/goods')
+
+api.add_resource(InvoiceItemCountResource, '/invoice/<int:invoice_id>/count')
 
 api.add_resource(GoodResource, '/good/<int:id>')
 

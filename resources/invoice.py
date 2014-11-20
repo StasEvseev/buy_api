@@ -35,7 +35,14 @@ class InvoiceResource(BaseTokeniseResource):
         'date': fields.String
     }))})
     def get(self):
-        return {'items': InvoiceService.get_all()}
+        args = request.args
+
+        if 'from' in args:
+            invoices = InvoiceService.get_from(args['from'])
+        else:
+            invoices = InvoiceService.get_all()
+
+        return {'items': invoices}
 
 
 class InvoiceItemResource(BaseTokeniseResource):
@@ -61,6 +68,13 @@ class InvoiceItemResource(BaseTokeniseResource):
     }))})
     def get(self, invoice_id):
         return {'items': InvoiceService.get_items(invoice_id)}
+
+
+class InvoiceItemCountResource(BaseTokeniseResource):
+    @marshal_with({'result': fields.Nested({'count': fields.Integer})})
+    def get(self, invoice_id):
+        count = InvoiceService.get_count_items(invoice_id)
+        return {'result': {'count': count}}
 
 
 class InvoicePriceItemsResource(BaseTokeniseResource):

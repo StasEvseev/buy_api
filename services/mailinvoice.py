@@ -26,6 +26,18 @@ class InvoiceService(object):
         return Invoice.query.all()
 
     @classmethod
+    def get_from(cls, from_id):
+        return Invoice.query.filter(Invoice.id>from_id)
+
+    @classmethod
+    def get_count_items(cls, invoice_id):
+        return InvoiceItem.query.filter(InvoiceItem.invoice_id==invoice_id).count()
+
+    # @classmethod
+    # def get_from(cls, from_id):
+    #     return InvoiceItem.query.filter(InvoiceItem.id>=from_id)
+
+    @classmethod
     def get_items(cls, invoice_id):
         """
         Получаем позиции накладной по id
