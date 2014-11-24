@@ -36,9 +36,9 @@ class GoodService(object):
         good = cls.get_good(id)
         good.barcode = barcode
 
-        if good.count:
-            good.count = count
-            good.is_confirm = True
+        # if good.count:
+        good.count = count
+        good.is_confirm = True
 
         db.session.add(good)
 

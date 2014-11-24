@@ -9,18 +9,18 @@ class GoodResource(BaseTokeniseResource):
 
     def post(self, id):
         try:
-            data = request.json['data']
+            data = request.json
             print "=" * 80
             print data
             print "=" * 80
             barcode = data['barcode']
-            count = data['count']
+            count = data['factCount']
         except KeyError:
-            abort(402, message="Bad args")
+            abort(400, message="Bad args")
         try:
             GoodService.update_good(id, count, barcode)
         except GoodServiceException as err:
-            abort(404, message=unicode(err))
+            abort(500, message=unicode(err))
         return "ok"
 
     @marshal_with({
