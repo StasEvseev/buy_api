@@ -19,7 +19,8 @@ class InvoiceModel(object):
         self.count = 0
         self.start_row = 0
 
-        self.doc = xlrd.open_workbook(doc, on_demand=True)
+        self.doc = xlrd.open_workbook(doc, on_demand=True, encoding_override="cp1251")
+        # self.doc.verbosity = 2
         sheet = self.doc.sheet_by_index(0)
 
         self.number = self.get_value(sheet, 3, 0, u'№ ', u' от')

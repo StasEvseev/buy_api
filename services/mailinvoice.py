@@ -58,9 +58,12 @@ class MailInvoiceService(object):
         """
         count = cls.get_count_new_mails()
         if count > 0:
-            ids, mails = get_mails()
+            ids = []
             try:
+                ids, mails = get_mails()
+                # try:
                 for mail in mails:
+                    print "TITLE - " ,mail.title, " ,FILE - ", mail.file_
                     ml = Mail(title=mail.title, date=mail.date_, from_=mail.from_, to=mail.to_, file=mail.file_)
 
                     invoice = InvoiceModel(ml.file)

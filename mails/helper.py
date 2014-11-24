@@ -34,8 +34,11 @@ def name_for_file(part, path):
     Генерация имени для файла(без корреляции).
     """
     cont_t = get_cont_type_file(part)
+    filename = part.get_filename()
+    if '.' in filename:
+        filename = filename[:filename.find('.')]
     date_ = datetime.datetime.now()
-    result = 'nakl_ot_%s' % date_.strftime('%d%m%Y')
+    result = 'nakl_%s_%s' % (filename, date_.strftime('%d%m%Y'))
     if cont_t == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
         result = ''.join([result, '.xls'])
     if os.path.isfile(os.path.join(path, result)):

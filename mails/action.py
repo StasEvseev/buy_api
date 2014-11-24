@@ -74,21 +74,26 @@ def get_mails():
 
     mail, ids = get_ids_mails()
 
-    for id in ids:
+    try:
 
-        result, data = mail.fetch(id, "(RFC822)")
-        if data[0] is not None:
-            raw_email = data[0][1]
+        for id in ids:
 
-            pmail = email.message_from_string(raw_email)
-            try:
-                mail_item = file_imap(pmail)
-            except Exception:
-                raise
-            finally:
-                mail.close()
-                mail.logout()
-            results.append(mail_item)
+            result, data = mail.fetch(id, "(RFC822)")
+            if data[0] is not None:
+                raw_email = data[0][1]
+
+                pmail = email.message_from_string(raw_email)
+                try:
+                    mail_item = file_imap(pmail)
+                except Exception:
+                    raise
+                # finally:
+                #     mail.close()
+                #     mail.logout()
+                results.append(mail_item)
+    finally:
+        mail.close()
+        mail.logout()
 
     return ids, results
 
@@ -122,6 +127,7 @@ def file_imap(pmail):
             continue
         if part.get('Content-Disposition') is None:
             continue
+        print "FIND FILE - ", part.get_filename()
         fileName = part.get_filename()
         if bool(fileName):
 
