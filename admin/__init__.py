@@ -1,4 +1,5 @@
 #coding: utf-8
+from admin.acceptance import AcceptanceView
 from admin.commodityview import CommodityView
 from admin.providerview import ProviderView
 
@@ -15,3 +16,4 @@ admin = Admin(name=u"Личный кабинет", template_mode='bootstrap3', i
 admin.add_view(MailView(name=u'Прием почты'))
 admin.add_view(ProviderView(db.session, name=u'Поставщики'))
 admin.add_view(CommodityView(db.session, name=u'Товары'))
+admin.add_view(AcceptanceView(db.session, name=u"Приемки"))

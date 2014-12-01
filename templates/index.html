@@ -43,7 +43,12 @@
                         <p ng-if="item.id != model.idSelected">{{item.title|angular}}</p>
 {#                        {{item.title|angular}}#}
                     </td>
-                <td data-title="'Отправитель'" sortable="'from'">
+                <td data-title="'Поставщик'" sortable="'from'">
+                        <p ng-if="item.id == model.idSelected"><strong>{{item.provider|angular}}</strong></p>
+                        <p ng-if="item.id != model.idSelected">{{item.provider|angular}}</p>
+{#                        {{ item.from|angular }}#}
+                    </td>
+                <td data-title="'Почтовый ящик'" sortable="'from'">
                         <p ng-if="item.id == model.idSelected"><strong>{{item.from|angular}}</strong></p>
                         <p ng-if="item.id != model.idSelected">{{item.from|angular}}</p>
 {#                        {{ item.from|angular }}#}

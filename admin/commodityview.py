@@ -7,6 +7,7 @@ from flask.ext import login
 class CommodityView(ModelView):
 
     form_columns = ('name', 'thematic')
+    column_labels = dict(name=u'Наименование', thematic=u'Тематика')
     can_delete = False
 
     def is_accessible(self):

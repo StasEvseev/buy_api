@@ -10,7 +10,8 @@ class ProviderView(ModelView):
     # Disable model creation
     #can_create = False
     # form_excluded_columns = ['invoices', ]
-    form_columns = ('name', )
+    form_columns = ('name', 'address', 'emails')
+    column_labels = dict(name=u'Наименование', address=u'Адрес', emails=u"Почтовые ящики")
     # Override displayed fields
     column_list = ('name', )#, 'email')
     can_delete = False

@@ -29,5 +29,8 @@ class Invoice(db.Model):
     #Отпустил
     responsible = db.Column(db.String(250))
 
-    def __repr__(self):
-        return '<Invoice %r>' % self.number
+    # def __repr__(self):
+    #     return '%r' % self.number
+
+    def __unicode__(self):
+        return u'Накладная %s от %s' % (self.number, self.date)

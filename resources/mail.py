@@ -40,7 +40,9 @@ class MailCheck(BaseTokeniseResource):
         'title': fields.String,
         'from': fields.String(attribute='from_'),
         'is_handling': fields.Boolean,
-        'invoice_id': fields.Integer
+        'invoice_id': fields.Integer,
+        'provider_id': fields.Integer(attribute='invoice.provider_id'),
+        'provider': fields.String(attribute='invoice.provider.name')
     })), 'count': fields.Integer})
     def get(self, **kwargs):
         """
