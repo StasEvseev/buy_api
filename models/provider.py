@@ -10,5 +10,14 @@ class Provider(db.Model):
     #Наименование
     name = db.Column(db.String(250))
 
+    address = db.Column(db.String(250))
+
+    emails = db.Column(db.String(250))
+
     def __repr__(self):
         return '<Provider %r>' % self.name
+
+    def get_emails(self):
+        if self.emails:
+            return self.emails.split(",")
+        return []

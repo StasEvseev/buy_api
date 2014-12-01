@@ -11,8 +11,20 @@ from services.priceserv import PriceService, PriceServiceException
 
 
 class PriceResource(BaseTokeniseResource):
+    @marshal_with({'items': fields.List(fields.Nested({
+        'id': fields.Integer,
+        'commodity_id': fields.Integer,
+        'NDS': fields.Float,
+        'price_prev': fields.Price,
+        'price_post': fields.Price,
+        'number_local': fields.String,
+        'number_global': fields.String,
+        'price_gross': fields.Price,
+        'price_retail': fields.Price,
+        'date_from': fields.String
+    }))})
     def get(self):
-        pass
+        return {'items': PriceService.get_all()}
 
     def post(self):
         pass

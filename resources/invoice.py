@@ -32,7 +32,9 @@ class InvoiceResource(BaseTokeniseResource):
     @marshal_with({'items': fields.List(fields.Nested({
         'id': fields.Integer,
         'number': fields.String,
-        'date': fields.String
+        'date': fields.String,
+        'provider_id': fields.Integer,
+        # 'is_acceptance': fields.Boolean
     }))})
     def get(self):
         args = request.args
@@ -64,7 +66,9 @@ class InvoiceItemResource(BaseTokeniseResource):
         'thematic': fields.String,
         'count_whole_pack': fields.Integer,
         'placer': fields.Integer,
-        'good_id': fields.Integer
+        'good_id': fields.Integer,
+        'commodity_id': fields.Integer(attribute='good.commodity_id'),
+        'price_id': fields.Integer(attribute='good.price_id')
     }))})
     def get(self, invoice_id):
         return {'items': InvoiceService.get_items(invoice_id)}

@@ -35,9 +35,9 @@ class MyAdminIndexView(admin.AdminIndexView):
 
         if login.current_user.is_authenticated():
             return redirect(url_for('.index'))
-        # link = u'<p>Не имеете аккаунта? <a href="' + url_for('.register_view') + u'">Нажмите для регистрации.</a></p>'
+        link = u'<p>Не имеете аккаунта? <a href="' + url_for('.register_view') + u'">Нажмите для регистрации.</a></p>'
         self._template_args['form'] = form
-        # self._template_args['link'] = link
+        self._template_args['link'] = link
         return super(MyAdminIndexView, self).index()
 
     @expose('/register/', methods=('GET', 'POST'))

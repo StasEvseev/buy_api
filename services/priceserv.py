@@ -35,6 +35,10 @@ class PriceService(object):
         return Price.query.filter(Price.id==id).one()
 
     @classmethod
+    def get_all(cls):
+        return Price.query.all()
+
+    @classmethod
     def create_or_update_prices(cls, datas, date):
         """
         Создаем или изменяем цены.

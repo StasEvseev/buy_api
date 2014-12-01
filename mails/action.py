@@ -1,7 +1,7 @@
 #coding:utf-8
 
 import imaplib
-import email
+import email as email_module
 import os
 from collections import namedtuple
 
@@ -34,14 +34,14 @@ def get_mail(mail, search_str):
     result, data = mail.search(None, *search_str)
     return result, data
 
-def get_count_mails():
+def get_count_mails(email):
     """
     функция получения количества новых писем
     """
-    m, l_ids = get_ids_mails()
+    m, l_ids = get_ids_mails(email)
     return len(l_ids) # get the latest
 
-def get_ids_mails():
+def get_ids_mails(email):
     """
     Получение идентификаторов непрочитанных писем от некоего отправителя
     """
@@ -53,7 +53,7 @@ def get_ids_mails():
     else:
         search_str = ['UnSeen', ]
         if from_imap:
-            from_str = '(FROM "%s")' % from_imap
+            from_str = '(FROM "%s")' % email
             search_str.append(from_str)
         result, data = get_mail(mail, search_str)
 
@@ -62,38 +62,39 @@ def get_ids_mails():
 
     return mail, id_list
 
-def get_mails():
+def get_mails(emails):
     """
     Получение всех непрочитанных писем от некоего отправителя
     """
 
-    results = []
+    results = {}
 
     if not os.path.exists(DIR_ATTACH):
         os.makedirs(DIR_ATTACH)
 
-    mail, ids = get_ids_mails()
-
+    mail = None
     try:
+        for email in emails:
+            results[email] = []
+            mail, ids = get_ids_mails(email)
+            for id in ids:
+                result, data = mail.fetch(id, "(RFC822)")
+                if data[0] is not None:
+                    raw_email = data[0][1]
 
-        for id in ids:
-
-            result, data = mail.fetch(id, "(RFC822)")
-            if data[0] is not None:
-                raw_email = data[0][1]
-
-                pmail = email.message_from_string(raw_email)
-                try:
-                    mail_item = file_imap(pmail)
-                except Exception:
-                    raise
-                # finally:
-                #     mail.close()
-                #     mail.logout()
-                results.append(mail_item)
+                    pmail = email_module.message_from_string(raw_email)
+                    try:
+                        mail_item = file_imap(pmail)
+                    except Exception:
+                        raise
+                    # finally:
+                    #     mail.close()
+                    #     mail.logout()
+                    results[email].append(mail_item)
     finally:
-        mail.close()
-        mail.logout()
+        if mail:
+            mail.close()
+            mail.logout()
 
     return ids, results
 

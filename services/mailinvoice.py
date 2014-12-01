@@ -8,6 +8,7 @@ from models.good import Good
 from models.invoice import Invoice
 from models.invoiceitem import InvoiceItem
 from services import CommodityService
+from services.providerserv import ProviderService
 
 
 class MailInvoiceException(Exception):
@@ -56,65 +57,79 @@ class MailInvoiceService(object):
         """
         Метод обрабатывает почтовый ящик
         """
-        count = cls.get_count_new_mails()
+        emails = []
+        for provider in ProviderService.get_all():
+            emails.extend(provider.get_emails())
+
+        count = cls.get_count_new_mails(emails)
         if count > 0:
             ids = []
             try:
-                ids, mails = get_mails()
-                # try:
-                for mail in mails:
-                    print "TITLE - " ,mail.title, " ,FILE - ", mail.file_
-                    ml = Mail(title=mail.title, date=mail.date_, from_=mail.from_, to=mail.to_, file=mail.file_)
+                ids, mails = get_mails(emails)
 
-                    invoice = InvoiceModel(ml.file)
+                for _from in mails:
 
-                    invmodel = Invoice(
-                        number=invoice.number, date=invoice.date,
-                        sum_without_NDS=invoice.sum_without_NDS, sum_with_NDS=invoice.sum_with_NDS,
-                        sum_NDS=invoice.sum_NDS, weight=invoice.weight, responsible=invoice.responsible)
+                    provider = ProviderService.get_provider_by_email(_from)
+                    mailss = mails[_from]
+                    for mail in mailss:
+                        # mail = mail[]
+                        print "TITLE - " ,mail.title, " ,FILE - ", mail.file_
+                        ml = Mail(title=mail.title, date=mail.date_, from_=mail.from_, to=mail.to_, file=mail.file_)
 
-                    products = invoice.get_products()
+                        invoice = InvoiceModel(ml.file)
 
-                    ml.invoice = invmodel
+                        invmodel = Invoice(
+                            number=invoice.number, date=invoice.date,
+                            sum_without_NDS=invoice.sum_without_NDS, sum_with_NDS=invoice.sum_with_NDS,
+                            sum_NDS=invoice.sum_NDS, weight=invoice.weight, responsible=invoice.responsible)
+                        if provider:
+                            invmodel.provider = provider
 
-                    db.session.add(ml)
-                    db.session.add(invmodel)
+                        products = invoice.get_products()
 
-                    for product in products:
-                        invitem = InvoiceItem(
-                            full_name=product.full_name, name=product.name, number_local=product.number_local,
-                            number_global=product.number_global,
-                            count_order=product.count_order, count_postorder=product.count_postorder,
-                            count=product.count, price_without_NDS=product.price_without_NDS,
-                            price_with_NDS=product.price_with_NDS, sum_without_NDS=product.sum_without_NDS,
-                            sum_NDS=product.sum_NDS, rate_NDS=product.rate_NDS, sum_with_NDS=product.sum_with_NDS,
-                            thematic=product.thematic, count_whole_pack=product.count_whole_pack,
-                            placer=product.placer, invoice=invmodel)
+                        ml.invoice = invmodel
 
-                        good = Good(full_name=product.full_name)
+                        db.session.add(ml)
+                        db.session.add(invmodel)
 
-                        res, comm = CommodityService.get_or_create_commodity(
-                            name=product.name, thematic=product.thematic)
+                        for product in products:
+                            invitem = InvoiceItem(
+                                full_name=product.full_name, name=product.name, number_local=product.number_local,
+                                number_global=product.number_global,
+                                count_order=product.count_order, count_postorder=product.count_postorder,
+                                count=product.count, price_without_NDS=product.price_without_NDS,
+                                price_with_NDS=product.price_with_NDS, sum_without_NDS=product.sum_without_NDS,
+                                sum_NDS=product.sum_NDS, rate_NDS=product.rate_NDS, sum_with_NDS=product.sum_with_NDS,
+                                thematic=product.thematic, count_whole_pack=product.count_whole_pack,
+                                placer=product.placer, invoice=invmodel)
 
-                        good.commodity = comm
+                            good = Good(full_name=product.full_name)
 
-                        if res is False:
-                            db.session.add(comm)
+                            res, comm = CommodityService.get_or_create_commodity(
+                                name=product.name, thematic=product.thematic)
 
-                        invitem.good = good
+                            good.commodity = comm
 
-                        db.session.add(good)
-                        db.session.add(invitem)
+                            if res is False:
+                                db.session.add(comm)
 
-                    db.session.commit()
+                            invitem.good = good
+
+                            db.session.add(good)
+                            db.session.add(invitem)
+
+                        db.session.commit()
             except Exception as err:
                 mark_as_unseen(ids)
                 raise MailInvoiceException(err)
 
 
     @classmethod
-    def get_count_new_mails(cls):
-        try:
-            return get_count_mails()
-        except NotConnect as err:
-            raise MailInvoiceException(err)
+    def get_count_new_mails(cls, emails):
+        count = 0
+        for email in emails:
+            try:
+                count += get_count_mails(email)
+            except NotConnect as err:
+                raise MailInvoiceException(err)
+        return count
