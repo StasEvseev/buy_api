@@ -27,7 +27,7 @@ class AcceptanceView(ModelView):
         form = super(AcceptanceView, self).create_form(obj)
 
         form.invoice.query_factory = Invoice.query.outerjoin(
-            Invoice.acceptances
+            Invoice.acceptance
         ).filter(
             Acceptance.invoice_id == None
         ).all
@@ -39,7 +39,7 @@ class AcceptanceView(ModelView):
         form = super(AcceptanceView, self).edit_form(obj)
 
         form.invoice.query_factory = Invoice.query.outerjoin(
-            Invoice.acceptances
+            Invoice.acceptance
         ).filter(
             or_(
                 Acceptance.invoice_id == None,
