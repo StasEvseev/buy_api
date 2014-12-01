@@ -2,7 +2,7 @@
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext import login
 from flask.ext.admin.form import Select2Field
-from sqlalchemy import not_
+from sqlalchemy import not_, or_
 from wtforms import SelectField
 from models.acceptance import Acceptance
 from models import db
@@ -26,6 +26,26 @@ class AcceptanceView(ModelView):
 
         form = super(AcceptanceView, self).create_form(obj)
 
-        form.invoice.query_factory = Invoice.query.filter(not_(Invoice.acceptances)).all
+        form.invoice.query_factory = Invoice.query.outerjoin(
+            Invoice.acceptances
+        ).filter(
+            Acceptance.invoice_id == None
+        ).all
+
+        return form
+
+    def edit_form(self, obj=None):
+
+        form = super(AcceptanceView, self).edit_form(obj)
+
+        form.invoice.query_factory = Invoice.query.outerjoin(
+            Invoice.acceptances
+        ).filter(
+            or_(
+                Acceptance.invoice_id == None,
+                Invoice.id == obj.invoice_id
+            )
+
+        ).all
 
         return form
