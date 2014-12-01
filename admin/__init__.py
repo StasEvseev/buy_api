@@ -1,6 +1,7 @@
 #coding: utf-8
 from admin.acceptance import AcceptanceView
 from admin.commodityview import CommodityView
+from admin.goodview import GoodView
 from admin.providerview import ProviderView
 
 from flask.ext.admin import Admin
@@ -15,5 +16,6 @@ admin = Admin(name=u"Личный кабинет", template_mode='bootstrap3', i
               base_template='my_master.html')
 admin.add_view(MailView(name=u'Прием почты'))
 admin.add_view(ProviderView(db.session, name=u'Поставщики'))
-admin.add_view(CommodityView(db.session, name=u'Товары'))
+admin.add_view(CommodityView(db.session, name=u'Наименования товаров'))
 admin.add_view(AcceptanceView(db.session, name=u"Приемки"))
+admin.add_view(GoodView(db.session, name=u"Товар"))

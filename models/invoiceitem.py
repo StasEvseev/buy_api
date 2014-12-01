@@ -52,7 +52,7 @@ class InvoiceItem(db.Model):
 
     #Товар в системе
     good_id = db.Column(db.Integer, db.ForeignKey('good.id'))
-    good = db.relationship(Good, backref=db.backref('invoiceitems', lazy='dynamic'))
+    good = db.relationship(Good, backref=db.backref('invoiceitem', uselist=False))
 
     def __repr__(self):
         return '<InvoiceItem %r>' % self.name

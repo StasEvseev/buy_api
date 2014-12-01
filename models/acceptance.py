@@ -13,7 +13,7 @@ class Acceptance(db.Model):
     #Накладная основание
     invoice_id = db.Column(db.Integer, db.ForeignKey('invoice.id'))
     invoice = db.relationship(Invoice,
-        backref=db.backref('acceptances', lazy='dynamic'))
+        backref=db.backref('acceptance', uselist=False))
     #Дата приема товара
     date = db.Column(db.Date)
 

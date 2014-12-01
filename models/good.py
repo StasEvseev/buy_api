@@ -2,6 +2,7 @@
 
 from models import db
 from models.commodity import Commodity
+from models.invoice import Invoice
 from models.price import Price
 
 
@@ -26,3 +27,7 @@ class Good(db.Model):
 
     #подтвержден товар
     is_confirm = db.Column(db.BOOLEAN, default=False)
+
+
+    # def invoice(self):
+    #     return Invoice.query.filter(Invoice.id==self.invoiceitem.invoice_id).one()
