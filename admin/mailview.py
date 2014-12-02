@@ -3,6 +3,7 @@
 from flask import url_for, g
 from flask.ext.admin import BaseView, expose
 from flask.ext import login
+from werkzeug.utils import redirect
 
 from services.mailinvoice import MailInvoiceService
 

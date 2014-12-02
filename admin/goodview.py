@@ -2,10 +2,11 @@
 from flask.ext.admin.contrib.sqla import ModelView
 from flask.ext import login
 from flask.ext.admin.model import InlineFormAdmin
+from admin.baseview import BaseViewAuth
 from models.good import Good
 
 
-class GoodView(ModelView):
+class GoodView(BaseViewAuth):
 
     form_columns = ('full_name', 'count', 'barcode', )
     column_labels = {
@@ -23,8 +24,8 @@ class GoodView(ModelView):
     can_edit = False
     column_filters = ('full_name', 'barcode')
 
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
+    # def is_accessible(self):
+    #     return login.current_user.is_authenticated()
 
     def __init__(self, session, **kwargs):
         # You can pass name and other parameters if you want to

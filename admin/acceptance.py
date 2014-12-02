@@ -4,19 +4,20 @@ from flask.ext import login
 from flask.ext.admin.form import Select2Field
 from sqlalchemy import not_, or_
 from wtforms import SelectField
+from admin.baseview import BaseViewAuth
 from models.acceptance import Acceptance
 from models import db
 # from models.invoice import Invoice
 from models.invoice import Invoice
 
 
-class AcceptanceView(ModelView):
+class AcceptanceView(BaseViewAuth):
     form_columns = ('invoice', 'date')
     column_labels = dict(invoice=u'Накладная', date=u'Дата')
     can_delete = False
 
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
+    # def is_accessible(self):
+    #     return login.current_user.is_authenticated()
 
     def __init__(self, session, **kwargs):
         # You can pass name and other parameters if you want to

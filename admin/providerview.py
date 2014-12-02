@@ -2,11 +2,12 @@
 
 
 from flask.ext.admin.contrib.sqla import ModelView
+from admin.baseview import BaseViewAuth
 from models.provider import Provider
 from flask.ext import login
 
 
-class ProviderView(ModelView):
+class ProviderView(BaseViewAuth):
     # Disable model creation
     #can_create = False
     # form_excluded_columns = ['invoices', ]
@@ -16,8 +17,10 @@ class ProviderView(ModelView):
     column_list = ('name', )#, 'email')
     can_delete = False
 
-    def is_accessible(self):
-        return login.current_user.is_authenticated()
+    # def is_accessible(self):
+    #     return login.current_user.is_authenticated()
+
+    # def action_view(self):
 
     def __init__(self, session, **kwargs):
         # You can pass name and other parameters if you want to
