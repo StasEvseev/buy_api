@@ -1,0 +1,121 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-8">
+                <button class="btn btn-primary btn-sm" ng-click="saveInvoice($event)" data-loading-text="Сохранение...">Сохранить</button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div ng-show="model.validate.is_success" class="alert alert-success" role="alert">
+    <strong>Замечательно!</strong> Приемка сохранена. Можно переходить к следующему пункту.
+</div>
+
+<div ng-show="model.validate.is_error" class="alert alert-danger" role="alert">
+    <strong>Ошибка!</strong> Приемка не сохранилась. Попробуйте снова, или обратитесь в службу поддержки.
+    <p>{{ model.validate.error }}</p>
+</div>
+
+<div class="form-bg">
+    <div class="form-sheet">
+        <div class="row">
+            <div class="form-group-my" ng-class="{'has-error': model.errors.date}">
+                <div class="col-md-12 form-row">
+                    <dict-select-field label="Поставщик"
+                                       placeholder="Выберите поставщика или поищите..."
+                                       attrdisplay="name"
+                                       resource="resource"
+
+                                       selected="model.selected_provider"
+                                       clbkclose="loadGood">
+
+                    </dict-select-field>
+                </div>
+
+            </div>
+
+            <div class="form-group-my" ng-class="{'has-error': model.errors.date}">
+                <div class="col-md-12 form-row">
+                    <date-field label="Дата" model="model.date" />
+                </div>
+            </div>
+        </div>
+
+        <div class="category">
+            Товар
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Количество</th>
+                    <th>Цена с НДС</th>
+                    <th>Цена розницы</th>
+                    <th>Цена опта</th>
+                    <th>Сумма (руб.)</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="item in model.items" ng-click="editItem(item)" style="cursor:pointer;">
+
+                    <td >
+                        {{ item.full_name }}
+                    </td>
+                    <td>
+                        {{ item.count_invoice }}
+                    </td>
+                    <td>
+                        <span>
+                            {{ item.price_post | rub }}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{ item.price_retail | rub }}
+                        </span>
+                    </td>
+                    <td>
+                        <span>
+                            {{ item.price_gross | rub }}
+                        </span>
+                    </td>
+                    <td>
+                        {{ item.count_invoice * item.price_post | rub }}
+                    </td>
+                    <td ng-click="deleteItem(item)">
+                        <i class="fa fa-trash-o"></i>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        <a ng-click="openToAdd()" style="cursor:pointer; font-weight: bold">Добавить</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="8">
+                        &nbsp;
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr></tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+
+
+
+<!--<div class="panel panel-default">
+    <div class="panel-heading">
+
+    </div>
+
+    <div class="panel-body">
+
+    </div>
+
+</div>-->

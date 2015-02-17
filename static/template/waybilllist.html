@@ -1,0 +1,36 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-9">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-danger dropdown-toggle btn-sm" data-toggle="dropdown" aria-expanded="false">
+                        Создать <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="/admin/waybillcustomview/select_acceptance">Сформировать по приемке</a></li>
+                        <li><a href="/admin/waybillcustomview/select_mail">Сформировать по почте</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/admin/waybillcustomview/select_point">Сформировать новую</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-md-3">
+                <search-field
+                        placeholder="Поиск"
+                        clbkclick="reload"></search-field>
+            </div>
+        </top-panel>
+    </div>
+</div>
+<table-remote resource="resource" class="table table-bordered table-striped my-table" handlerclkrow="select">
+    <row r-repeat="item in $data" style="cursor: pointer">
+        <column data-title="'Дата'"><span>{{item.date| date:'MMM d, y'}}</span></column>
+        <column data-title="'Накладная'"><span>{{item.number}}</span></column>
+        <column data-title="'Тип'"><span>{{item.type_str}}</span></column>
+        <column data-title="'Получатель'"><span>{{item.point}}</span></column>
+        <column data-title="'Отправитель'"><span>{{item.pointsale_from}}</span></column>
+        <column data-title="'Накладная основание'"><span>{{item.invoice}}</span></column>
+        <column data-title="'Файл'"><a href="{{item.filepath}}" target="_blank">Скачать</a></column>
+    </row>
+</table-remote>

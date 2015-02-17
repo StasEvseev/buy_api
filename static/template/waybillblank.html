@@ -1,0 +1,100 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-8">
+                <button class="btn btn-primary" ng-click="saveAndPrint()">Сохранить и печатать</button>
+                <button class="btn btn-default" ng-click="openToAdd()" ng-hide="addHide">Добавить</button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div ng-show="model.is_save" class="alert alert-success" role="alert">
+    <strong>Замечательно!</strong><br/>Накладная сохранена. Перейдите по этой
+    <a target="_self" href="{{ model.url_to_download }}" class="alert-link">ссылке</a> для скачивания.
+</div>
+
+<div ng-show="model.is_error" class="alert alert-danger" role="alert">
+    <strong>Ошибка!</strong><br/>Накладная не сохранена.
+    {{ model.message_error }}
+</div>
+
+<div class="alert alert-warning" role="alert">
+    <strong>Внимание!</strong><br/>
+    Позиции с вычеркнутыми названиями не попадут в накладную.
+</div>
+
+<div class="form-bg container">
+    <div class="form-sheet" style="">
+        <table class="table">
+            <thead>
+                <tr>
+                    <!--<th>№</th>-->
+                    <th>Наименование</th>
+                    <th>Кол-во (в накл.)</th>
+                    <th>Кол-во (ост.)</th>
+                    <th class="column_price" ng-show="model.typeInvoice == 1">Цена розницы</th>
+                    <th class="column_price" ng-show="model.typeInvoice == 2">Цена опта</th>
+                    <th class="column_price">Сумма</th>
+                    <th ng-show="isActionClmn">Действия</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-repeat="item in model.items">
+
+                    <!--<td >
+                        {{ $index + 1 }}
+                    </td> -->
+
+                    <td >
+                        <del ng-if="!item.is_approve">
+                            {{ item.full_name }}
+                        </del>
+                        <span ng-if="item.is_approve">
+                            {{ item.full_name }}
+                        </span>
+
+                    </td>
+
+                    <td>
+                        <input nks-only-number ng-model="item.count_invoice"
+                               ng-change="item.count_change(model.typeInvoice)"
+                               class="input-small input-table"
+                               type="text"
+                               placeholder="Количество"/>
+                    </td>
+
+                    <td >
+                        {{ item.count }}
+                    </td>
+                    <td ng-show="model.typeInvoice == 1">
+                        {{ item.price_retail | rub}}
+                    </td>
+
+                    <td ng-show="model.typeInvoice == 2">
+                        {{ item.price_gross | rub}}
+                    </td>
+
+                    <td>
+                        {{ item.count_invoice * (model.typeInvoice == 1?item.price_retail:item.price_gross) | rub }}
+                    </td>
+
+                    <td ng-show="isActionClmn">
+                        <span ng-hide="item.is_approve"><button popover="Нажмите, для того чтобы добавить позицию в накладную!"
+                                                                popover-trigger="mouseenter"
+                                                                ng-disabled="!item.is_can_approve"
+                                                                class="btn btn-success btn-block btn-sm"
+                                                                ng-click="addToInvoice(item, model.typeInvoice)">Добавить</button></span>
+
+                        <span ng-hide="!item.is_approve"><button popover="Нажмите, для того чтобы убрать позицию из накладной!"
+                                                                 popover-trigger="mouseenter" class="btn btn-danger btn-block btn-sm"
+                                                                 ng-click="removeFromInvoice(item)">Убрать</button></span>
+                    </td>
+
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+</div>

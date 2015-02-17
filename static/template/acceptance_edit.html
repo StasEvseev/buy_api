@@ -1,0 +1,100 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-9">
+
+                <span ng-hide="editMode">
+                    <button ng-click="edit()">Редактировать</button><button style="margin-left: 5px" ng-click="create()">Создать</button>
+                </span>
+                <span ng-hide="!editMode">
+                    <a class="btn btn-danger btn-sm" ng-click="saveAcceptance($event)">Сохранить</a> или <a ng-click="discard()" style="cursor:pointer;">Отменить</a>
+                </span>
+
+                <!--<button class="btn btn-primary btn-sm" ng-click="saveAcceptance($event)" data-loading-text="Сохранение...">
+                    Сохранить
+                </button> -->
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div ng-show="model.validate.is_success" class="alert alert-success" role="alert">
+    <strong>Замечательно!</strong> Приемка сохранена. Можно переходить к следующему пункту.
+</div>
+
+<div ng-show="model.validate.is_error" class="alert alert-danger" role="alert">
+    <strong>Ошибка!</strong> Приемка не сохранилась. Попробуйте снова, или обратитесь в службу поддержки.
+    <p>{{ model.validate.error }}</p>
+</div>
+
+
+<div class="form-bg">
+    <div class="form-sheet">
+        <div class="row">
+            <div class="form-group-my" ng-class="{'has-error': model.errors.date}">
+                <div class="col-md-12 form-row">
+                    <dict-select-field label="Поставщик"
+                                       placeholder="Выберите поставщика или поищите..."
+                                       attrdisplay="name"
+                                       resource="resource"
+                                       selected="model.selected_provider"
+                                       clbkclose="loadGood"
+                                       disabled="disabled || disabled_provider">
+                    </dict-select-field>
+                </div>
+            </div>
+            <div class="col-md-12 form-row">
+                <div class="form-group-my" ng-class="{'has-error': model.errors.date}">
+                        <date-field label="Дата" model="model.date" disabled="disabled"></date-field>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div class="category">Товар</div>
+                <!-- Table -->
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Наименование</th>
+                            <th>Цена без НДС</th>
+                            <th>Цена с НДС</th>
+                            <th>Фактическое кол-во</th>
+                            <th>Кол-во по накладной</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-class="{warning: item.is_change}" ng-repeat="item in model.items">
+                            <td>
+                                {{ item.full_name }}
+                            </td>
+                            <td>
+                                {{ item.price_without_NDS | rub}}
+                            </td>
+                            <td>
+                                {{ item.price_with_NDS | rub }}
+                            </td>
+
+                            <td>
+                                <div ng-show="disabled">
+                                    {{ item.fact_count }}
+                                </div>
+                                <div ng-hide="disabled">
+                                    <input nks-only-number ng-model="item.fact_count" class="input-small  input-table" type="text" placeholder="Количество"/>
+                                </div>
+
+                            </td>
+
+                            <td>
+                                {{ item.count }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,27 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <button type="button" class="btn btn-primary" ng-click="nextStep()"
+                ng-disabled="!selected.id">Сформировать накладную</button>
+        </top-panel>
+    </div>
+
+    <table-remote resource="resource" class="table table-bordered my-table" selected="selected">
+        <row r-repeat="item in $data"
+            r-click="setSelected(item)"
+            r-class="{'active': item.id == model.idSelected, 'info': item.is_acceptance}">
+            <column data-title="'Дата'">
+                <span r-if="item.id == model.idSelected"><strong>{{item.date | date:'MMM d, y'}}</strong></span>
+                <span r-if="item.id != model.idSelected">{{item.date | date:'MMM d, y'}}</span>
+            </column>
+            <column data-title="'Номер'">
+                <span r-if="item.id == model.idSelected"><strong>{{item.number}}</strong></span>
+                <span r-if="item.id != model.idSelected">{{item.number}}</span>
+            </column>
+            <column data-title="'Поставщик'">
+                <span r-if="item.id == model.idSelected"><strong>{{item.provider_name}}</strong></span>
+                <span r-if="item.id != model.idSelected">{{item.provider_name}}</span>
+            </column>
+        </row>
+    </table-remote>
+</div>

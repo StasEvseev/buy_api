@@ -1,0 +1,67 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-9">
+                <button class="btn btn-primary btn-sm" ng-click="savePrice($event)" data-loading-text="Сохранение...">
+                    Сохранить
+                </button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div ng-show="model.is_success" class="alert alert-success" role="alert">
+    <strong>Замечательно!</strong> Цены сохранены. Можно переходить к следующему пункту.
+</div>
+
+<div ng-show="model.is_error" class="alert alert-danger" role="alert">
+    <strong>Ошибка!</strong> Цены не сохранились. Попробуйте снова, или обратитесь в службу поддержки.
+</div>
+
+<div ng-show="model.is_change" class="alert alert-warning" role="alert">
+    <h4>Внимание!</h4>
+    В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.
+</div>
+
+<div class="form-bg">
+    <div class="form-sheet">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Наименование</th>
+                    <th>Цена с НДС</th>
+                    <th>Цена розницы</th>
+                    <th>Рек. ц/р</th>
+                    <th>Цена опта</th>
+                    <th>Рек. ц/о</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr ng-class="{warning: item.is_change}" ng-repeat="item in model.items">
+                    <td>
+                        {{ item.full_name }}
+                    </td>
+                    <td style="white-space: nowrap">
+                        {{ item.price_post | rub}}
+                    </td>
+                    <td>
+                        <input nks-only-number ng-model="item.price_retail" class="input-small input-table-sm" type="text" placeholder="Цена"/>
+                    </td>
+
+                    <td style="white-space: nowrap">
+                        {{ item.price_retail_recommendation | rub }}
+                    </td>
+
+                    <td>
+                        <input ng-model="item.price_gross"
+                               class="input-small input-table-sm" type="text" placeholder="Цена">
+                    </td>
+                    <td style="white-space: nowrap">
+                        {{ item.price_gross_recommendation | rub}}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

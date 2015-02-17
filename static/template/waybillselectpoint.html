@@ -1,0 +1,23 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-offset-5">
+                <button type="button" class="btn btn-primary" ng-click="nextStep()"
+                    ng-disabled="!model.selected_pointsale">Продолжить</button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <h4>Выберите точку отправитель:</h4>
+        <ui-select ng-model="model.selected_pointsale" theme="bootstrap" ng-disabled="disabled">
+            <ui-select-match>
+                {{$select.selected.name}}
+            </ui-select-match>
+            <ui-select-choices repeat="pointsale in model.pointsale_items">
+                <div ng-bind-html="pointsale.name | highlight: $select.search"></div>
+            </ui-select-choices>
+        </ui-select>
+    </div>
+</div>

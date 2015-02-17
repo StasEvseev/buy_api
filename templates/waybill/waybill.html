@@ -1,0 +1,38 @@
+{% extends 'admin/base_template.html' %}
+
+{% block body %}
+
+
+<div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
+
+{#    <a class="btn btn-danger" href="{{ url_back }}">Назад</a><br/>#}
+
+    <div ng-view>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block tail %}
+
+    {{ super() }}
+
+    <script type="text/javascript">
+        var path_to_acceptance = '{{ url_to_acceptance }}';
+    </script>
+
+    {% assets "ng-table-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
+    {% assets "ng-table-js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "waybilllist" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+{% endblock %}

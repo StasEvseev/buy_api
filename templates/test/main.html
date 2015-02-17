@@ -1,0 +1,233 @@
+{% extends 'admin/base_template.html' %}
+
+{% block body %}
+
+
+<div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
+
+{#    <a class="btn btn-danger" href="{{ url_back }}">Назад</a><br/>#}
+
+    <div class="panel panel-default">
+
+    <div class="panel-heading">
+        <a class="btn btn-warning" href="/admin/waybillcustomview/[[ model.idSelected ]]/edit" ng-disabled="!model.idSelected">Редактировать</a>
+
+        <a class="btn btn-success" ng-click="createNew()">Создать</a>
+
+    </div>
+
+    <div class="panel-body">
+        <div>
+            <table ng-cloak ng-table="tableParams" show-filter="true" class="table table-bordered table-hover">
+                <tbody>
+                    <tr ng-repeat="item in $data"
+                          ng-click="setSelected(item)"
+                          ng-class="{'active': item.id == model.idSelected}">
+
+                        {% for c, name in list_columns %}
+
+                            <td data-title="'{{ c }}'"
+                                    {% if is_selected %}
+                                        ng-click="setSelected(item)"
+                                    {% endif %}
+                                    >
+                                {% if is_selected %}
+                                    <span ng-if="item.id == model.idSelected"><strong>[[item.{{ name }}]]</strong></span>
+                                    <span ng-if="item.id != model.idSelected">[[item.{{ name }}]]</span>
+                                {% else %}
+                                    <span>[[item.{{ name }}]]</span>
+                                {% endif %}
+                            </td>
+
+                        {% endfor %}
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Добавление товара</h3>
+        </div>
+        <div class="modal-body">
+
+            <div class="alert alert-danger" ng-show="model.validate.message" role="alert">
+                [[ model.validate.message ]]
+            </div>
+
+            <p>Выбран:[[person.selected]]</p>
+            <div class="row">
+                <div class="col-md-9">
+                    <ui-select ng-model="model.commodity_selected" theme="bootstrap" ng-disabled="disabled" on-select="commoditySelect($item, $model)" >
+                        <ui-select-match placeholder="Выберите номенклатуру или поищите ее...">
+                            [[$select.selected.name]]
+                        </ui-select-match>
+                        <ui-select-choices repeat="commodity in model.commodity_items | propsFilter: {name: $select.search}">
+                            <div ng-bind-html="commodity.name | highlight: $select.search"></div>
+                            <small>
+                                <span>
+                                    Тематика: <span ng-bind-html="''+commodity.thematic | highlight: $select.search"></span>
+                                </span>
+                            </small>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+
+                <div class="col-md-offset-1 col-md-2">
+                    <button class="btn btn-default" ng-click="createNewCommodity()">Создать</button>
+                </div>
+
+            </div>
+            <br/>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div collapse="isCollapsedNumber">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Нумерация</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group" ng-class="{'has-error': model.errors.number_local}">
+                                            <label class="control-label" for="number_local">№(годовой)</label>
+                                            <input nks-only-number type="text" class="form-control" id="number_local" ng-model="model.number_local" placeholder="Введите номер">
+                                        </div>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group" ng-class="{'has-error': model.errors.number_global}">
+                                            <label class="control-label" for="number_global">№(общий)</label>
+                                            <input nks-only-number type="text" class="form-control" id="number_global" ng-model="model.number_global" placeholder="Введите номер">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" ng-click="ok()">Сохранить</button>
+            <button class="btn btn-warning" ng-click="cancel()">Закрыть</button>
+        </div>
+    </script>
+
+</div>
+
+{% endblock %}
+
+{% block tail %}
+
+    {{ super() }}
+
+{#    <script type="text/javascript">#}
+{#        var path_to_acceptance = '{{ url_to_acceptance }}';#}
+{#    </script>#}
+
+    {% assets "ng-table-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
+    {% assets "ng-table-js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    <script>
+        var app = angular.module('myApp', ['ngTable', 'ngResource',  'AuthModule', 'RestApp', 'TableHelper', 'ui.bootstrap', 'ui.select']);
+
+{#        {% if list_res %}#}
+
+        {% for res in list_res %}
+
+            app.factory("{{ res.name }}", function($resource, Base64) {
+                return $resource("{{ res.full_path }}", {}, {
+                    query: { method: "GET", isArray: false , headers: { Authorization: 'Basic ' + Base64.encode(TOKEN + ':' + 'unused') }}
+                });
+            });
+
+        {% endfor %}
+
+{#        {% endif %}#}
+
+        app.config(function($interpolateProvider) {
+            $interpolateProvider.startSymbol('[[');
+            $interpolateProvider.endSymbol(']]');
+          });
+
+        app.controller("ModalInstanceCtrl", function($scope) {});
+
+        app.controller("MainCtrl", function($scope, ngTableParams, load, $modal
+                {% for res in list_res %}
+                    ,{{ res.name }}
+                {% endfor %}
+                ) {
+
+            $scope.model = {};
+
+            {% if is_selected %}
+                $scope.model.idSelected = null;
+
+                $scope.setSelected = function (selected) {
+                   $scope.model.idSelected = selected.id;
+                   $scope.model.selected = selected;
+                };
+            {% endif %}
+
+            $scope.createNew = function() {
+                var modalInstance = $modal.open({
+                  templateUrl: 'myModalContent.html',
+                  controller: 'ModalInstanceCtrl',
+{#                  size: size,#}
+{#                  resolve: {#}
+{#                    items: function () {#}
+{#                      return $scope.items;#}
+{#                    }#}
+{#                  }#}
+                });
+
+            };
+
+            $scope.tableParams = new ngTableParams({
+                page: 1,            // show first page
+                count: 10,
+                sorting: {
+                       // initial sorting
+                }
+            }, {
+                total: 0,           // length of data
+                getData: function($defer, params) {
+
+                    $scope.model.count = params.count();
+
+                    $scope.model.page = params.page();
+                    var filter = params.filter();
+                    var sort = params.sorting();
+
+                    $scope.model.filter_field = _.keys(filter)[0];
+                    $scope.model.filter_text = filter[$scope.model.filter_field];
+                    $scope.model.sort_field = _.keys(sort)[0];
+                    $scope.model.sort_course = sort[$scope.model.sort_field];
+
+
+                    load.loadData(function(data) {
+                        params.total(data.max);
+                        $defer.resolve(data.items);
+                    }, {{ res_table.name }}.query, {}, $scope);
+                }
+            });
+        });
+
+    </script>
+
+{#    {% assets "acceptance" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+
+{% endblock %}

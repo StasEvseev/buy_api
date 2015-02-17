@@ -1,0 +1,111 @@
+{% extends 'admin/base_template.html' %}
+
+{% block body %}
+
+    <ul class="nav nav-pills">
+        <a class="btn btn-danger" href="{{ url_back }}">Назад</a>
+    </ul>
+    <br/>
+
+    <div ng-app="AcceptanceApp" ng-controller="MainCtrl" ng-cloak>
+
+        <div ng-show="model.validate.is_success" class="alert alert-success" role="alert">
+            <strong>Замечательно!</strong> Приемка сохранена. Можно переходить к следующему пункту.
+        </div>
+
+        <div ng-show="model.validate.is_error" class="alert alert-danger" role="alert">
+            <strong>Ошибка!</strong> Приемка не сохранилась. Попробуйте снова, или обратитесь в службу поддержки.
+            <p>{{ model.validate.error|angular }}</p>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button class="btn btn-primary" ng-click="saveAcceptance($event)" data-loading-text="Сохранение...">Сохранить</button>
+            </div>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="form-group" ng-class="{'has-error': model.errors.date}">
+                        <div class="col-md-6">
+                            <h4>Выберите дату</h4>
+                            <p class="input-group" ng-class="{'has-error': model.validate.date_empty == true,
+                                                              'has-success': !model.validate.date_empty == false}">
+                              <input type="text" class="form-control"
+                                     datepicker-popup="{{model.date.format}}"
+                                     ng-model="model.date.dt"
+                                     is-open="model.date.opened"
+                                     min-date="model.date.minDate"
+                                     max-date="model.date.maxDate"
+                                     datepicker-options="model.date.dateOptions"
+                                     date-disabled="model.date.disabled(date, mode)" ng-required="true"
+                                     close-text="Закрыть" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="model.date.open($event)"><i class="glyphicon glyphicon-calendar"></i></button>
+                              </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>Товар</h4>
+                <!-- Table -->
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>№</th>
+                            <th>Наименование</th>
+                            <th>Цена (руб.)</th>
+                            <th>Цена с НДС (руб.)</th>
+                            <th>Фактическое количество</th>
+                            <th>Количество по накладной</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr ng-class="{warning: item.is_change}" ng-repeat="item in model.items">
+                            <td >
+                                {{ '$index + 1'|angular }}
+                            </td>
+                            <td>
+                                {{ item.full_name|angular }}
+                            </td>
+                            <td>
+                                {{ item.price_without_NDS|angular}}
+                            </td>
+                            <td>
+                                {{ item.price_with_NDS|angular }}
+                            </td>
+
+                            <td>
+                                <input nks-only-number ng-model="item.fact_count" class="input-small" type="text" placeholder="Количество"/>
+                            </td>
+
+                            <td>
+                                {{ item.count|angular }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block tail %}
+
+    {{ super() }}
+
+    <script type="text/javascript">
+        var POINTSALE_ID = {{ pointsale_id }};
+        var INVOICE_ID = {{ invoice_id }};
+        var MAIL_ID = {{ mail_id }};
+    </script>
+
+    {% assets "acceptance_invoice" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+{% endblock %}

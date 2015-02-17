@@ -1,0 +1,110 @@
+{#{% extends 'admin/base_template.html' %}#}
+{##}
+{#{% block body %}#}
+{#    <ul class="nav nav-pills">#}
+{#        <a class="btn btn-danger" href="{{ url_back }}">Назад</a>#}
+{#    </ul>#}
+{#    <br/>#}
+{##}
+{#    <div ng-app="PriceApp" ng-controller="PriceController" ng-cloak>#}
+{##}
+{#        <div ng-show="model.is_success" class="alert alert-success" role="alert">#}
+{#            <strong>Замечательно!</strong> Цены сохранены. Можно переходить к следующему пункту.#}
+{#        </div>#}
+{##}
+{#        <div ng-show="model.is_error" class="alert alert-danger" role="alert">#}
+{#            <strong>Ошибка!</strong> Цены не сохранились. Попробуйте снова, или обратитесь в службу поддержки.#}
+{#        </div>#}
+{##}
+{#        <div ng-show="model.is_change" class="alert alert-warning" role="alert">#}
+{#            <h4>Внимание!</h4>#}
+{#            В этой накладной были изменены цена на некоторые товары. Обратите внимание на позиции обозначенные желтым цветом.#}
+{#        </div>#}
+{##}
+{#        <div class="panel panel-default">#}
+{#            <div class="panel-heading">#}
+{#                <button class="btn btn-primary" ng-click="savePrice($event)" data-loading-text="Сохранение...">Сохранить</button>#}
+{#                <h4 class="text-right">Цены на товары по приходной накладной <strong>{{ date.strftime('%d.%m.%Y') }}</strong></h4>#}
+{#            </div>#}
+{#            <div class="panel-body">#}
+{##}
+{#                <div class="pull-right">#}
+{#                    <a class="btn btn-primary" href="{{ url_retail }}">Розничная накладная</a>#}
+{#                    <a class="btn btn-primary" href="{{ url_gross }}">Оптовая накладная</a>#}
+{#                </div>#}
+{#            </div>#}
+{##}
+{#            <!-- Table -->#}
+{#            <table class="table table-bordered table-hover">#}
+{#                <thead>#}
+{#                    <tr>#}
+{#                        <th>№</th>#}
+{#                        <th>Наименование</th>#}
+{#                        <th>НДС (%)</th>#}
+{#                        <th>Цена (руб.)</th>#}
+{#                        <th>Цена с НДС (руб.)</th>#}
+{#                        <th>Цена розницы (руб.)</th>#}
+{#                        <th>Рекомендуемая цена розницы (руб.)</th>#}
+{#                        <th>Цена опта (руб.)</th>#}
+{#                        <th>Рекомендуемая цена опта (руб.)</th>#}
+{#                    </tr>#}
+{#                </thead>#}
+{##}
+{#                <tbody>#}
+{#                    <tr ng-class="{warning: item.is_change}" ng-repeat="item in model.items">#}
+{#                        <td >#}
+{#                            {{ '$index + 1'|angular }}#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            {{ item.full_name|angular }}#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            {{ item.NDS|angular }}#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            {{ item.price_prev|angular}}#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            {{ item.price_post|angular }}#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            <input nks-only-number ng-model="item.price_retail" class="input-small" type="text" placeholder="Цена"/>#}
+{##}
+{#                            <input type="text" ng-model="item.price_retail" valid-number />#}
+{#                            <input ng-model="item.price_retail" class="input-small" type="text" placeholder="Цена">#}
+{#                        </td>#}
+{##}
+{#                        <td>#}
+{#                            {{ item.price_retail_recommendation|angular }}#}
+{#                        </td>#}
+{##}
+{#                        <td>#}
+{#                            <input ng-model="item.price_gross"#}
+{#                                   class="input-small" type="text" placeholder="Цена">#}
+{#                        </td>#}
+{#                        <td>#}
+{#                            {{ item.price_gross_recommendation|angular }}#}
+{#                        </td>#}
+{#                    </tr>#}
+{#                </tbody>#}
+{#            </table>#}
+{#        </div>#}
+{##}
+{##}
+{#    </div>#}
+{##}
+{#{% endblock %}#}
+{##}
+{#{% block tail %}#}
+{##}
+{#    {{ super() }}#}
+{##}
+{#    <script type="text/javascript">#}
+{#        var INVOICE_ID = {{ invoice_id }};#}
+{#    </script>#}
+{##}
+{#    {% assets "prices" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#{% endblock %}#}

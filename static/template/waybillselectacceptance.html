@@ -1,0 +1,32 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-9">
+                <button type="button" class="btn btn-primary" ng-click="nextStep()"
+                    ng-disabled="!selected.id">Далее</button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<table-remote resource="resource" class="table table-bordered table-striped my-table" selected="selected">
+    <row r-repeat="item in $data">
+        <column data-title="'Дата'">
+                <span r-if="item.id == model.idSelected"><strong>{{item.date| date:'MMM d, y'}}</strong></span>
+                <span r-if="item.id != model.idSelected">{{item.date| date:'MMM d, y'}}</span>
+        </column>
+        <column data-title="'Накладная'">
+                <span r-if="item.id == model.idSelected"><strong>{{item.invoice_str}}</strong></span>
+                <span r-if="item.id != model.idSelected">{{item.invoice_str}}</span>
+        </column>
+        <column data-title="'Отправитель'">
+            <span r-if="item.id == model.idSelected"><strong>{{ item.provider_name }}</strong></span>
+            <span r-if="item.id != model.idSelected">{{item.provider_name}}</span>
+        </column>
+
+        <column data-title="'Получатель'">
+            <span r-if="item.id == model.idSelected"><strong>{{item.pointsale_name}}</strong></span>
+            <span r-if="item.id != model.idSelected">{{item.pointsale_name}}</span>
+       </column>
+    </row>
+</table-remote>

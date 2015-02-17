@@ -1,0 +1,129 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-8">
+                <button class="btn btn-primary" ng-click="saveAndPrint()">Сохранить и печатать</button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div ng-show="model.is_save" class="alert alert-success" role="alert">
+    <strong>Замечательно!</strong><br/>Накладная сохранена. Перейдите по этой
+    <a target="_self" href="{{ model.url_to_download }}" class="alert-link">ссылке</a> для скачивания.
+</div>
+
+<div ng-show="model.is_error" class="alert alert-danger" role="alert">
+    <strong>Ошибка!</strong><br/>Накладная не сохранена.
+    {{ model.message_error}}
+</div>
+
+<div class="panel panel-default">
+
+
+<div class="panel-body">
+
+    <div class="row">
+
+        <div class="col-md-6">
+
+            <h4>Выберите дату</h4>
+            <p class="input-group" ng-class="{'has-error': model.validate.date_empty == true,
+                                              'has-success': !model.validate.date_empty == false}">
+                <input type="text" class="form-control"
+                     datepicker-popup="{{model.date.format}}"
+                     ng-model="model.date.dt"
+                     is-open="model.date.opened"
+                     min-date="model.date.minDate"
+                     max-date="model.date.maxDate"
+                     datepicker-options="model.date.dateOptions"
+                     date-disabled="model.date.disabled(date, mode)" ng-required="true"
+                     close-text="Закрыть" />
+                <span class="input-group-btn">
+                <button type="button" class="btn btn-default" ng-click="model.date.open($event)"><i class="fa fa-calendar"></i></button>
+                </span>
+            </p>
+        </div>
+
+    </div>
+
+    <h3>Товары</h3>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <button class="btn btn-default" ng-click="openToAdd()">Добавить</button>
+        </div>
+
+        <div class="panel-body">
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>№</th>
+                        <th>Наименование</th>
+                        <th>Количество (в накладную)</th>
+                        <th>Количество (остатки)</th>
+                        <th>Цена</th>
+                        <th>Сумма (руб.)</th>
+                        <th ng-show="isAction">Действия</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr ng-repeat="item in model.items">
+
+                        <td >
+                            {{ $index + 1 }}
+                        </td>
+
+                        <td >
+                            <del ng-if="!item.is_approve">
+                                {{ item.full_name }}
+                            </del>
+                            <span ng-if="item.is_approve">
+                                {{ item.full_name }}
+                            </span>
+
+                        </td>
+
+                        <td>
+                            <input nks-only-number ng-model="item.count_invoice"
+                                   ng-change="item.count_change()"
+                                   class="input-small"
+                                   type="text"
+                                   placeholder="Количество"/>
+                        </td>
+
+                        <td >
+                            {{ item.count}}
+                        </td>
+
+
+                        <td>
+                            {{ item.price }}
+                        </td>
+
+                        <td>
+                                {{ item.count_invoice * item.price | rub }}
+                        </td>
+
+                        <td ng-show="isAction">
+                            <span ng-hide="item.is_approve"><button popover="Нажмите, для того чтобы добавить позицию в накладную!"
+                                                                    popover-trigger="mouseenter"
+                                                                    ng-disabled="!item.is_can_approve"
+                                                                    class="btn btn-success btn-block btn-sm"
+                                                                    ng-click="addToInvoice(item, model.typeInvoice)">Добавить</button></span>
+
+                            <span ng-hide="!item.is_approve"><button popover="Нажмите, для того чтобы убрать позицию из накладной!"
+                                                                     popover-trigger="mouseenter" class="btn btn-danger btn-block btn-sm"
+                                                                     ng-click="removeFromInvoice(item)">Убрать</button></span>
+                        </td>
+
+
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+    </div>
+</div>

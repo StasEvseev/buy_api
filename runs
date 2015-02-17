@@ -1,0 +1,2 @@
+#запуск всех тестов
+python -m unittest discover -s tests

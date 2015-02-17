@@ -1,0 +1,42 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-offset-5">
+                <div class="btn-group">
+                    <button type="button" ng-disabled="!model.selected_pointsale"
+                            class="btn btn-warning dropdown-toggle"
+                            data-toggle="dropdown" aria-expanded="false">
+                        Действие <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a ng-click="next('mail')">Приемка по накладной из почты</a></li>
+                        <li><a ng-click="next('new')">Приемка нового товара</a></li>
+                    </ul>
+                </div>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div class="container">
+        <h4>Выберите точку:</h4>
+        <div class="row">
+            <div class="col-md-8">
+                <form class="form-horizontal">
+                    <fieldset>
+                        <div class="form-group-my" ng-class="{'has-error': model.errors.good}">
+                            <dict-select-field label="Торговая точка"
+                                               placeholder="Выберите точку или поищите..."
+                                               resource="resource"
+
+                                               attrdisplay="name"
+                                               modal="['/static/template/pointsale/main.html', 'PointSaleCtrl', 'lg']"
+                                               selected="model.selected_pointsale"
+                                               clbkclose="loadGood">
+                            </dict-select-field>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>

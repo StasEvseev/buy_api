@@ -1,0 +1,54 @@
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-8">
+                <span ng-hide="editMode">
+                    <button ng-click="edit()">Редактировать</button><button style="margin-left: 5px" ng-click="create()">Создать</button>
+                </span>
+                <span ng-hide="!editMode">
+                    <a class="btn btn-danger btn-sm" ng-click="save()">Сохранить</a> или <a ng-click="discard()" style="cursor:pointer;">Отменить</a>
+                </span>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+<div class="form-bg container">
+    <div class="form-sheet" style="">
+        <good-edit
+            object="object"
+            disabled="disabled"
+            savefnc="savefnc"
+            successclbk="successclbk"></good-edit>
+
+        <div ng-show="pricesShow">
+            <tabset>
+            <tab heading="Цены прихода">
+                    <table ng-cloak ng-table="tableParams" class="table table-bordered table-hover">
+                    <tbody>
+                        <tr ng-repeat="item in $data"
+                              ng-click="setSelected(item)"
+                              style="cursor:pointer;">
+                            <td data-title="'Поставщик'">
+                                <span>{{ item.provider_name }}</span>
+                            </td>
+                            <td data-title="'Накладная'">
+                                <span>{{ item.invoice_number }}</span>
+                            </td>
+                            <td data-title="'Цена без НДС'">
+                                <span>{{item.price_prev | rub}}</span>
+                            </td>
+                            <td data-title="'Цена с НДС'">
+                                <span>{{item.price_post | rub}}</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+
+            </tab>
+        </tabset>
+        </div>
+
+    </div>
+</div>

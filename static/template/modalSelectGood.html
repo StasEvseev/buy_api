@@ -1,0 +1,16 @@
+<div class="modal-header">
+    <h3 class="modal-title">Добавление товара в накладную</h3>
+</div>
+<div class="modal-body">
+
+    <good-form fillclbk="func_fill_form"
+               unfillclbk="func_unfill_form"
+               saveclbk="func_save_form"
+               model="object"
+            ></good-form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-disabled="model.disS" ng-click="ok()">Сохранить</button>
+    <button class="btn btn-warning" ng-click="cancel()">Закрыть</button>
+</div>

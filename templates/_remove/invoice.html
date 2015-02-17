@@ -1,0 +1,213 @@
+{% extends 'admin/base_template.html' %}
+
+{% block body %}
+
+    <ul class="nav nav-pills">
+        <a class="btn btn-danger" href="{{ url_back }}">Назад</a>
+    </ul>
+    <br/>
+
+    <div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
+
+        <div ng-show="model.is_save" class="alert alert-success" role="alert">
+            <strong>Замечательно!</strong><br/>Накладная сохранена. Перейдите по этой
+            <a target="_self" href="{{ model.url_to_download|angular }}" class="alert-link">ссылке</a> для скачивания.
+        </div>
+
+        <div ng-show="model.is_error" class="alert alert-danger" role="alert">
+            <strong>Ошибка!</strong><br/>Накладная не сохранена.
+            {{ model.message_error|angular }}
+        </div>
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <button class="btn btn-primary" ng-click="saveAndPrint()">Сохранить и печатать</button>
+            </div>
+
+            <div class="panel-body">
+
+                <div class="row">
+                    <div class="form-group" ng-class="{'has-error': model.errors.date}">
+                        <div class="col-md-6">
+                            <h4>Выберите дату</h4>
+                            <p class="input-group" ng-class="{'has-error': model.validate.date_empty == true,
+                                                              'has-success': !model.validate.date_empty == false}">
+                              <input type="text" class="form-control"
+                                     datepicker-popup="{{model.date.format}}"
+                                     ng-model="model.date.dt"
+                                     is-open="model.date.opened"
+                                     min-date="model.date.minDate"
+                                     max-date="model.date.maxDate"
+                                     datepicker-options="model.date.dateOptions"
+                                     date-disabled="model.date.disabled(date, mode)" ng-required="true"
+                                     close-text="Закрыть" />
+                              <span class="input-group-btn">
+                                <button type="button" class="btn btn-default" ng-click="model.date.open($event)"><i class="fa fa-calendar"></i></button>
+                              </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h4>Выберите тип</h4>
+                            <div class="btn-group">
+                                <label class="btn btn-success" ng-model="model.typeInvoice" btn-radio="1" ng-change="checkTypeInvoice()">Розничная накладная</label>
+                                <label class="btn btn-success" ng-model="model.typeInvoice" btn-radio="2" ng-change="checkTypeInvoice()">Оптовая накладная</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group " ng-class="{'has-error': model.errors.point_or_receiver}">
+
+                        <div class="col-md-6">
+                            <h4>Выберите кому</h4>
+                            <div class="btn-group">
+                                <label class="btn btn-success" ng-model="model.typeT" btn-radio="1" uncheckable>Торговые точки</label>
+                                <label class="btn btn-success" ng-model="model.typeT" btn-radio="2" uncheckable>Получатели</label>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+
+                            <div ng-show="model.typeT == 1">
+                                <h4>Выберите точку:</h4>
+                                <ui-select ng-model="model.selected_pointsale" theme="bootstrap" ng-disabled="disabled" style="min-width: 500px;">
+                                    <ui-select-match>
+                                        {{'$select.selected.name'|angular}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="pointsale in model.pointsale_items">
+    {#                                    <div ng-bind-html="pointsale.name | highlight: $select.search"></div>#}
+                                        <span ng-bind-html="pointsale.name | highlight: $select.search"></span>
+    {#                                    <small ng-bind-html="country.code | highlight: $select.search"></small>#}
+                                    </ui-select-choices>
+
+                                </ui-select>
+                            </div>
+
+                            <div ng-show="model.typeT == 2">
+                                <h4>Выберите получателя:</h4>
+                                <ui-select ng-model="model.selected_receiver" theme="bootstrap" ng-disabled="disabled" style="min-width: 500px;">
+                                    <ui-select-match>
+                                        {{'$select.selected.fullname'|angular}}
+                                    </ui-select-match>
+                                    <ui-select-choices repeat="receiver in model.receiver_items">
+                                        <div ng-bind-html="receiver.fullname | highlight: $select.search"></div>
+                                        <small>
+                                            <span ng-if="receiver.passport">
+                                                Паспортные данные: <span ng-bind-html="''+receiver.passport | highlight: $select.search"></span>
+                                            </span>
+                                        </small>
+                                    </ui-select-choices>
+                                </ui-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <br/>
+
+                <div class="alert alert-warning" role="alert">
+                    <strong>Внимание!</strong><br/>
+                    Позиции с вычеркнутыми названиями не попадут в накладную.
+                </div>
+
+                <h3>Товары</h3>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <button class="btn btn-default" ng-click="openToAdd()">Добавить</button>
+                    </div>
+
+                    <div class="panel-body">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>№</th>
+                                    <th>Наименование</th>
+                                    <th>Количество (в накладную)</th>
+                                    <th>Количество (остатки)</th>
+                                    <th ng-show="model.typeInvoice == 1">Цена розницы (руб.)</th>
+                                    <th ng-show="model.typeInvoice == 2">Цена опта (руб.)</th>
+                                    <th>Сумма (руб.)</th>
+                                    <th>Действия</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr ng-repeat="item in model.items">
+
+                                    <td >
+                                        {{ '$index + 1'|angular }}
+                                    </td>
+
+                                    <td >
+                                        <del ng-if="!item.is_approve">
+                                            {{ item.full_name|angular }}
+                                        </del>
+                                        <span ng-if="item.is_approve">
+                                            {{ item.full_name|angular }}
+                                        </span>
+
+                                    </td>
+
+                                    <td>
+                                        <input nks-only-number ng-model="item.count_invoice"
+                                               ng-change="item.count_change()"
+                                               class="input-small"
+                                               type="text"
+                                               placeholder="Количество"/>
+                                    </td>
+
+                                    <td >
+                                        {{ item.count|angular }}
+                                    </td>
+                                    <td ng-show="model.typeInvoice == 1">
+                                        {{ item.price_retail|angular}}
+                                    </td>
+
+                                    <td ng-show="model.typeInvoice == 2">
+                                        {{ item.price_gross|angular}}
+                                    </td>
+
+                                    <td>
+
+                                    </td>
+
+                                    <td>
+                                        <span ng-hide="item.is_approve"><button popover="Нажмите, для того чтобы добавить позицию в накладную!" popover-trigger="mouseenter" ng-disabled="!item.is_can_approve" class="btn btn-success btn-block btn-sm" ng-click="addToInvoice(item)">Добавить</button></span>
+
+                                        <span ng-hide="!item.is_approve"><button popover="Нажмите, для того чтобы убрать позицию из накладной!" popover-trigger="mouseenter" class="btn btn-danger btn-block btn-sm" ng-click="removeFromInvoice(item)">Убрать</button></span>
+                                    </td>
+
+                                </tr>
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+{#        <script type="text/ng-template" id="myModalContent.html">#}
+{##}
+{#        </script>#}
+
+    </div>
+
+{% endblock %}
+
+{% block tail %}
+
+    {{ super() }}
+
+    <script type="text/javascript">
+        var INVOICE_ID = {{ invoice_id }};
+        var ACCEPTANCE_ID = {{ acceptance_id }};
+        var POINTSALE_ID = {{ pointsale_id }};
+    </script>
+
+    {% assets "invoice_retail" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+{% endblock %}

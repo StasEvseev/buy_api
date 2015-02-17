@@ -1,0 +1,28 @@
+<div class="col-xs-5 bordered-right">
+    <label class="control-label" for="sss">{{ label }}</label>
+</div>
+<div ng-show="disabled" class="input-group span-view" style="padding-left: 15px;">
+    <span>
+        {{ model.dt | date: format }}
+    </span>
+</div>
+<div ng-hide="disabled" class="input-group" style="padding-left: 15px;"
+     ng-class="{'has-error': model.validate.date_empty == true,
+                'has-success': !model.validate.date_empty == false}">
+
+    <input type="text" class="form-control input-sm"
+     datepicker-popup="{{format}}"
+     style="font-size: 14px"
+     ng-model="model.dt"
+     is-open="opened"
+     min-date="minDate"
+     max-date="maxDate"
+     datepicker-options="dateOptions"
+     date-disabled="disabled(date, mode)"
+     ng-required="true"
+     close-text="Закрыть" />
+    <span class="input-group-btn" >
+        <button type="button" class="btn btn-default btn-sm" ng-click="open($event)">
+            <i class="fa fa-calendar"></i></button>
+    </span>
+</div>

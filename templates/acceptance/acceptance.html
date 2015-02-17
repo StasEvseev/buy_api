@@ -1,0 +1,32 @@
+{% extends 'admin/base_template.html' %}
+
+{% block body %}
+
+
+<div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
+
+    <div ng-view>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+{% block tail %}
+
+    {{ super() }}
+
+    {% assets "ng-table-css" %}
+        <link rel="stylesheet" href="{{ ASSET_URL }}" />
+    {% endassets %}
+
+    {% assets "ng-table-js" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+    {% assets "acceptance" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+{% endblock %}

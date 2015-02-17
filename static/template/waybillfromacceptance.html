@@ -1,0 +1,83 @@
+
+<div class="panel panel-default top-bar">
+    <div class="panel-heading">
+        <top-panel breadcrumbs="breadcrumbs">
+            <div class="col-md-8">
+                <button type="button" class="btn btn-primary" ng-click="nextStep()">Сформировать накладную</button>
+            </div>
+        </top-panel>
+    </div>
+</div>
+
+
+    <div class="row">
+        <div class="form-group" ng-class="{'has-error': model.errors.date}">
+            <div class="col-md-6">
+                <h4>Выберите дату</h4>
+                <p class="input-group" ng-class="{'has-error': model.validate.date_empty == true,
+                                                  'has-success': !model.validate.date_empty == false}">
+                  <input type="text" class="form-control"
+                         datepicker-popup="{{model.date.format}}"
+                         ng-model="model.date.dt"
+                         is-open="model.date.opened"
+                         min-date="model.date.minDate"
+                         max-date="model.date.maxDate"
+                         datepicker-options="model.date.dateOptions"
+                         date-disabled="model.date.disabled(date, mode)" ng-required="true"
+                         close-text="Закрыть" />
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="model.date.open($event)"><i class="fa fa-calendar"></i></button>
+                  </span>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <h4>Выберите тип</h4>
+                <div class="btn-group">
+                    <label class="btn btn-success" ng-model="model.typeInvoice" btn-radio="1" ng-change="checkTypeInvoice()">Розничная накладная</label>
+                    <label class="btn btn-success" ng-model="model.typeInvoice" btn-radio="2" ng-change="checkTypeInvoice()">Оптовая накладная</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+
+        <div class="form-group " ng-class="{'has-error': model.errors.point_or_receiver}">
+
+
+        <div class="col-md-6">
+            <br/><br/>
+            <div ng-show="model.typeT == 1">
+                <dict-select-field label="Точка"
+                       placeholder="Выберите или поищите..."
+                       resource="resource_pointsale"
+                       attrdisplay="name"
+                       selected="model.selected_pointsale"
+                       clbkclose="loadCommodity"
+                       disabled="disabled">
+                </dict-select-field>
+            </div>
+
+            <div ng-show="model.typeT == 2">
+                <dict-select-field label="Получатель"
+                       placeholder="Выберите или поищите..."
+                       resource="resource_receiver"
+                       attrdisplay="fullname"
+                       selected="model.selected_receiver"
+                       clbkclose="loadCommodity"
+                       disabled="disabled">
+                </dict-select-field>
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+            <h4>Выберите кому</h4>
+            <div class="btn-group">
+                <label class="btn btn-success" ng-model="model.typeT" btn-radio="1" uncheckable>Торговые точки</label>
+                <label class="btn btn-success" ng-model="model.typeT" btn-radio="2" uncheckable>Получатели</label>
+            </div>
+        </div>
+
+    </div>
+    </div>

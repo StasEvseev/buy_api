@@ -1,0 +1,69 @@
+{#{% extends 'admin/base_template.html' %}#}
+{##}
+{#{% block body %}#}
+{##}
+{#    <div ng-app="MailApp" ng-controller="MailMainCtrl">#}
+{##}
+{#        <div>#}
+{#            <button class="btn btn-danger" ng-click="checkPost($event)" data-loading-text="Идет проверка...">Проверить почту</button>#}
+{#            <button class="btn btn-success" ng-click="goToPrice()" ng-disabled="!model.idSelected">Обработать</button>#}
+{#        </div>#}
+{#        <br/>#}
+{##}
+{#        <div>#}
+{#          <table ng-cloak ng-table="tableParams" show-filter="true" class="table table-bordered table-hover">#}
+{#            <tbody>#}
+{#              <tr ng-repeat="item in model.items"#}
+{#                      ng-click="setSelected(item)"#}
+{#                      ng-class="{'active': item.id == model.idSelected}">#}
+{#                <td data-title="'Дата и время'" sortable="'date'">#}
+{#                        <p ng-if="item.id == model.idSelected"><strong>{{item.date|angular}}</strong></p>#}
+{#                        <p ng-if="item.id != model.idSelected">{{item.date|angular}}</p>#}
+{#                        {{item.date|angular}}#}
+{#                    </td>#}
+{#                <td data-title="'Заголовок'" sortable="'title'" filter="{ 'title': 'text' }">#}
+{#                        <p ng-if="item.id == model.idSelected"><strong>{{item.title|angular}}</strong></p>#}
+{#                        <p ng-if="item.id != model.idSelected">{{item.title|angular}}</p>#}
+{#                        {{item.title|angular}}#}
+{#                    </td>#}
+{#                <td data-title="'Поставщик'" sortable="'from'">#}
+{#                        <p ng-if="item.id == model.idSelected"><strong>{{item.provider|angular}}</strong></p>#}
+{#                        <p ng-if="item.id != model.idSelected">{{item.provider|angular}}</p>#}
+{#                        {{ item.from|angular }}#}
+{#                    </td>#}
+{#                <td data-title="'Почтовый ящик'" sortable="'from'">#}
+{#                        <p ng-if="item.id == model.idSelected"><strong>{{item.from|angular}}</strong></p>#}
+{#                        <p ng-if="item.id != model.idSelected">{{item.from|angular}}</p>#}
+{#                        {{ item.from|angular }}#}
+{#                    </td>#}
+{#              </tr>#}
+{#            </tbody>#}
+{#          </table>#}
+{#        </div>#}
+{##}
+{#    </div>#}
+{##}
+{##}
+{#{% endblock %}#}
+{##}
+{#{% block tail %}#}
+{##}
+{#    {{ super() }}#}
+{##}
+{#    <script type="text/javascript">#}
+{#        var path_to_invoice = '{{ url_to_price }}';#}
+{#    </script>#}
+{##}
+{#    {% assets "ng-table-css" %}#}
+{#        <link rel="stylesheet" href="{{ ASSET_URL }}" />#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "ng-table-js" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#    {% assets "indexmail" %}#}
+{#        <script type="text/javascript" src="{{ ASSET_URL }}"></script>#}
+{#    {% endassets %}#}
+{##}
+{#{% endblock %}#}

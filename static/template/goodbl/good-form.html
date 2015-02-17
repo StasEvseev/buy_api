@@ -1,0 +1,124 @@
+<div class="alert alert-danger" ng-show="model.validate.message" role="alert">
+    {{ model.validate.message }}
+</div>
+
+<form class="form-horizontal">
+    <fieldset>
+        <div class="form-group" ng-class="{'has-error': model.errors.good}">
+            <dict-select-field label="Наименование товара"
+                               placeholder="Выберите или поищите товар"
+                               resource="resource"
+                               attrdisplay="full_name"
+                               modal="['/static/template/modalAddInvoiceItem.html', 'AddNewGoodCtrl', 'lg']"
+                               selected="model.good_selected"
+                               clbkclose="loadGood">
+            </dict-select-field>
+        </div>
+    </fieldset>
+</form>
+<br/>
+
+<div class="row">
+    <div class="col-md-12">
+        <div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Стоимость</h3>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group" ng-class="{'has-error': model.errors.NDS}">
+                                <label class="control-label" for="NDS">НДС (%)</label>
+                                <input nks-only-number type="text" class="form-control" id="NDS" ng-model="model.NDS" placeholder="Введите НДС">
+                            </div>
+
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" ng-class="{'has-error': model.errors.price_pre}">
+                                <label class="control-label" for="price_pre">Цена без НДС (руб.)</label>
+                                <input nks-only-number type="text" class="form-control" id="price_pre" ng-model="model.price_pre" placeholder="Введите цену без НДС">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group" ng-class="{'has-error': model.errors.price_post}">
+                                <label class="control-label" for="price_post">Цена с НДС (руб.)</label>
+                                <input nks-only-number type="text" class="form-control" id="price_post"
+                                       ng-change="priceChange()"
+                                       ng-model="model.price_post" placeholder="Введите цену с НДС">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <button ng-disabled="!(model.good_selected && model.price_post)"
+                                    ng-click="getPrice()" type="submit" class="btn btn-primary">
+                                Проставить цены
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" collapse="isCollapsed">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Цена продажи</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group" ng-class="{'has-error': model.errors.price_retail}">
+                            <label for="price_retail">Цена розницы</label>
+                            <div class="input-group">
+                                <div class="input-group-addon" popover="Рекомендуемая цена розницы!"
+                                                               popover-trigger="mouseenter">{{ model.price_retail_rec | rub }}</div>
+                                <input nks-only-number ng-model="model.price_retail" type="text" class="form-control" id="price_retail" placeholder="Цена">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group" ng-class="{'has-error': model.errors.price_gross}">
+                            <label for="price_gross">Цена опта</label>
+                            <div class="input-group">
+                                <div class="input-group-addon" popover="Рекомендуемая цена опта!"
+                                                               popover-trigger="mouseenter">{{ model.price_gross_rec | rub }}</div>
+                                <input nks-only-number ng-model="model.price_gross" type="text" class="form-control" id="price_gross" placeholder="Цена">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel panel-primary" style="margin-left: 15px" >
+
+                <div class="panel-heading" popover="Выберите уже готовую стоимость!"
+                                           popover-trigger="mouseenter">
+                    <h3 class="panel-title">Варианты цен</h3>
+                </div>
+                <div class="panel-body" style="padding: 0 0 0 0">
+                    <div class="list-group" style="margin-bottom: 0">
+                        <div class="animate" ng-repeat="price in model.price_recommendation">
+                            <a ng-click="setRec(price.price_retail, price.price_gross)"
+                               class="list-group-item"
+                                    ng-class="{'list-group-item-info': compare_info(price.price_post, model.price_post),
+                                               'list-group-item-warning': compare_warning(price.price_post, model.price_post),
+                                               'list-group-item-success': compare_success(price.price_post, model.price_post)}">
+                               <strong>{{ price.provider_str }}.</strong>
+                               <span ng-if="price.number_local_from"> С номера №{{ price.number_local_from }}({{ price.number_global_from }})</span>
+                               <span ng-if="!price.number_local_from"> С даты {{ price.date_from | date:'MMM d, y' }}</span>
+                                 стоимость с НДС - <strong>{{ price.price_post | rub }}</strong>.
+                               Цена розницы - <strong>{{ price.price_retail | rub }}</strong>.
+                               Цена опта - <strong>{{ price.price_gross | rub }}</strong>.</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

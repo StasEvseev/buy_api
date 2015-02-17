@@ -1,0 +1,41 @@
+{% extends 'admin/base_template.html' %}
+
+{% block body %}
+
+    <div ng-app="myApp" ng-controller="MainCtrl" ng-cloak>
+
+        <div>
+            <h4>Выберите точку:</h4>
+            <ui-select ng-model="model.selected_pointsale" theme="bootstrap" ng-disabled="disabled" style="min-width: 500px;">
+                <ui-select-match>
+                    {{'$select.selected.name'|angular}}
+                </ui-select-match>
+                <ui-select-choices repeat="pointsale in model.pointsale_items">
+                    <div ng-bind-html="pointsale.name | highlight: $select.search"></div>
+                </ui-select-choices>
+            </ui-select>
+
+            <br/>
+            <br/>
+            <button type="button" class="btn btn-primary" ng-click="nextStep()"
+                        ng-disabled="!model.selected_pointsale">Далее</button>
+        </div>
+
+    </div>
+
+{% endblock %}
+
+{% block tail %}
+
+    {{ super() }}
+
+    <script type="text/javascript">
+        var PATH_TO_MENU = '{{ url_next }}';
+        console.log(PATH_TO_MENU);
+    </script>
+
+    {% assets "pointselect" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+    {% endassets %}
+
+{% endblock %}

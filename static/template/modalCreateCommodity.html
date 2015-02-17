@@ -1,0 +1,30 @@
+<div class="modal-header">
+    <h3 class="modal-title">Добавление новой номенклатуры</h3>
+</div>
+<div class="modal-body">
+
+    <div class="alert alert-danger" ng-show="model.validate.message" role="alert">
+        {{ model.validate.message }}
+    </div>
+
+    <form role="form">
+        <div class="form-group" ng-class="{'has-error': model.errors.name}">
+            <label for="name" class="control-label">Наименование</label>
+            <input type="text" class="form-control" id="name" ng-model="model.name" placeholder="Введите наименование">
+        </div>
+        <div class="form-group">
+            <label for="thematic">Тематика</label>
+            <input type="text" class="form-control" id="thematic" ng-model="model.thematic" placeholder="Введите тематику">
+        </div>
+        <div class="checkbox">
+            <label class="control-label">
+                <input type="checkbox" ng-model="model.numeric"> Номерная
+            </label>
+        </div>
+    </form>
+
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Сохранить</button>
+    <button class="btn btn-warning" ng-click="cancel()">Закрыть</button>
+</div>

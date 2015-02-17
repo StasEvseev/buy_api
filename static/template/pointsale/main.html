@@ -1,0 +1,23 @@
+<div class="modal-header">
+    <h3 class="modal-title">Товарная точка</h3>
+</div>
+<div class="modal-body">
+    <div class="alert alert-danger" ng-show="model.validate.message" role="alert">
+        {{ model.validate.message }}
+    </div>
+
+    <form role="form">
+        <div class="form-group" ng-class="{'has-error': model.errors.name}">
+            <label for="name" class="control-label">Название</label>
+            <input type="text" class="form-control" id="name" ng-model="model.name" placeholder="Введите наименование">
+        </div>
+        <div class="form-group">
+            <label for="thematic">Адрес</label>
+            <input type="text" class="form-control" id="thematic" ng-model="model.address" placeholder="Введите адрес">
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">Сохранить</button>
+    <button class="btn btn-warning" ng-click="cancel()">Закрыть</button>
+</div>

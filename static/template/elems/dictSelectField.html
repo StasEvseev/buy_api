@@ -1,0 +1,31 @@
+<div class="form-group-my">
+    <div class="col-xs-5 bordered-right">
+        <label class="control-label" for="sss">{{ label }}</label>
+    </div>
+    <span class="col-xs-7">
+        <span style="width: 100%; display: inline-block; vertical-align: top;">
+            <div ng-show="disabled" class="span-view">
+                {{ selected[attrdisplay] }}
+            </div>
+            <div ng-hide="disabled">
+                <i style="font-size: 30px; cursor:pointer; float: right;padding-left: 2px;"
+                   ng-hide="(!selected || disabled)" class="fa fa-pencil-square-o"
+                   tooltip="Редактировать" ng-click="edit()"></i>
+                <i style="font-size: 30px; cursor:pointer; float: right;padding-left: 2px;" class="fa fa-pencil" tooltip="Создать"
+                   ng-click="createNew(true)" ng-hide="disabled"></i>
+                <div ng-class="{'with-edit': selected && !disabled, 'without-edit': !selected && !disabled, 'empty': disabled}">
+                    <ui-select ng-disabled="disabled" id="sss" ng-model="selected" theme="bootstrap"
+                               on-select="someFunction($item, $model)" class="dict-select">
+                        <ui-select-match placeholder="{{ placeholder }}" class="form-control input-sm">
+                            {{ $select.selected[attrdisplay] }}
+                        </ui-select-match>
+                        <ui-select-choices repeat="item in items" refresh="refresh($select.search)">
+                            <div ng-bind-html="item[attrdisplay] | highlight: $select.search"></div>
+                        </ui-select-choices>
+                    </ui-select>
+                </div>
+            </div>
+
+        </span>
+    </span>
+</div>

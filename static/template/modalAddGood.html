@@ -1,0 +1,29 @@
+<div class="modal-header">
+    <h3 class="modal-title">Добавление товара в розничную накладную</h3>
+</div>
+<div class="modal-body">
+    <p>Выбран: {{person.selected}}</p>
+    <ui-select ng-model="model.selected" theme="bootstrap" ng-disabled="disabled" style="min-width: 500px;">
+        <ui-select-match placeholder="Выберите товар или поищите его...">
+            {{$select.selected.full_name}}
+        </ui-select-match>
+        <ui-select-choices repeat="good in model.good_items | propsFilter: {full_name: $select.search, price_retail: $select.search}">
+            <div ng-bind-html="good.full_name | highlight: $select.search"></div>
+            <small>
+                <span ng-if="good.price_retail">
+                    Цена розницы: <span ng-bind-html="''+good.price_retail | highlight: $select.search"></span>
+                </span>
+                <span ng-if="good.price_gross">
+                    Цена опта: <span ng-bind-html="''+good.price_gross | highlight: $select.search"></span>
+                </span>
+                <span ng-if="good.count">
+                    Количество: <span ng-bind-html="''+good.count | highlight: $select.search"></span>
+                </span>
+            </small>
+        </ui-select-choices>
+    </ui-select>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+</div>
