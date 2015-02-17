@@ -84,19 +84,20 @@ class InvoiceModel(object):
                 return result
         return result
 
-    def get_name_number(self, full_name):
+    @classmethod
+    def get_name_number(cls, full_name):
         """
         Извлечь чистое имя, локальный и глобальный номера.
         """
         wt_nb = full_name.find(u"б/н")
 
         if wt_nb != -1:
-            return full_name[:wt_nb].strip(), None, None
+            return full_name, None, None
 
         st = full_name.split(u"№")
         name = st[0].strip()
         number_local = st[1].split(u"(")[0]
-        number_global = self.substring(st[1], "(", ")")
+        number_global = cls.substring(st[1], "(", ")")
         return name, number_local, number_global
 
     def find_cell(self, sheet, text):
@@ -113,7 +114,8 @@ class InvoiceModel(object):
         result = self.substring(value, mask_begin, mask_end)
         return result
 
-    def substring(self, string, mask_begin, mask_end):
+    @classmethod
+    def substring(cls, string, mask_begin, mask_end):
         ind_begin = string.find(mask_begin) + len(mask_begin)
         ind_end = string.find(mask_end)
         if not ind_end:

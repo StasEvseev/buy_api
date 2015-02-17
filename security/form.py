@@ -12,6 +12,14 @@ class LoginForm(form.Form):
     login = fields.TextField(validators=[validators.required()])
     password = fields.PasswordField(validators=[validators.required()])
 
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+
+        self.login.type = "text"
+        self.login.label = u"Имя"
+        self.password.type = "password"
+        self.password.label = u"Пароль"
+
     def validate_login(self, field):
         """
         Проверяем логин
@@ -38,6 +46,16 @@ class RegistrationForm(form.Form):
     login = fields.TextField(validators=[validators.required()])
     email = fields.TextField()
     password = fields.PasswordField(validators=[validators.required()])
+
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+
+        self.login.type = "text"
+        self.login.label = u"Имя"
+        self.email.type = "text"
+        self.email.label = u"Адрес"
+        self.password.type = "password"
+        self.password.label = u"Пароль"
 
     def validate_login(self, field):
         if db.session.query(User).filter_by(login=self.login.data).count() > 0:

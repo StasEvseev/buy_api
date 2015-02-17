@@ -1,6 +1,6 @@
 psycopg2
 flask
-flask-restful
+flask-restful==0.3.1
 Flask-SQLAlchemy
 Flask-Migrate
 flask-admin
@@ -12,3 +12,5 @@ flask-triangle
 flask-security
 Flask-HTTPAuth
 flask-fixtures
+flask-babel
+mock

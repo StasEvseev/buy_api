@@ -23,6 +23,11 @@ class AcceptanceView(BaseViewAuth):
         # You can pass name and other parameters if you want to
         super(AcceptanceView, self).__init__(Acceptance, session, **kwargs)
 
+    # def create_view(self):
+    #
+    #     pass
+
+
     def create_form(self, obj=None):
 
         form = super(AcceptanceView, self).create_form(obj)

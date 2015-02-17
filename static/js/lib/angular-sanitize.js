@@ -58,7 +58,7 @@ var $sanitizeMinErr = angular.$$minErr('$sanitize');
  *
  * @example
    <example module="ngSanitize" deps="angular-sanitize.js">
-   <file name="index.html">
+   <file name="mail.html">
      <script>
        function Ctrl($scope, $sce) {
          $scope.snippet =
@@ -499,7 +499,7 @@ angular.module('ngSanitize', []).provider('$sanitize', $SanitizeProvider);
  *
  * @example
    <example module="ngSanitize" deps="angular-sanitize.js">
-     <file name="index.html">
+     <file name="mail.html">
        <script>
          function Ctrl($scope) {
            $scope.snippet =

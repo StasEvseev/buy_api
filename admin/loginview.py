@@ -18,10 +18,14 @@ class MyAdminIndexView(admin.AdminIndexView):
     Базовая вьюха админки
     """
 
+    def is_visible(self):
+        return False
+
     @expose('/')
     def index(self):
         if not login.current_user.is_authenticated():
             return redirect(url_for('.login_view'))
+        self.name = u"Главная"
         return super(MyAdminIndexView, self).index()
 
     @expose('/login/', methods=('GET', 'POST'))
@@ -38,6 +42,7 @@ class MyAdminIndexView(admin.AdminIndexView):
         link = u'<p>Не имеете аккаунта? <a href="' + url_for('.register_view') + u'">Нажмите для регистрации.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
+        self.name = u"Вход"
         return super(MyAdminIndexView, self).index()
 
     @expose('/register/', methods=('GET', 'POST'))
@@ -59,6 +64,7 @@ class MyAdminIndexView(admin.AdminIndexView):
         link = u'<p>Уже имеете аккаунт? <a href="' + url_for('.login_view') + u'">Нажмите для входа.</a></p>'
         self._template_args['form'] = form
         self._template_args['link'] = link
+        self.name = u"Регистрация"
         return super(MyAdminIndexView, self).index()
 
     @expose('/logout/')

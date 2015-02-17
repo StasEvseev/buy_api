@@ -2,7 +2,7 @@
 
 from models import db
 
-
+#Склад
 class WareHouse(db.Model):
     """
     Склад товара

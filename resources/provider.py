@@ -1,15 +1,20 @@
 #coding: utf-8
-from flask.ext.restful import marshal_with, fields
-from resources.core import BaseTokeniseResource
-from services.providerserv import ProviderService
+
+from flask.ext.restful import fields
+
+from resources.core import BaseCanoniseResource
+
+from models.provider import Provider
 
 
-class ProviderResource(BaseTokeniseResource):
-    @marshal_with({'items': fields.List(fields.Nested({
+class ProviderCanon(BaseCanoniseResource):
+
+    model = Provider
+    attr_json = {
         'id': fields.Integer,
         'name': fields.String,
         'address': fields.String,
         'emails': fields.String
-    }))})
-    def get(self):
-        return {'items': ProviderService.get_all()}
+    }
+
+    multif = {'filter_field': ('name', 'address')}

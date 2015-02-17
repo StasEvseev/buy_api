@@ -34,3 +34,16 @@ class Invoice(db.Model):
 
     def __unicode__(self):
         return u'Накладная %s от %s' % (self.number, self.date)
+
+    @property
+    def is_acceptance(self):
+        from services import AcceptanceService
+        acc = AcceptanceService.get_by_invoice_id(self.id)
+
+        return True if acc else False
+
+    @property
+    def acceptance_id(self):
+        from services import AcceptanceService
+        acc = AcceptanceService.get_by_invoice_id(self.id)
+        return acc.id

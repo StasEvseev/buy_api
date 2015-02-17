@@ -2,7 +2,7 @@
 from models import db
 from invoice import Invoice
 
-
+#TODO deprecated
 class RetailInvoice(db.Model):
     """
     Розничная накладная.

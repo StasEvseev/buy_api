@@ -9,7 +9,11 @@ except ImportError:
     USER = 'test'
     PASSWORD = 'test'
 
-DATABASE_URI = 'postgresql://%s:%s@localhost:5432/buy_api' % (USER, PASSWORD)
+DB = "buy_api"
+
+COMMON_URL = 'postgresql://%s:%s@localhost:5432/%s'
+
+DATABASE_URI = COMMON_URL % (USER, PASSWORD, DB)
 
 try:
     from config_local import SECRET_KEY
@@ -23,8 +27,20 @@ except ImportError:
     user_imap = ''
     user_pass = ''
 
+try:
+    from config_local import admin_imap
+    from config_local import admin_pass
+except ImportError:
+    admin_imap = ""
+    admin_pass = ""
+
+try:
+    from config_local import ADMINS
+except ImportError:
+    ADMIN = "stasevseev@gmail.com"
+    ADMINS = [ADMIN]
+
 imap_server = 'imap.gmail.com'
-from_imap = "stasevseev@gmail.com"
 
 
 DIR_PROJECT = os.path.dirname(__file__)

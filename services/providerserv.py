@@ -5,6 +5,10 @@ from models.provider import Provider
 class ProviderService(object):
 
     @classmethod
+    def get_by_id(cls, id):
+        return Provider.query.get(id)
+
+    @classmethod
     def get_all(cls):
         return Provider.query.all()
 

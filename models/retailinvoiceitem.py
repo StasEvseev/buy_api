@@ -1,11 +1,9 @@
 #coding: utf-8
 from models import db
-from models.commodity import Commodity
 from models.good import Good
-from models.price import Price
 from models.retailinvoice import RetailInvoice
 
-
+#TODO deprecated
 class RetailInvoiceItem(db.Model):
     """
     Позиция в розничной накладной.

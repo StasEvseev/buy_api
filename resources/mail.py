@@ -1,28 +1,29 @@
 #coding: utf-8
 
-from flask.ext import restful
-from flask.ext.restful import abort, marshal_with, fields, reqparse
+from flask.ext.restful import abort, marshal_with, fields
+from log import warning, debug
 
 from mails.model import Mail
-from resources.core import TokenResource, BaseTokeniseResource
 
-from services.mailinvoice import MailInvoiceService, MailInvoiceException
-from sqlalchemy import desc, asc
+from resources import InvoiceItemResource
+from resources.core import BaseTokeniseResource, BaseTokenMixinResource, BaseModelPackResource
 
-
-parser = reqparse.RequestParser()
-parser.add_argument('filter_field', type=str)
-parser.add_argument('filter_text', type=unicode)
-parser.add_argument('sort_field', type=str)
-parser.add_argument('sort_course', type=str)
-parser.add_argument('count', type=int)
-parser.add_argument('page', type=int)
+from services import MailInvoiceService, MailInvoiceException
 
 
-class MailCheck(BaseTokeniseResource):
+class MailInvoiceItem(BaseTokeniseResource):
+    def get(self, id):
+        mail = MailInvoiceService.get_mail(id)
+        return InvoiceItemResource().get(mail.invoice_id)
+
+
+
+class MailCheck(BaseTokenMixinResource, BaseModelPackResource):
     """
     Ресурс для работы с почтой.
     """
+
+    model = Mail
 
     def post(self):
         """
@@ -48,28 +49,6 @@ class MailCheck(BaseTokeniseResource):
         """
         Получим все почтовые письма.
         """
-        args = parser.parse_args()
+        result = super(MailCheck, self).get()
 
-        filter_field = args['filter_field']
-        filter_text = args['filter_text']
-        sort_field = args['sort_field']
-        sort_course = args['sort_course']
-        page = args['page']
-        count = args['count']
-
-        query = Mail.query
-
-        if filter_field and filter_text:
-            query = query.filter(
-                Mail.__table__.columns[filter_field].like("%"+filter_text+"%")
-            )
-        if sort_field and sort_course:
-            query = query.order_by(
-                {'desc': desc, 'asc': asc}[sort_course](Mail.__table__.columns[sort_field])
-            )
-        # query =
-        query = query.offset((page - 1) * count).limit(count)
-        mails = query.all()
-        count_ = query.count()
-
-        return {'items': mails, 'count': count_}
+        return {'items': result['items'], 'count': result['count']}

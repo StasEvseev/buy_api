@@ -7,6 +7,8 @@ Create Date: 2014-10-15 18:58:52.408670
 """
 
 # revision identifiers, used by Alembic.
+from sqlalchemy.dialects.sqlite.pysqlite import SQLiteDialect_pysqlite
+
 revision = '3763273f85f5'
 down_revision = '52363779f642'
 
@@ -20,7 +22,14 @@ def upgrade():
     op.add_column('price', sa.Column('number_local', sa.String(length=250), nullable=True))
     op.add_column('price', sa.Column('price_gross', sa.DECIMAL(), nullable=True))
     op.add_column('price', sa.Column('price_retail', sa.DECIMAL(), nullable=True))
-    op.drop_column('price', 'number_from')
+    bind = op.get_bind()
+    if type(bind.dialect) == SQLiteDialect_pysqlite:
+        try:
+            op.drop_column('price', 'number_from')
+        except Exception as exc:
+            pass
+    else:
+        op.drop_column('price', 'number_from')
     ### end Alembic commands ###
 
 

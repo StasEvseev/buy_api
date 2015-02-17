@@ -19,6 +19,10 @@ bundles = {
 
     'underscore': Bundle('js/lib/underscore-min.js'),
 
+    'font-awesome-css': Bundle('css/lib/font-awesome-4.1.0/css/font-awesome.min.css'),
+
+    'selectize-css': Bundle('css/lib/selectize.default.css'),
+
     'bootstrap-css': Bundle('css/lib/bootstrap.min.css'),
     'bootstrap-js': Bundle('js/lib/bootstrap.min.js'),
 
@@ -32,22 +36,57 @@ bundles = {
     'select-css': Bundle('css/lib/select.css',
                          'css/lib/select2.css'),
 
-    'prices': Bundle('js/prices.js'),
+    'indexmail': Bundle('js/mail/indexmail.js'),
+    'prices': Bundle('js/mail/prices.js'),
 
-    'angularjs': Bundle('js/lib/angular.min.js',
+    'angularjs': Bundle('js/lib/angular.js',
                         'js/lib/angular-resource.min.js',
+                        'js/lib/angular-animate.min.js',
                         'js/lib/angular-route.min.js',
                         'js/lib/angular-sanitize.js',
-                        'js/auth.js'
+                        'js/lib/ng-breadcrumbs.js',
+                        'js/lib/angular-locale_ru-ru.js',
+                        'js/angular/number.js',
+                        'js/angular/auth.js',
+                        'js/angular/rest.js',
+                        'js/angular/table.js',
+                        'js/angular/filter.js',
+                        'js/angular/params.js',
+                        'js/angular/modalWindow.js',
+                        'js/angular/elems.js',
+
+                        'js/bl/goodbl.js'
                         ),
 
     'angularjs-ui-bootstrap': Bundle('js/lib/ui-bootstrap-tpls-0.11.2.min.js'),
 
     'bootbox': Bundle('js/lib/bootbox.min.js'),
 
-    'invoice_retail': Bundle('js/invoice_retail.js'),
+    # 'invoice_retail': Bundle('js/invoice.js'),
 
-    'indexmail': Bundle('js/indexmail.js')
+
+
+    # 'acceptance': Bundle('js/acceptance.js'),
+
+    'metisMenu_css': Bundle('css/lib/metisMenu.css'),
+
+    'metisMenu_js': Bundle('js/lib/metisMenu.js'),
+
+    'custom_dash': Bundle('css/custom/sb-admin.css'),
+
+    # 'invoicemail': Bundle('js/invoice_mail.js'),
+
+    # 'acceptance_invoice': Bundle('js/acceptance_invoice.js'),
+
+    # 'pointselect': Bundle('js/pointselect.js'),
+
+    'waybilllist': Bundle('js/waybill/waybilllist.js'),
+
+    'acceptance': Bundle('js/acceptance/acceptance.js'),
+
+    'mail': Bundle('js/mail/mail.js'),
+
+    'good': Bundle('js/good/good.js')
 }
 
 assets.register(bundles)

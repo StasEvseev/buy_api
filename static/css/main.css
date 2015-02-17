@@ -7,7 +7,158 @@
     color: red;
 }
 
-.panel-default {
-    padding-right: 30px;
-    padding-bottom: 25px;
+/*html,body{height:100%;}*/
+
+/*.container {*/
+    /*height:100%;*/
+/*}*/
+
+.category {
+    font-weight: bold;
+font-size: 20px;
+margin: 15px 0px 10px 0px;
 }
+
+.tab-content {
+    margin-top: 20px;
+margin-left: 10px;
+margin-right: 10px;
+}
+
+.form-row {
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+.form-bg {
+    height: 100%;
+    width: 100%;
+    min-height: 568px;
+}
+
+.form-sheet {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: #ffffff;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    padding: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    border: 1px solid #c8c8d3;
+    max-width: 860px;
+}
+
+.panel {
+    border-radius: 0px;
+}
+
+div.top-bar {
+    margin-bottom: 0px;
+    border: 0px;
+}
+
+.panel-default {
+    /*padding-right: 30px;*/
+    /*padding-bottom: 25px;*/
+}
+
+a:hover, a:focus {
+    text-decoration: none;
+}
+
+.table th.column_price {
+    width: 100px;
+}
+
+.table tr {
+   line-height: 25px;
+   min-height: 25px;
+   max-height: 25px;
+   height: 25px;
+   /*font-size: 14px;*/
+    font-family: Times New Roman, Times, serif;
+}
+
+div > .table th {
+    text-align: left;
+    font-family: "Lucida Grande", Helvetica, Verdana, Arial, sans-serif;
+    font-size: 13px;
+}
+
+tfoot {
+    border-top: 2px solid #cacaca;
+border-bottom: 1px solid #cacaca;
+background: #eee;
+font-weight: bold;
+}
+
+thead {
+    border-bottom: 2px solid #cacaca;
+}
+
+table.my-table {
+    border: 0px;
+}
+
+.table-striped>tbody>tr:nth-child(odd)>td,
+.table-striped>tbody>tr:nth-child(odd)>th {
+   background-color: #efeff8;
+ }
+
+.table td {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    vertical-align: bottom !important;
+}
+
+.breadcrumb {
+    font-size: 18px;
+}
+
+.empty {
+    width: 100%;
+}
+
+.with-edit {
+    width: calc(100% - 60px)
+}
+
+.without-edit {
+    width: calc(100% - 30px);
+}
+
+.span-view {
+    padding-top: 7px;
+}
+
+.form-group-my > label  {
+    text-align: left !important;
+}
+
+.bordered-right {
+    border-right: 2px solid #eee;
+    height: 30px;
+}
+
+.input-table {
+    outline: none;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-color: gainsboro;
+    border-bottom-width: 1px;
+}
+
+.input-table-sm {
+    outline: none;
+    border-top-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    border-color: gainsboro;
+    border-bottom-width: 1px;
+    width: 80px;
+}
+/*.table100, .row, .container, .table-responsive, .table-bordered  {*/
+    /*height: 100%;*/
+/*}*/

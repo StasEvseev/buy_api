@@ -9,6 +9,7 @@ class Commodity(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
     thematic = db.Column(db.String(250))
+    numeric = db.Column(db.Boolean, default=True)
 
 
     def __repr__(self):

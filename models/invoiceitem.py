@@ -50,9 +50,11 @@ class InvoiceItem(db.Model):
     invoice = db.relationship('Invoice',
         backref=db.backref('items', lazy='dynamic'))
 
+    fact_count = db.Column(db.Integer)
+
     #Товар в системе
     good_id = db.Column(db.Integer, db.ForeignKey('good.id'))
-    good = db.relationship(Good, backref=db.backref('invoiceitem', uselist=False))
+    good = db.relationship(Good, backref=db.backref('invoiceitem', lazy='dynamic'))
 
     def __repr__(self):
         return '<InvoiceItem %r>' % self.name

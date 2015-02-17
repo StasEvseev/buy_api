@@ -7,7 +7,7 @@ from collections import namedtuple
 
 from mails.helper import (get_title, get_date, get_from, get_to, name_for_file)
 from config import (mail_folder, user_imap, user_pass, imap_server,
-                    from_imap, DIR_PROJECT)
+                    DIR_PROJECT)
 
 detach_dir = '.'
 
@@ -52,9 +52,9 @@ def get_ids_mails(email):
         raise NotConnect(u'Нет соединения с сервером. Проверьте подключение.')
     else:
         search_str = ['UnSeen', ]
-        if from_imap:
-            from_str = '(FROM "%s")' % email
-            search_str.append(from_str)
+        # if from_imap:
+        from_str = '(FROM "%s")' % email
+        search_str.append(from_str)
         result, data = get_mail(mail, search_str)
 
         ids = data[0] # data is a list.
@@ -62,41 +62,40 @@ def get_ids_mails(email):
 
     return mail, id_list
 
-def get_mails(emails):
-    """
-    Получение всех непрочитанных писем от некоего отправителя
-    """
+class MailHepls(object):
+    @classmethod
+    def get_mails(cls, emails):
+        """
+        Получение всех непрочитанных писем от некоего отправителя
+        """
 
-    results = {}
+        results = {}
 
-    if not os.path.exists(DIR_ATTACH):
-        os.makedirs(DIR_ATTACH)
+        if not os.path.exists(DIR_ATTACH):
+            os.makedirs(DIR_ATTACH)
 
-    mail = None
-    try:
-        for email in emails:
-            results[email] = []
-            mail, ids = get_ids_mails(email)
-            for id in ids:
-                result, data = mail.fetch(id, "(RFC822)")
-                if data[0] is not None:
-                    raw_email = data[0][1]
+        mail = None
+        try:
+            for email in emails:
+                results[email] = []
+                mail, ids = get_ids_mails(email)
+                for id in ids:
+                    result, data = mail.fetch(id, "(RFC822)")
+                    if data[0] is not None:
+                        raw_email = data[0][1]
 
-                    pmail = email_module.message_from_string(raw_email)
-                    try:
-                        mail_item = file_imap(pmail)
-                    except Exception:
-                        raise
-                    # finally:
-                    #     mail.close()
-                    #     mail.logout()
-                    results[email].append(mail_item)
-    finally:
-        if mail:
-            mail.close()
-            mail.logout()
+                        pmail = email_module.message_from_string(raw_email)
+                        try:
+                            mail_item = file_imap(pmail)
+                        except Exception:
+                            raise
+                        results[email].append(mail_item)
+        finally:
+            if mail:
+                mail.close()
+                mail.logout()
 
-    return ids, results
+        return ids, results
 
 def mark_as_unseen(ids):
     """
