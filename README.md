@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/StasEvseev/buy_api.svg?branch=master)](https://travis-ci.org/StasEvseev/buy_api)
+
 **BuyApi**
 
 Проект для моих родителей. Учетная система ведения товарооборота и ценовой политики.
